@@ -9,7 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import animationClaimed from "../../lotties/claimed.json";
+import animationClaimed from "../../../lotties/claimed.json";
 import { useTranslation } from "react-i18next";
 import { Lottie } from "@/lottie/Lottie";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import "../../shared-css/colors.css";
+import "@/shared-css/colors.css";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { getApyValues } from "../../util/staking-rewards";
+import { getApyValues } from "../logic/staking-rewards";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import { avinocIcon } from "@/asset-paths";
