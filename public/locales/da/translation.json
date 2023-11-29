@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "dag"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "Søger efter NFT'er...",
+    "PENDING_FETCH_BALANCE": "Henter balance...",
+    "PENDING_DETAILS_FETCH": "Indlæser belønninger...",
+    "PENDING_FETCH_QUOTE": "Info indlæses...",
+    "PENDING_SUBMIT_TX": "Venter på bekræftelse...",
+    "ERROR_MISSING_WALLET_BACKUP": "Sikkerhedskopiering påkrævet - Gå venligst tilbage for at skrive en sikkerhedskopi af dine 12 ord, før du sætter en AVINOC.",
+    "ERROR_FETCH_FAILED": "Fejl - Forbindelsen mislykkedes",
+    "ERROR_INSUFFICIENT_RESERVES": "Fejl - Utilstrækkelige AVINOC-reserver i indsatskontrakten.",
+    "ERROR_NO_NFTS": "Ingen tilgængelige NFT'er",
+    "ERROR_NO_NFTS_CLAIM": "Ingen tilgængelige belønninger. Gå tilbage for at vælge en mængde AVINOC.",
+    "ERROR_TX_FAILED": "Fejl - Transaktion mislykkedes",
+    "ERROR_INSUFFICIENT_ETH": "Fejl - Kan ikke betale transaktionsgebyrer. Venligst finansier din tegnebog med tilstrækkelig Ethereum.",
+    "ERROR_LIMIT_EXCEEDED": "AVINOC-indsats er begrænset til maksimalt 250000 AVINOC (kun i 15 år).",
+    "ERROR_INSUFFICIENT_AVINOC": "Utilstrækkelig AVINOC-mængde"
+  },
+  "dialog": {
+    "congratulations": "Tillykke!",
+    "great": "Store!",
+    "startStaking": "Begynd at satse!"
+  },
+  "staking": {
+    "available": "Ledig",
+    "loadBalance": "Indlæser...",
+    "enterAmount": "Indtast venligst beløb",
+    "AvinocStaking": "AVINOC Staking",
+    "year": "år",
+    "years": "år",
+    "safirStakingEnabled": "Din Safir indsatsbonus er aktiveret",
+    "AvinocRewards": "Dine AVINOC-belønninger",
+    "claimRewards": "Gør krav på belønninger",
+    "DialogSuccess": "Du har satset dit token med succes.",
+    "amountStaking": "Vælg beløb til indsats",
+    "dialogConfirm": "Bekræftelse",
+    "networkBonus": "Netværksbonus",
+    "apyWithoutBonus": "APY uden netværksbonus",
+    "apyWithBonus": "APY med netværksbonus",
+    "networkBonusWarning": "Din netværksbonus er ikke aktiveret!",
+    "amount": "Beløb",
+    "networkBonusEnabled": "Netværksbonus er aktiveret!"
+  },
+  "reward": {
+    "totalPayout": "Samlet udbetaling",
+    "stakingPeriod": "Indsatsperiode",
+    "claimRewards": "Gør krav på belønninger",
+    "claim": "Påstand",
+    "claimAll": "Gør krav på alle",
+    "claimedRewards": "Betalte belønninger",
+    "unclaimedRewards": "Uhævede belønninger",
+    "DialogSuccess": "Du har med succes gjort krav på dine belønninger.",
+    "disabled": "handicappet"
+  },
+  "nftPage": {
+    "nftTitle": "Dine NFT'er",
+    "nftName": "Navn",
+    "nftSymbol": "Symbol"
+  }
+}

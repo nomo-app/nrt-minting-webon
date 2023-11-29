@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "dag"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "NFT's zoeken...",
+    "PENDING_FETCH_BALANCE": "Balans ophalen...",
+    "PENDING_DETAILS_FETCH": "Beloningen laden...",
+    "PENDING_FETCH_QUOTE": "Info laden ...",
+    "PENDING_SUBMIT_TX": "Op bevestiging wachten...",
+    "ERROR_MISSING_WALLET_BACKUP": "Back-up vereist - Ga terug om een back-up van uw 12 woorden op te schrijven voordat u AVINOC uitzet.",
+    "ERROR_FETCH_FAILED": "Fout - Verbinding mislukt",
+    "ERROR_INSUFFICIENT_RESERVES": "Fout - Onvoldoende AVINOC-reserves in het stakingscontract.",
+    "ERROR_NO_NFTS": "Geen NFT's beschikbaar",
+    "ERROR_NO_NFTS_CLAIM": "Geen beloningen beschikbaar. Ga terug om een hoeveelheid AVINOC te kiezen.",
+    "ERROR_TX_FAILED": "Fout - Transactie mislukt",
+    "ERROR_INSUFFICIENT_ETH": "Fout - Kan transactiekosten niet betalen. Gelieve uw portemonnee te financieren met voldoende Ethereum.",
+    "ERROR_LIMIT_EXCEEDED": "AVINOC staking is beperkt tot een maximum van 250000 AVINOC (alleen voor 15 jaar).",
+    "ERROR_INSUFFICIENT_AVINOC": "Onvoldoende hoeveelheid AVINOC"
+  },
+  "dialog": {
+    "congratulations": "Gefeliciteerd!",
+    "great": "Geweldig!",
+    "startStaking": "Begin met uitzetten!"
+  },
+  "staking": {
+    "available": "Beschikbaar",
+    "loadBalance": "Bezig met laden...",
+    "enterAmount": "Vul a.u.b. bedrag in",
+    "AvinocStaking": "AVINOC Uitzetten",
+    "year": "Jaar",
+    "years": "jaren",
+    "safirStakingEnabled": "Uw Safir-inzetbonus is ingeschakeld",
+    "AvinocRewards": "Uw AVINOC-beloningen",
+    "claimRewards": "Beloningen claimen",
+    "DialogSuccess": "Je hebt je token met succes ingezet.",
+    "amountStaking": "Selecteer bedrag om in te zetten",
+    "dialogConfirm": "Bevestiging",
+    "networkBonus": "Netwerkbonus",
+    "apyWithoutBonus": "APY zonder netwerkbonus",
+    "apyWithBonus": "APY met netwerkbonus",
+    "networkBonusWarning": "Uw netwerkbonus is niet ingeschakeld!",
+    "amount": "Hoeveelheid",
+    "networkBonusEnabled": "Netwerkbonus is ingeschakeld!"
+  },
+  "reward": {
+    "totalPayout": "Totale uitbetaling",
+    "stakingPeriod": "Uitzetperiode",
+    "claimRewards": "Beloningen claimen",
+    "claim": "Claim",
+    "claimAll": "Alles claimen",
+    "claimedRewards": "Betaalde beloningen",
+    "unclaimedRewards": "Niet-opgeëiste beloningen",
+    "DialogSuccess": "U heeft uw beloningen succesvol geclaimd.",
+    "disabled": "gehandicapt"
+  },
+  "nftPage": {
+    "nftTitle": "Uw NFT's",
+    "nftName": "Naam",
+    "nftSymbol": "Symbool"
+  }
+}

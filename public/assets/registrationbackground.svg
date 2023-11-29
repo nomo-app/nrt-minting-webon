@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="428" height="926" viewBox="0 0 428 926">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-0.078" y1="2.187" x2="0.571" y2="0.567" gradientUnits="objectBoundingBox">
+      <stop offset="0.603" stop-color="#d4d4cb"/>
+      <stop offset="0.986" stop-color="#fff"/>
+    </linearGradient>
+    <radialGradient id="radial-gradient" cx="0.854" cy="-0.134" r="0.605" gradientTransform="translate(0.093) scale(0.814 1)" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-2" x1="0.212" y1="0.883" x2="0.753" y2="0.163" gradientUnits="objectBoundingBox">
+      <stop offset="0.603" stop-color="#fff"/>
+      <stop offset="0.986" stop-color="#d4d4cb"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e3e3e3"/>
+      <stop offset="1" stop-color="#f7f7f7"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-5" x1="1" y1="0.5" x2="0" y2="0.5" xlink:href="#linear-gradient-3"/>
+    <linearGradient id="linear-gradient-7" x1="0.818" y1="0.015" x2="-0.418" y2="0.927" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d4d4cb"/>
+      <stop offset="0.394" stop-color="#f7f7f7"/>
+      <stop offset="0.7" stop-color="#f7f7f7"/>
+      <stop offset="1" stop-color="#e3e3e3"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-8" x1="1.62" y1="-0.577" x2="-0.439" y2="0.944" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#a6a6a6"/>
+      <stop offset="1" stop-color="#f7f7f7"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-9" x1="1.097" y1="-0.383" x2="0.068" y2="1.139" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d4d4cb"/>
+      <stop offset="1" stop-color="#f7f7f7"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-10" x1="1.428" y1="1.288" x2="-0.139" y2="0.38" xlink:href="#linear-gradient-8"/>
+    <clipPath id="clip-iPhone_12_Pro_Max_20">
+      <rect width="428" height="926"/>
+    </clipPath>
+  </defs>
+  <g id="iPhone_12_Pro_Max_20" data-name="iPhone 12 Pro Max – 20" clip-path="url(#clip-iPhone_12_Pro_Max_20)">
+    <rect width="428" height="926" fill="#fff"/>
+    <g id="Gruppe_227" data-name="Gruppe 227" transform="translate(123.035 33.2)">
+      <path id="Pfad_144" data-name="Pfad 144" d="M1195.938,2320.563,859.956,1984.581,1180.437,1664.1Z" transform="translate(-845.66 -1436.543)" fill="url(#linear-gradient)"/>
+      <path id="Pfad_145" data-name="Pfad 145" d="M650.788-54.993H223.858L571.534,292.683l76.673-76.673S652.225-54.993,650.788-54.993Z" transform="translate(-314.111 0)" fill="url(#radial-gradient)"/>
+      <path id="Pfad_146" data-name="Pfad 146" d="M1178.054-54.993,1356.1,123.056l92.049-92.049v-86Z" transform="translate(-1111.475)" fill="#fff"/>
+      <path id="Pfad_147" data-name="Pfad 147" d="M-69.982-54.993l314.1,314.1L333.9,169.322V500.851H-152.034V-54.993Z" transform="translate(0)" opacity="0.7" fill="url(#linear-gradient-2)"/>
+      <g id="Gruppe_226" data-name="Gruppe 226" transform="translate(-63.433 372.874)" opacity="0.8">
+        <g id="Gruppe_225" data-name="Gruppe 225" transform="translate(0.075 228.216)">
+          <path id="Pfad_148" data-name="Pfad 148" d="M951.561,3936.745H798.341l107.647,107.647L723.345,4227.028,540.7,4044.392l107.647-107.647H495.135L387.488,4044.392l335.856,335.856,335.863-335.856Z" transform="translate(-387.488 -3936.745)" fill="url(#linear-gradient-3)"/>
+        </g>
+        <path id="Pfad_149" data-name="Pfad 149" d="M1793.759,2704.235l-156-156-156,156Z" transform="translate(-1301.825 -2548.232)" fill="url(#linear-gradient-3)"/>
+        <path id="Pfad_150" data-name="Pfad 150" d="M387.1,4591.312H540.323l182.641,183.437V4927.17Z" transform="translate(-387.033 -4255.45)" fill="url(#linear-gradient-5)"/>
+        <path id="Pfad_151" data-name="Pfad 151" d="M2994.843,4044.392h153.22l-107.647-107.647H2887.2Z" transform="translate(-2476.269 -3708.528)" fill="url(#linear-gradient-3)"/>
+      </g>
+      <path id="Pfad_152" data-name="Pfad 152" d="M-152.035,669.883v634.935L165.433,987.351Z" transform="translate(0 -605.736)" opacity="0.7" fill="url(#linear-gradient-7)"/>
+      <path id="Pfad_153" data-name="Pfad 153" d="M-152.035,4117.351v68.309l34.154-34.154Z" transform="translate(0 -3486.576)" fill="url(#linear-gradient-8)"/>
+      <path id="Pfad_154" data-name="Pfad 154" d="M-152.033,4687.758l276.821,276.821H-152.033Z" transform="translate(-0.001 -3963.231)" opacity="0.6" fill="url(#linear-gradient-9)"/>
+      <path id="Pfad_155" data-name="Pfad 155" d="M-152.034,4838.544l75.393-75.393-75.393-75.393Z" transform="translate(0 -3963.231)" opacity="0.6" fill="url(#linear-gradient-10)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "day"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "Searching for NFTs...",
+    "PENDING_FETCH_BALANCE": "Fetching balance...",
+    "PENDING_DETAILS_FETCH": "Loading rewards...",
+    "PENDING_FETCH_QUOTE": "Info loading ...",
+    "PENDING_SUBMIT_TX": "Waiting for confirmation...",
+    "ERROR_MISSING_WALLET_BACKUP": "Backup required - Please go back to write down a backup of your 12 words before staking any AVINOC.",
+    "ERROR_FETCH_FAILED": "Error - Connection failed",
+    "ERROR_INSUFFICIENT_RESERVES": "Error - Insufficient AVINOC reserves in the staking contract.",
+    "ERROR_NO_NFTS": "No NFTs available",
+    "ERROR_NO_NFTS_CLAIM": "No rewards available. Please go back to choose an amount of AVINOC.",
+    "ERROR_TX_FAILED": "Error - Transaction failed",
+    "ERROR_INSUFFICIENT_ETH": "Error - Cannot pay transaction fees. Please fund your wallet with sufficient Ethereum.",
+    "ERROR_LIMIT_EXCEEDED": "AVINOC staking is limited to a maximum of 250000 AVINOC (only for 15 years).",
+    "ERROR_INSUFFICIENT_AVINOC": "Insufficient AVINOC amount"
+  },
+  "dialog": {
+    "congratulations": "Congratulations!",
+    "great": "Great!",
+    "startStaking": "Start Staking!"
+  },
+  "staking": {
+    "available": "Available",
+    "loadBalance": "Loading...",
+    "enterAmount": "Please enter amount",
+    "AvinocStaking": "AVINOC Staking",
+    "year": "Year",
+    "years": "Years",
+    "safirStakingEnabled": "Your Safir staking bonus is enabled",
+    "AvinocRewards": "Your Rewards",
+    "claimRewards": "Claim Rewards",
+    "DialogSuccess": "You have successfully staked your token.",
+    "amountStaking": "Select amount to stake",
+    "dialogConfirm": "Confirmation",
+    "networkBonus": "Network Bonus",
+    "apyWithoutBonus": "APY without Network bonus",
+    "apyWithBonus": "APY with Network bonus",
+    "networkBonusWarning": "Your Network bonus is not enabled!",
+    "amount": "Amount",
+    "networkBonusEnabled": "Network bonus is enabled!"
+  },
+  "reward": {
+    "totalPayout": "Total payout",
+    "stakingPeriod": "Staking Period",
+    "claimRewards": "Claim Rewards",
+    "claim": "Claim",
+    "claimAll": "Claim All",
+    "claimedRewards": "Paid Rewards",
+    "unclaimedRewards": "Unclaimed Rewards",
+    "DialogSuccess": "You have successfully claimed your rewards.",
+    "disabled": "disabled"
+  },
+  "nftPage": {
+    "nftTitle": "Your NFTs",
+    "nftName": "Name",
+    "nftSymbol": "Symbol"
+  }
+}

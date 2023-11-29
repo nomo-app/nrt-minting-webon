@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "dag"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "Söker efter NFT...",
+    "PENDING_FETCH_BALANCE": "Hämtar balans...",
+    "PENDING_DETAILS_FETCH": "Laddar belöningar...",
+    "PENDING_FETCH_QUOTE": "Information laddas...",
+    "PENDING_SUBMIT_TX": "Väntar på bekräftelse...",
+    "ERROR_MISSING_WALLET_BACKUP": "Säkerhetskopiering krävs - Vänligen gå tillbaka för att skriva ner en säkerhetskopia av dina 12 ord innan du sätter in någon AVINOC.",
+    "ERROR_FETCH_FAILED": "Fel - Anslutning misslyckades",
+    "ERROR_INSUFFICIENT_RESERVES": "Fel - Otillräckliga AVINOC-reserver i insatskontraktet.",
+    "ERROR_NO_NFTS": "Inga NFT:er tillgängliga",
+    "ERROR_NO_NFTS_CLAIM": "Inga belöningar tillgängliga. Gå tillbaka för att välja en mängd AVINOC.",
+    "ERROR_TX_FAILED": "Fel - Transaktionen misslyckades",
+    "ERROR_INSUFFICIENT_ETH": "Fel - Kan inte betala transaktionsavgifter. Vänligen finansiera din plånbok med tillräckligt med Ethereum.",
+    "ERROR_LIMIT_EXCEEDED": "AVINOC-insatsen är begränsad till maximalt 250 000 AVINOC (endast i 15 år).",
+    "ERROR_INSUFFICIENT_AVINOC": "Otillräcklig mängd AVINOC"
+  },
+  "dialog": {
+    "congratulations": "Grattis!",
+    "great": "Bra!",
+    "startStaking": "Börja staka!"
+  },
+  "staking": {
+    "available": "Tillgängliga",
+    "loadBalance": "Läser in...",
+    "enterAmount": "Ange belopp",
+    "AvinocStaking": "AVINOC Staking",
+    "year": "År",
+    "years": "år",
+    "safirStakingEnabled": "Din Safir insatsbonus är aktiverad",
+    "AvinocRewards": "Dina AVINOC-belöningar",
+    "claimRewards": "Gör anspråk på belöningar",
+    "DialogSuccess": "Du har framgångsrikt satsat din token.",
+    "amountStaking": "Välj belopp att satsa",
+    "dialogConfirm": "Bekräftelse",
+    "networkBonus": "Nätverksbonus",
+    "apyWithoutBonus": "APY utan nätverksbonus",
+    "apyWithBonus": "APY med nätverksbonus",
+    "networkBonusWarning": "Din nätverksbonus är inte aktiverad!",
+    "amount": "Belopp",
+    "networkBonusEnabled": "Nätverksbonus är aktiverad!"
+  },
+  "reward": {
+    "totalPayout": "Total utbetalning",
+    "stakingPeriod": "Insatsperiod",
+    "claimRewards": "Gör anspråk på belöningar",
+    "claim": "Krav",
+    "claimAll": "Gör anspråk på alla",
+    "claimedRewards": "Betala belöningar",
+    "unclaimedRewards": "Outlösta belöningar",
+    "DialogSuccess": "Du har framgångsrikt tagit emot dina belöningar.",
+    "disabled": "Inaktiverad"
+  },
+  "nftPage": {
+    "nftTitle": "Dina NFT:er",
+    "nftName": "namn",
+    "nftSymbol": "Symbol"
+  }
+}

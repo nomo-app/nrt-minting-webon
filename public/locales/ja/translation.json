@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "日"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "NFTを検索しています...",
+    "PENDING_FETCH_BALANCE": "バランスをとる...",
+    "PENDING_DETAILS_FETCH": "報酬を読み込んでいます...",
+    "PENDING_FETCH_QUOTE": "情報の読み込み..。",
+    "PENDING_SUBMIT_TX": "確認を待ちます...",
+    "ERROR_MISSING_WALLET_BACKUP": "バックアップが必要です-AVINOCをステーキングする前に、戻って12ワードのバックアップを書き留めてください。",
+    "ERROR_FETCH_FAILED": "エラー-接続に失敗しました",
+    "ERROR_INSUFFICIENT_RESERVES": "エラー-ステーキング契約のAVINOCリザーブが不十分です。",
+    "ERROR_NO_NFTS": "利用可能なNFTはありません",
+    "ERROR_NO_NFTS_CLAIM": "利用できる報酬はありません。 AVINOCの量を選択するために戻ってください。",
+    "ERROR_TX_FAILED": "エラー-トランザクションが失敗しました",
+    "ERROR_INSUFFICIENT_ETH": "エラー-取引手数料を支払うことができません。十分なイーサリアムであなたの財布に資金を供給してください。",
+    "ERROR_LIMIT_EXCEEDED": "AVINOCのステーキングは最大250000AVINOCに制限されています（15年間のみ）。",
+    "ERROR_INSUFFICIENT_AVINOC": "AVINOCの量が不足しています"
+  },
+  "dialog": {
+    "congratulations": "おめでとう！",
+    "great": "すごい！",
+    "startStaking": "ステーキングを始めましょう！"
+  },
+  "staking": {
+    "available": "利用可能",
+    "loadBalance": "読み込んでいます...",
+    "enterAmount": "金額を入力してください",
+    "AvinocStaking": "AVINOCステーキング",
+    "year": "年",
+    "years": "年",
+    "safirStakingEnabled": "Safirステーキングボーナスが有効になります",
+    "AvinocRewards": "あなたのAVINOCリワード",
+    "claimRewards": "報酬を請求する",
+    "DialogSuccess": "トークンの賭けに成功しました。",
+    "amountStaking": "賭ける金額を選択する",
+    "dialogConfirm": "確認",
+    "networkBonus": "ネットワークボーナス",
+    "apyWithoutBonus": "ネットワークボーナスなしのAPY",
+    "apyWithBonus": "ネットワークボーナス付きAPY",
+    "networkBonusWarning": "ネットワークボーナスが有効になっていません！",
+    "amount": "額",
+    "networkBonusEnabled": "ネットワークボーナスが有効になります！"
+  },
+  "reward": {
+    "totalPayout": "総支払い",
+    "stakingPeriod": "ステーキング期間",
+    "claimRewards": "報酬を請求する",
+    "claim": "請求",
+    "claimAll": "すべてを請求する",
+    "claimedRewards": "有料特典",
+    "unclaimedRewards": "未請求の報酬",
+    "DialogSuccess": "報酬の請求に成功しました。",
+    "disabled": "無効"
+  },
+  "nftPage": {
+    "nftTitle": "あなたのNFT",
+    "nftName": "名前",
+    "nftSymbol": "シンボル"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "día"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "Buscando NFT...",
+    "PENDING_FETCH_BALANCE": "Recuperando saldo...",
+    "PENDING_DETAILS_FETCH": "Cargando recompensas...",
+    "PENDING_FETCH_QUOTE": "Información cargando...",
+    "PENDING_SUBMIT_TX": "Esperando confirmación...",
+    "ERROR_MISSING_WALLET_BACKUP": "Se requiere copia de seguridad: regrese para escribir una copia de seguridad de sus 12 palabras antes de apostar cualquier AVINOC.",
+    "ERROR_FETCH_FAILED": "Error: conexión fallida",
+    "ERROR_INSUFFICIENT_RESERVES": "Error - Reservas AVINOC insuficientes en el contrato de participación.",
+    "ERROR_NO_NFTS": "No hay NFT disponibles",
+    "ERROR_NO_NFTS_CLAIM": "No hay recompensas disponibles. Vuelva a elegir una cantidad de AVINOC.",
+    "ERROR_TX_FAILED": "Error: transacción fallida",
+    "ERROR_INSUFFICIENT_ETH": "Error: no se pueden pagar las tarifas de transacción. Financie su billetera con suficiente Ethereum.",
+    "ERROR_LIMIT_EXCEEDED": "La participación de AVINOC está limitada a un máximo de 250000 AVINOC (solo durante 15 años).",
+    "ERROR_INSUFFICIENT_AVINOC": "Cantidad insuficiente de AVINOC"
+  },
+  "dialog": {
+    "congratulations": "¡Felicidades!",
+    "great": "¡Genial!",
+    "startStaking": "¡Empieza a apostar!"
+  },
+  "staking": {
+    "available": "Disponible",
+    "loadBalance": "Cargando...",
+    "enterAmount": "Por favor ingrese la cantidad",
+    "AvinocStaking": "Replanteo AVINOC",
+    "year": "Año",
+    "years": "Años",
+    "safirStakingEnabled": "Su bono de participación Safir está habilitado",
+    "AvinocRewards": "Sus recompensas AVINOC",
+    "claimRewards": "Reclamar premios",
+    "DialogSuccess": "Has apostado con éxito tu token.",
+    "amountStaking": "Seleccione la cantidad a apostar",
+    "dialogConfirm": "Confirmación",
+    "networkBonus": "Bono de red",
+    "apyWithoutBonus": "APY sin bono de Red",
+    "apyWithBonus": "APY con bono de Red",
+    "networkBonusWarning": "¡Tu bono de red no está habilitado!",
+    "amount": "Cantidad",
+    "networkBonusEnabled": "¡El bono de red está habilitado!"
+  },
+  "reward": {
+    "totalPayout": "Pago total",
+    "stakingPeriod": "Período de apuesta",
+    "claimRewards": "Reclamar premios",
+    "claim": "Afirmar",
+    "claimAll": "Reclamar todo",
+    "claimedRewards": "Recompensas pagadas",
+    "unclaimedRewards": "Recompensas no reclamadas",
+    "DialogSuccess": "Has reclamado con éxito tus recompensas.",
+    "disabled": "discapacitado"
+  },
+  "nftPage": {
+    "nftTitle": "Tus NFT",
+    "nftName": "Nombre",
+    "nftSymbol": "Símbolo"
+  }
+}

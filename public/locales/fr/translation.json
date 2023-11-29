@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "journée"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "Recherche de NFT...",
+    "PENDING_FETCH_BALANCE": "Retrouver l'équilibre...",
+    "PENDING_DETAILS_FETCH": "Chargement des récompenses...",
+    "PENDING_FETCH_QUOTE": "Chargement des informations...",
+    "PENDING_SUBMIT_TX": "En attente de confirmation...",
+    "ERROR_MISSING_WALLET_BACKUP": "Sauvegarde requise - Veuillez revenir en arrière pour écrire une sauvegarde de vos 12 mots avant de jalonner un AVINOC.",
+    "ERROR_FETCH_FAILED": "Erreur - Échec de la connexion",
+    "ERROR_INSUFFICIENT_RESERVES": "Erreur - Réserves AVINOC insuffisantes dans le contrat de jalonnement.",
+    "ERROR_NO_NFTS": "Aucun NFT disponible",
+    "ERROR_NO_NFTS_CLAIM": "Aucune récompense disponible. Veuillez revenir en arrière pour choisir une quantité d'AVINOC.",
+    "ERROR_TX_FAILED": "Erreur - Échec de la transaction",
+    "ERROR_INSUFFICIENT_ETH": "Erreur - Impossible de payer les frais de transaction. Veuillez approvisionner votre portefeuille avec suffisamment d'Ethereum.",
+    "ERROR_LIMIT_EXCEEDED": "Le jalonnement AVINOC est limité à un maximum de 250000 AVINOC (seulement pendant 15 ans).",
+    "ERROR_INSUFFICIENT_AVINOC": "Quantité d'AVINOC insuffisante"
+  },
+  "dialog": {
+    "congratulations": "Toutes nos félicitations!",
+    "great": "Génial!",
+    "startStaking": "Commencez à jalonner !"
+  },
+  "staking": {
+    "available": "Disponible",
+    "loadBalance": "Chargement...",
+    "enterAmount": "Veuillez entrer le montant",
+    "AvinocStaking": "Jalonnement AVINOC",
+    "year": "An",
+    "years": "Années",
+    "safirStakingEnabled": "Votre bonus de mise Safir est activé",
+    "AvinocRewards": "Vos récompenses AVINOC",
+    "claimRewards": "Réclamer des récompenses",
+    "DialogSuccess": "Vous avez misé votre jeton avec succès.",
+    "amountStaking": "Sélectionnez le montant à miser",
+    "dialogConfirm": "Confirmation",
+    "networkBonus": "Bonus de réseau",
+    "apyWithoutBonus": "APY sans bonus réseau",
+    "apyWithBonus": "APY avec bonus réseau",
+    "networkBonusWarning": "Votre bonus réseau n'est pas activé !",
+    "amount": "Montant",
+    "networkBonusEnabled": "Le bonus réseau est activé !"
+  },
+  "reward": {
+    "totalPayout": "Paiement total",
+    "stakingPeriod": "Période de jalonnement",
+    "claimRewards": "Réclamer des récompenses",
+    "claim": "Prétendre",
+    "claimAll": "Réclamer tout",
+    "claimedRewards": "Récompenses payées",
+    "unclaimedRewards": "Récompenses non réclamées",
+    "DialogSuccess": "Vous avez réclamé vos récompenses avec succès.",
+    "disabled": "désactivé"
+  },
+  "nftPage": {
+    "nftTitle": "Vos NFT",
+    "nftName": "Nom",
+    "nftSymbol": "Symbole"
+  }
+}

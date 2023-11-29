@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "день"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "Поиск NFT...",
+    "PENDING_FETCH_BALANCE": "Получение баланса...",
+    "PENDING_DETAILS_FETCH": "Загрузка наград...",
+    "PENDING_FETCH_QUOTE": "Загрузка информации...",
+    "PENDING_SUBMIT_TX": "Ожидание подтверждения...",
+    "ERROR_MISSING_WALLET_BACKUP": "Требуется резервная копия. Пожалуйста, вернитесь, чтобы записать резервную копию ваших 12 слов, прежде чем делать ставку на любой AVINOC.",
+    "ERROR_FETCH_FAILED": "Ошибка - Не удалось подключиться",
+    "ERROR_INSUFFICIENT_RESERVES": "Ошибка - Недостаточно резервов AVINOC в стейкинг-контракте.",
+    "ERROR_NO_NFTS": "Нет доступных NFT",
+    "ERROR_NO_NFTS_CLAIM": "Нет доступных наград. Пожалуйста, вернитесь, чтобы выбрать количество AVINOC.",
+    "ERROR_TX_FAILED": "Ошибка - транзакция не удалась",
+    "ERROR_INSUFFICIENT_ETH": "Ошибка: невозможно оплатить комиссию за транзакцию. Пожалуйста, пополните свой кошелек достаточным количеством Ethereum.",
+    "ERROR_LIMIT_EXCEEDED": "Ставки AVINOC ограничены максимум 250000 AVINOC (только на 15 лет).",
+    "ERROR_INSUFFICIENT_AVINOC": "Недостаточное количество AVINOC"
+  },
+  "dialog": {
+    "congratulations": "Поздравляем!",
+    "great": "Здорово!",
+    "startStaking": "Начните делать ставки!"
+  },
+  "staking": {
+    "available": "Доступный",
+    "loadBalance": "Загрузка...",
+    "enterAmount": "Пожалуйста, введите сумму",
+    "AvinocStaking": "АВИНОК Стейкинг",
+    "year": "Год",
+    "years": "Годы",
+    "safirStakingEnabled": "Ваш стейкинг-бонус Safir включен",
+    "AvinocRewards": "Ваши награды AVINOC",
+    "claimRewards": "Получить награды",
+    "DialogSuccess": "Вы успешно поставили свой токен.",
+    "amountStaking": "Выберите сумму для ставки",
+    "dialogConfirm": "Подтверждение",
+    "networkBonus": "Сетевой бонус",
+    "apyWithoutBonus": "APY без сетевого бонуса",
+    "apyWithBonus": "APY с сетевым бонусом",
+    "networkBonusWarning": "Ваш сетевой бонус не активирован!",
+    "amount": "Количество",
+    "networkBonusEnabled": "Сетевой бонус включен!"
+  },
+  "reward": {
+    "totalPayout": "Общая выплата",
+    "stakingPeriod": "Период ставок",
+    "claimRewards": "Получить награды",
+    "claim": "Требовать",
+    "claimAll": "Требовать все",
+    "claimedRewards": "Выплаченные вознаграждения",
+    "unclaimedRewards": "Невостребованные награды",
+    "DialogSuccess": "Вы успешно получили свои награды.",
+    "disabled": "инвалид"
+  },
+  "nftPage": {
+    "nftTitle": "Ваши NFT",
+    "nftName": "Имя",
+    "nftSymbol": "Условное обозначение"
+  }
+}

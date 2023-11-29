@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "dia"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "Procurando NFTs...",
+    "PENDING_FETCH_BALANCE": "Buscando equilíbrio...",
+    "PENDING_DETAILS_FETCH": "Carregando recompensas...",
+    "PENDING_FETCH_QUOTE": "Carregando informações...",
+    "PENDING_SUBMIT_TX": "Aguardando confirmação...",
+    "ERROR_MISSING_WALLET_BACKUP": "Backup necessário - Por favor, volte para anotar um backup de suas 12 palavras antes de apostar qualquer AVINOC.",
+    "ERROR_FETCH_FAILED": "Erro - Falha na conexão",
+    "ERROR_INSUFFICIENT_RESERVES": "Erro - Reservas AVINOC insuficientes no contrato de staking.",
+    "ERROR_NO_NFTS": "Não há NFTs disponíveis",
+    "ERROR_NO_NFTS_CLAIM": "Não há recompensas disponíveis. Por favor, volte para escolher uma quantidade de AVINOC.",
+    "ERROR_TX_FAILED": "Erro - Falha na transação",
+    "ERROR_INSUFFICIENT_ETH": "Erro - Não é possível pagar as taxas de transação. Por favor, financie sua carteira com Ethereum suficiente.",
+    "ERROR_LIMIT_EXCEEDED": "O staking de AVINOC está limitado a um máximo de 250.000 AVINOC (apenas por 15 anos).",
+    "ERROR_INSUFFICIENT_AVINOC": "Quantidade AVINOC insuficiente"
+  },
+  "dialog": {
+    "congratulations": "Parabéns!",
+    "great": "Excelente!",
+    "startStaking": "Comece a apostar!"
+  },
+  "staking": {
+    "available": "Disponível",
+    "loadBalance": "Carregando...",
+    "enterAmount": "Por favor, insira o valor",
+    "AvinocStaking": "Estaca AVINOC",
+    "year": "Ano",
+    "years": "Anos",
+    "safirStakingEnabled": "Seu bônus de aposta Safir está ativado",
+    "AvinocRewards": "Suas recompensas AVINOC",
+    "claimRewards": "Reivindicar recompensas",
+    "DialogSuccess": "Você apostou seu token com sucesso.",
+    "amountStaking": "Selecione o valor a apostar",
+    "dialogConfirm": "Confirmação",
+    "networkBonus": "Bônus de rede",
+    "apyWithoutBonus": "APY sem bônus de rede",
+    "apyWithBonus": "APY com bônus de rede",
+    "networkBonusWarning": "Seu bônus de rede não está ativado!",
+    "amount": "Montante",
+    "networkBonusEnabled": "O bônus de rede está ativado!"
+  },
+  "reward": {
+    "totalPayout": "Pagamento total",
+    "stakingPeriod": "Período de aposta",
+    "claimRewards": "Reivindicar recompensas",
+    "claim": "Afirmação",
+    "claimAll": "Reivindicar tudo",
+    "claimedRewards": "Recompensas pagas",
+    "unclaimedRewards": "Recompensas não reivindicadas",
+    "DialogSuccess": "Você reivindicou com sucesso suas recompensas.",
+    "disabled": "Desativado"
+  },
+  "nftPage": {
+    "nftTitle": "Suas NFTs",
+    "nftName": "Nome",
+    "nftSymbol": "Símbolo"
+  }
+}

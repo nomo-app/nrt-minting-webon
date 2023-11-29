@@ -1,0 +1,62 @@
+{
+  "generic": {
+    "day": "낮"
+  },
+  "status": {
+    "PENDING_TOKENID_FETCH": "NFT 검색 중...",
+    "PENDING_FETCH_BALANCE": "잔액을 가져오는 중...",
+    "PENDING_DETAILS_FETCH": "보상 로드 중...",
+    "PENDING_FETCH_QUOTE": "정보 로드 중...",
+    "PENDING_SUBMIT_TX": "확인을 기다리는 중...",
+    "ERROR_MISSING_WALLET_BACKUP": "백업 필요 - AVINOC를 스테이킹하기 전에 돌아가서 12단어의 백업을 기록해 두십시오.",
+    "ERROR_FETCH_FAILED": "오류 - 연결 실패",
+    "ERROR_INSUFFICIENT_RESERVES": "오류 - 스테이킹 계약에 AVINOC 보유량이 충분하지 않습니다.",
+    "ERROR_NO_NFTS": "사용 가능한 NFT가 없습니다.",
+    "ERROR_NO_NFTS_CLAIM": "사용 가능한 보상이 없습니다. AVINOC의 양을 선택하려면 돌아가십시오.",
+    "ERROR_TX_FAILED": "오류 - 거래 실패",
+    "ERROR_INSUFFICIENT_ETH": "오류 - 거래 수수료를 지불할 수 없습니다. 지갑에 충분한 이더리움을 충전하세요.",
+    "ERROR_LIMIT_EXCEEDED": "AVINOC 스테이킹은 최대 250000 AVINOC로 제한됩니다(15년 동안만).",
+    "ERROR_INSUFFICIENT_AVINOC": "불충분한 AVINOC 양"
+  },
+  "dialog": {
+    "congratulations": "축하합니다!",
+    "great": "엄청난!",
+    "startStaking": "스테이킹 시작!"
+  },
+  "staking": {
+    "available": "사용 가능",
+    "loadBalance": "로드 중...",
+    "enterAmount": "금액을 입력해주세요",
+    "AvinocStaking": "AVINOC 스테이킹",
+    "year": "년도",
+    "years": "연령",
+    "safirStakingEnabled": "Safir 스테이킹 보너스가 활성화되었습니다.",
+    "AvinocRewards": "당신의 AVINOC 보상",
+    "claimRewards": "보상 청구",
+    "DialogSuccess": "토큰을 성공적으로 스테이킹했습니다.",
+    "amountStaking": "스테이킹할 금액 선택",
+    "dialogConfirm": "확인",
+    "networkBonus": "네트워크 보너스",
+    "apyWithoutBonus": "네트워크 보너스가 없는 APY",
+    "apyWithBonus": "네트워크 보너스가 있는 APY",
+    "networkBonusWarning": "네트워크 보너스가 활성화되지 않았습니다!",
+    "amount": "양",
+    "networkBonusEnabled": "네트워크 보너스가 활성화되었습니다!"
+  },
+  "reward": {
+    "totalPayout": "총 지불금",
+    "stakingPeriod": "스테이킹 기간",
+    "claimRewards": "보상 청구",
+    "claim": "주장하다",
+    "claimAll": "모두 청구",
+    "claimedRewards": "유료 보상",
+    "unclaimedRewards": "미청구 보상",
+    "DialogSuccess": "보상을 성공적으로 청구했습니다.",
+    "disabled": "장애가있는"
+  },
+  "nftPage": {
+    "nftTitle": "당신의 NFT",
+    "nftName": "이름",
+    "nftSymbol": "상징"
+  }
+}
