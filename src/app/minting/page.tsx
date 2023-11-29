@@ -1,6 +1,6 @@
 "use client";
 
-import "../../i18n";
+import "../../util/i18n";
 import React, { useEffect } from "react";
 import "./MintingPage.css";
 import "../../shared-css/colors.css";
@@ -10,8 +10,6 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Alert, Card, CircularProgress, InputLabel } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import avinoc_logo from "../../assets/avinoc_ic.svg";
-import staking_icon from "../../assets/staking_ic.svg";
 import { useTranslation } from "react-i18next";
 import { CongratDialogSlide } from "./CongratDialog";
 import { ConfirmDialogSlide } from "./ConfirmDialog";
@@ -25,6 +23,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { getApyValues } from "../../util/staking-rewards";
 import { usePreventServerSideRendering } from "@/util/util";
+import { avinocIcon, stakingIcon } from "@/asset-paths";
 
 type PageState =
   | "IDLE"
@@ -255,7 +254,7 @@ const StakeButton: React.FC<{ disabled: boolean; onClick: () => void }> = (
           fontSize: "small",
         }}
       >
-        <img src={staking_icon} alt={""} height={"14px"} />
+        <img src={stakingIcon} alt={""} height={"14px"} />
         {"Stake"}
       </div>
     </button>
@@ -301,7 +300,7 @@ const StakingTitleBar: React.FC = () => {
     >
       <div style={{ flexGrow: 11 }} />
       <img
-        src={avinoc_logo}
+        src={avinocIcon}
         className="Avinoc-Hex"
         alt="hex"
         style={{
@@ -371,7 +370,7 @@ const AvinocAmountInput: React.FC<{
         startAdornment: (
           <InputAdornment position="start">
             <img
-              src={avinoc_logo}
+              src={avinocIcon}
               className="Zeniq-Logo"
               alt="logo"
               style={{ width: 20, height: 20 }}
@@ -610,7 +609,7 @@ const AvinocRewardLabel: React.FC<{ label: string }> = (props) => {
       }}
     >
       {props.label}
-      <img src={avinoc_logo} className={"avi-logo"} />
+      <img src={avinocIcon} className={"avi-logo"} />
     </div>
   );
 };

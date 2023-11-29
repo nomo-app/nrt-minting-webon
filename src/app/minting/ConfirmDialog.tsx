@@ -10,13 +10,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { useTranslation } from "react-i18next";
-import avinoc_logo from "../../assets/avinoc_ic.svg";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { getApyValues } from "../../util/staking-rewards";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import { avinocIcon } from "@/asset-paths";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -89,7 +89,7 @@ export const ConfirmDialogSlide: React.FC<{
           >
             {t("staking.amount")}: {props.selectedAmount}
             <img
-              src={avinoc_logo}
+              src={avinocIcon}
               className={"avi-logo"}
               style={{ height: "12px" }}
             />
