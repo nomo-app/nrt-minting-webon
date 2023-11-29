@@ -24,6 +24,7 @@ import { UnreachableCaseError } from "../../util/typesafe";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { getApyValues } from "../../util/staking-rewards";
+import { usePreventServerSideRendering } from "@/util/util";
 
 type PageState =
   | "IDLE"
@@ -40,8 +41,12 @@ function isErrorState(pageState: PageState) {
 }
 
 const MintingPage: React.FC = () => {
+  const { isClient } = usePreventServerSideRendering();
+
   const { avinocPrice } = { avinocPrice: 0.3 }; // TODO useAvinocPrice();
-  const { address: ethAddress } =  { address: "0x05870f1507d820212E921e1f39f14660336231D1" }; // TODO
+  const { address: ethAddress } = {
+    address: "0x05870f1507d820212E921e1f39f14660336231D1",
+  }; // TODO
   const { avinocBalance, fetchError: balanceFetchError } = useAvinocBalance({
     ethAddress,
   });
@@ -103,6 +108,9 @@ const MintingPage: React.FC = () => {
       });
   }
 
+  if (!isClient) {
+    return <div />;
+  }
   return (
     <div
       style={{
@@ -260,10 +268,7 @@ const SwitchToRewardPageButton: React.FC<{
   const { t } = useTranslation();
 
   return (
-    <a
-      href={props.disabled ? undefined : "TODO"}
-      style={{ width: "100%" }}
-    >
+    <a href={props.disabled ? undefined : "TODO"} style={{ width: "100%" }}>
       <button
         style={{
           color: props.disabled ? "white" : undefined,

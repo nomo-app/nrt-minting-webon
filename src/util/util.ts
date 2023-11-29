@@ -1,4 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
+export function usePreventServerSideRendering() {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  return { isClient };
+}
 
 export function arrayBufferToBase64(buffer: any) {
   let binary = "";
