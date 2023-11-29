@@ -154,7 +154,7 @@ const MintingPage: React.FC = () => {
         handleConfirm={() => submitStaking()}
       />
       <CongratDialogSlide
-        isOpen={successDialogOpen}
+        isOpen={true}
         handleClose={() => setSuccessDialogOpen(false)}
         translationKey={"staking.DialogSuccess"}
       />
