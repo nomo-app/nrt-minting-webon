@@ -6,6 +6,7 @@ import { BonusBox } from "./MintingComponents";
 import { AvinocDollarRewardLabel } from "./MintingComponents";
 import { AvinocRewardLabel } from "./MintingComponents";
 import { AvinocYearsLabel } from "./MintingComponents";
+import { formatTokenDollarPrice } from "@/util/use-avinoc-price";
 
 export const RewardPredictionBox: React.FC<{
   years: number;
@@ -51,12 +52,10 @@ export const RewardPredictionBox: React.FC<{
       return t("staking.enterAmount");
     } else {
       const amount = getRewardAmount(years);
-      return "rewardDollarPrice"; // TODO
-
-      // return `${formatTokenDollarPrice({
-      //   tokenPrice: props.avinocPrice,
-      //   tokenAmount: amount,
-      // })} `;
+      return `${formatTokenDollarPrice({
+        tokenPrice: props.avinocPrice,
+        tokenAmount: amount,
+      })} `;
     }
   }
 

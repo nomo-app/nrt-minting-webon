@@ -22,6 +22,7 @@ import { StakingTitleBar } from "@/app/minting/ui/MintingComponents";
 import { AvinocAmountInput } from "@/app/minting/ui/MintingComponents";
 import { SelectYears } from "@/app/minting/ui/MintingComponents";
 import { mintingMainFlexBox } from "@/app/minting/ui/minting-style";
+import { useAvinocPrice } from "@/util/use-avinoc-price";
 
 export type PageState =
   | "IDLE"
@@ -36,7 +37,7 @@ function isPendingState(pageState: PageState) {
 const MintingPage: React.FC = () => {
   const { isClient } = usePreventServerSideRendering();
 
-  const { avinocPrice } = { avinocPrice: 0.3 }; // TODO useAvinocPrice();
+  const { avinocPrice } = useAvinocPrice();
   const { address: ethAddress } = {
     address: "0x05870f1507d820212E921e1f39f14660336231D1",
   }; // TODO
