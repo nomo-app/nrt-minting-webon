@@ -1,0 +1,111 @@
+:root {
+    --gutter: 20px;
+}
+
+body {
+    height: 100%;
+}
+
+.primary-button:active {
+    transform: scale(1.1);
+}
+
+.claimRewards .Avinoc-Hex-Rewards {
+    animation-name: spin;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-duration: 5s;
+}
+
+.InfoLabel {
+    /*position: absolute;*/
+    /*top: 53%;*/
+    /*left: 20%;*/
+    font-size: 16px;
+    z-index: 1;
+    width: auto;
+    border-color: transparent!important;
+    border: none;
+    padding: 5px 5px 5px 5px;
+    margin-bottom: 3px;
+    border-color: var(--color-accent)!important;
+    border-width: 2px!important;
+    background-color: white!important;
+}
+
+.rewardsLabel {
+    /*position: absolute;*/
+    /*top: 53%;*/
+    /*left: 20%;*/
+    font-size: 14px;
+    width: auto;
+    border-color: transparent!important;
+    border: none;
+    padding: 5px 5px 5px 5px;
+    margin-bottom: 3px;
+    border-color: var(--color-accent)!important;
+    border-width: 2px!important;
+    /*background-color: white!important;*/
+    opacity: 100
+;
+
+}
+
+
+.primary-button {
+    width: 60%;
+    height: 3rem;
+    color: white;
+    background-color: var(--color-primary-button-background);
+    border: none;
+    border-radius: 5px;
+    font-size: small;
+    font-weight: bold;
+    text-align: center;
+    transition: ease-in-out all 0.3s;
+}
+
+.secondary-button, .AvinocStakingButton {
+    height: 50px;
+    width: 80%;
+    color: var(--color-secondary-button-text);
+    background-color: var(--color-secondary-button-background);
+    border: none;
+    border-radius: 5px;
+    font-size: small;
+    font-weight: bold;
+    text-align: center;
+    transition: ease-in-out all 0.3s;
+    justify-items: center;
+}
+
+.secondary-button:active, .AvinocStakingButton:active {
+    transform: scale(1.1);
+}
+
+
+.scroll-container {
+    display: grid;
+    grid-gap: calc(var(--gutter) / 2);
+    grid-auto-flow: column;
+    grid-auto-columns: calc(100% - var(--gutter) * 2);
+    grid-template-columns: 10px;
+    grid-template-rows: minmax(150px, 1fr);
+    overflow-x: scroll;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    padding: 5px 5px 5px 5px;
+    /*height: fit-content;*/
+}
+
+.scroll-container::before{
+    content: '';
+    margin: 100px;
+}
+
+.avi-logo{
+    height: 16px;
+    padding-right: 2px;
+    vertical-align: middle;
+}

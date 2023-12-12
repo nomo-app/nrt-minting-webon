@@ -1,6 +1,7 @@
 import { AbstractProvider, ethers } from "ethers";
 import { EthersjsNomoSigner } from "ethersjs-nomo-webons";
 import { nomo } from "nomo-webon-kit";
+import { useEffect, useState } from "react";
 
 export const ethProvider = ethers.getDefaultProvider("mainnet");
 export const ethSigner = new EthersjsNomoSigner(ethProvider);
@@ -13,6 +14,16 @@ export type Web3Error =
 export async function isWalletBackupAvailable(): Promise<boolean> {
   const res = await nomo.mnemonicBackupExisted();
   return res.mnemonicBackupExisted;
+}
+
+export function useEvmAddress(): { evmAddress: string | null } {
+  const [evmAddress, setEvmAddress] = useState<string | null>(null);
+  useEffect(() => {
+    nomo.getEvmAddress().then((res: string) => {
+      setEvmAddress(res);
+    });
+  }, []);
+  return { evmAddress };
 }
 
 export async function waitForConfirmationOrThrow(txResponse: any) {

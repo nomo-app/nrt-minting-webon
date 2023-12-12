@@ -18,12 +18,12 @@ const avinocContractAddress = "0xf1ca9cb74685755965c7458528a36934df52a3ef";
 const stakingContract = new ethers.Contract(
   stakingContractAddress,
   StakingABI.abi,
-  ethProvider,
+  ethProvider
 );
 const avinocContract = new ethers.Contract(
   avinocContractAddress,
   genericErc20Abi,
-  ethProvider,
+  ethProvider
 );
 
 const gasLimits = {
@@ -236,8 +236,8 @@ export async function fetchStakingNft(args: {
   tokenId: number;
 }): Promise<StakingNft> {
   const rawStakingNft = await stakingContract.stakingNFTs(args.tokenId);
-  const amount = rawStakingNft["amount"] / 1e18;
-  const payoutFactor = rawStakingNft["payoutFactor"] / 1e18;
+  const amount = Number(rawStakingNft["amount"]) / 1e18;
+  const payoutFactor = Number(rawStakingNft["payoutFactor"]) / 1e18;
   const start = new Date(Number(rawStakingNft["start"]) * 1000);
   const end = new Date(Number(rawStakingNft["end"]) * 1000);
   const lastClaim = new Date(Number(rawStakingNft["lastClaim"]) * 1000);
