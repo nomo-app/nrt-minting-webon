@@ -78,6 +78,7 @@ export const StatusBox: React.FC<{ pageState: PageState }> = (props) => {
     );
   }
 };
+
 export const StakeButton: React.FC<{
   disabled: boolean;
   onClick: () => void;
@@ -111,6 +112,7 @@ export const StakeButton: React.FC<{
     </button>
   );
 };
+
 export const SwitchToRewardPageButton: React.FC<{
   disabled: boolean;
 }> = (props) => {
@@ -158,12 +160,13 @@ export const StakingTitleBar: React.FC = () => {
       />
       <div style={{ flexGrow: 5 }} />
       <div style={{ fontWeight: "bold", fontSize: "large" }}>
-        {t("staking.AvinocStaking")}
+        {t("reward.claimedRewards")}
       </div>
       <div style={{ flexGrow: 15 }} />
     </div>
   );
 };
+
 export const AvinocAmountInput: React.FC<{
   onChange: (value: number) => void;
   value: number;
@@ -290,6 +293,7 @@ export const AvinocRewardLabel: React.FC<{ label: string }> = (props) => {
     </div>
   );
 };
+
 export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
   return (
     <div
@@ -303,6 +307,7 @@ export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
     </div>
   );
 };
+
 export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (
   props
 ) => {

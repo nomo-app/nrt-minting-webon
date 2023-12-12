@@ -1,3 +1,6 @@
+"use client";
+
+import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
 import "../ui/ClaimRewardsComponents.css";
 import "@/shared-css/colors.css";
@@ -20,6 +23,7 @@ import {
   TitleBox,
   claimRewardsMainFlexBox,
 } from "../ui/ClaimRewardsComponents";
+import { usePreventServerSideRendering } from "@/util/util";
 
 export type PageState =
   | "PENDING_TOKENID_FETCH"
@@ -40,6 +44,8 @@ export function isErrorState(pageState: PageState) {
 }
 
 const ClaimRewardsPage: React.FC = () => {
+  const { isClient } = usePreventServerSideRendering();
+
   const { evmAddress } = useEvmAddress();
   const { avinocPrice } = useAvinocPrice();
   const [pageState, setPageState] = React.useState<PageState>(
@@ -125,6 +131,9 @@ const ClaimRewardsPage: React.FC = () => {
     }
   }
 
+  if (!isClient) {
+    return <div />;
+  }
   return (
     <div style={claimRewardsMainFlexBox}>
       <div style={{ flexGrow: "10" }} />
