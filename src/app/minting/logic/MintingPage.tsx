@@ -2,7 +2,7 @@
 
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
-import "@/shared-css/colors.css";
+import "@/common/colors.css";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { Card } from "@mui/material";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";

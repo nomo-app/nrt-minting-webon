@@ -1,42 +1,38 @@
 "use client";
 
 import "@/util/i18n"; // needed to initialize i18next
-import { StakingTitleBar } from "./minting/ui/MintingComponents";
-import { usePreventServerSideRendering } from "@/util/util";
-import { stakingIcon } from "@/asset-paths";
-import { mintingMainFlexBox } from "./minting/ui/minting-style";
-import { useEffect } from "react";
 import {
-  NomoTheme,
-  getCurrentNomoTheme,
-  injectNomoCSSVariables,
-  switchNomoTheme,
-} from "nomo-webon-kit";
+  themeSwitchRotation,
+  usePreventServerSideRendering,
+} from "@/util/util";
+import { avinocIcon, stakingIcon } from "@/asset-paths";
+import { mintingMainFlexBox } from "./minting/ui/minting-style";
+import { navigateToMintingPage } from "@/web3/navigation";
+import { nomo } from "nomo-webon-kit";
 
 export default function Home() {
   const { isClient } = usePreventServerSideRendering();
-  useEffect(() => {
-    injectNomoCSSVariables();
-  }, []);
 
   if (!isClient) {
     return <div />;
   }
   return (
     <div style={mintingMainFlexBox}>
-      <StakingTitleBar />
+      <WelcomeTitleBar />
       <ChainSelectButton
         onClick={() => {
-          location.replace("/minting");
+          navigateToMintingPage("zeniq-smart-chain");
         }}
         text={"ZEN20 (ZENIQ Smartchain)"}
       />
       <ChainSelectButton
         onClick={() => {
-          location.replace("/minting");
+          navigateToMintingPage("ethereum");
         }}
         text={"ERC20 (Ethereum)"}
       />
+      <MigrateToZEN20Button />
+      <div style={{ height: "16px" }} />
       <ThemeSwitchButton />
     </div>
   );
@@ -59,19 +55,29 @@ export const ThemeSwitchButton: React.FC<{}> = () => {
   );
 };
 
-async function themeSwitchRotation() {
-  const oldTheme: NomoTheme = (await getCurrentNomoTheme()).name as NomoTheme;
-  const newTheme: NomoTheme =
-    oldTheme === "LIGHT"
-      ? "DARK"
-      : oldTheme == "DARK"
-      ? "TUPAN"
-      : oldTheme == "TUPAN"
-      ? "AVINOC"
-      : "LIGHT";
-  await switchNomoTheme({ theme: newTheme });
-  await injectNomoCSSVariables(); // refresh css variables after switching theme
+async function installMigrationWebOn() {
+  nomo.installWebOn({
+    deeplink: "https://nomo.app/webon/avinoc-migration.nomo.app",
+    navigateBack: false,
+    skipPermissionDialog: true,
+  });
 }
+
+export const MigrateToZEN20Button: React.FC<{}> = () => {
+  return (
+    <button
+      onClick={installMigrationWebOn}
+      className="primary-button"
+      style={{
+        backgroundColor: "var(--nomoPrimary)",
+        padding: "8px",
+        color: "var(--nomoOnPrimary)",
+      }}
+    >
+      Migrate from ERC20 to ZEN20
+    </button>
+  );
+};
 
 export const ChainSelectButton: React.FC<{
   onClick: () => void;
@@ -101,5 +107,36 @@ export const ChainSelectButton: React.FC<{
         {props.text}
       </div>
     </button>
+  );
+};
+
+export const WelcomeTitleBar: React.FC = () => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        alignContent: "space-around",
+        width: "100%",
+        justifyContent: "center",
+        marginTop: "20px",
+      }}
+    >
+      <div style={{ flexGrow: 11 }} />
+      <img
+        src={avinocIcon}
+        className="Avinoc-Hex"
+        alt="hex"
+        style={{
+          width: "10%",
+        }}
+      />
+      <div style={{ flexGrow: 1 }} />
+      <div style={{ fontWeight: "bold", fontSize: "large" }}>
+        {"AVINOC DeFi"}
+      </div>
+      <div style={{ flexGrow: 15 }} />
+    </div>
   );
 };

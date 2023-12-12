@@ -24,12 +24,6 @@ a {
     color: var(--color-accent)!important;
 }
 
-.MuiCard-root {
-    /*height: 35vw;*/
-    /*width: 100%;*/
-    /*padding: 10px 0 10px 0;*/
-}
-
 .input-card {
     margin: 10px 10px 10px 10px;
     width: 100%;

@@ -2,7 +2,7 @@
 
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
-import "@/shared-css/colors.css";
+import "@/common/colors.css";
 import { useAvinocPrice } from "../../../util/use-avinoc-price";
 import { useTranslation } from "react-i18next";
 import { Alert, Card, CircularProgress } from "@mui/material";

@@ -17,6 +17,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { avinocIcon, stakingIcon } from "@/asset-paths";
 import { PageState } from "../logic/MintingPage";
+import BackButton from "@/common/BackButton";
 
 export function isErrorState(pageState: PageState) {
   return pageState.startsWith("ERROR");
@@ -152,6 +153,7 @@ export const StakingTitleBar: React.FC = () => {
         marginTop: "20px",
       }}
     >
+      <BackButton />
       <div style={{ flexGrow: 11 }} />
       <img
         src={avinocIcon}

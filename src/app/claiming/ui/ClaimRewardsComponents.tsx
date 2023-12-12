@@ -1,5 +1,5 @@
-import React, { CSSProperties } from "react";
-import "@/shared-css/colors.css";
+import React from "react";
+import "@/common/colors.css";
 import { formatTokenDollarPrice } from "@/util/use-avinoc-price";
 import { useTranslation } from "react-i18next";
 import {
@@ -15,6 +15,7 @@ import { usePeriodReRender } from "../../../util/util";
 import { PageState } from "@/app/minting/logic/MintingPage";
 import { isPendingState } from "@/app/claiming/logic/ClaimRewardsPage";
 import { avinocIcon, boxLogo, doubleBoxLogo, rocketIcon } from "@/asset-paths";
+import BackButton from "@/common/BackButton";
 
 export const TitleBox: React.FC = () => {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ export const TitleBox: React.FC = () => {
         fontWeight: "bold",
       }}
     >
+      <BackButton />
       {t("reward.claimRewards")}
     </div>
   );
