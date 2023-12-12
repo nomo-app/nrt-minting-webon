@@ -20,7 +20,7 @@
     "i18next-http-backend": "^1.3.1",
     "lottie-web": "^5.12.2",
     "next": "^14.0.4",
-    "nomo-webon-kit": "^0.1.15",
+    "nomo-webon-kit": "^0.1.18",
     "react": "^18",
     "react-dom": "^18",
     "react-i18next": "^11.12.0"

@@ -11,9 +11,5 @@ export const mintingMainFlexBox: CSSProperties = {
   height: "100vh",
   paddingLeft: "10%",
   paddingRight: "10%",
-  background: "url(assets/registrationbackground.svg)",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  backgroundPosition: "bottom",
   overflowY: "scroll",
 };

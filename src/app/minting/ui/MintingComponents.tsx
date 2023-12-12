@@ -119,7 +119,10 @@ export const SwitchToRewardPageButton: React.FC<{
   const { t } = useTranslation();
 
   return (
-    <a href={props.disabled ? undefined : "TODO"} style={{ width: "100%" }}>
+    <a
+      href={props.disabled ? undefined : "/claiming"}
+      style={{ width: "100%" }}
+    >
       <button
         style={{
           color: props.disabled ? "white" : undefined,

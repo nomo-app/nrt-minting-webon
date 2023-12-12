@@ -2,10 +2,6 @@ import { CSSProperties } from "react";
 import "./ClaimRewardsComponents.css";
 
 export const claimRewardsMainFlexBox: CSSProperties = {
-  background: "url(assets/registrationbackground.svg)",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  backgroundPosition: "bottom",
   display: "flex",
   flexDirection: "column",
   rowGap: "10px",
