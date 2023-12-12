@@ -1,4 +1,5 @@
 import { CSSProperties } from "react";
+import "./MintingPage.css";
 
 export const mintingMainFlexBox: CSSProperties = {
   display: "flex",
@@ -12,7 +13,7 @@ export const mintingMainFlexBox: CSSProperties = {
   paddingRight: "10%",
   background: "url(assets/registrationbackground.svg)",
   backgroundRepeat: "no-repeat",
-  backgroundSize: "100%",
+  backgroundSize: "cover",
   backgroundPosition: "bottom",
   overflowY: "scroll",
 };

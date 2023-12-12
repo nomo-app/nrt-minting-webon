@@ -16,23 +16,6 @@ import { PageState } from "@/app/minting/logic/MintingPage";
 import { isPendingState } from "@/app/claiming/logic/ClaimRewardsPage";
 import { avinocIcon, boxLogo, doubleBoxLogo, rocketIcon } from "@/asset-paths";
 
-export const claimRewardsMainFlexBox: CSSProperties = {
-  background: "url(assets/registrationbackground.svg)",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "100%",
-  backgroundPosition: "bottom",
-  display: "flex",
-  flexDirection: "column",
-  rowGap: "10px",
-  alignContent: "start",
-  alignItems: "center",
-  textAlign: "center",
-  justifyContent: "center",
-  fontSize: "calc(10px + 1vmin)",
-  height: "100vh",
-  width: "100%",
-};
-
 export const TitleBox: React.FC = () => {
   const { t } = useTranslation();
   return (

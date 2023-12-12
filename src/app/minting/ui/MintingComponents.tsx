@@ -160,7 +160,7 @@ export const StakingTitleBar: React.FC = () => {
       />
       <div style={{ flexGrow: 5 }} />
       <div style={{ fontWeight: "bold", fontSize: "large" }}>
-        {t("reward.claimedRewards")}
+        {t("staking.AvinocStaking")}
       </div>
       <div style={{ flexGrow: 15 }} />
     </div>

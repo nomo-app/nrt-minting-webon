@@ -2,7 +2,6 @@
 
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
-import "@/app/minting/ui/MintingPage.css";
 import "@/shared-css/colors.css";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { Card } from "@mui/material";

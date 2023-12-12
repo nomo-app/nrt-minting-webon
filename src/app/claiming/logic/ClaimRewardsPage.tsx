@@ -2,7 +2,6 @@
 
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
-import "../ui/ClaimRewardsComponents.css";
 import "@/shared-css/colors.css";
 import { useAvinocPrice } from "../../../util/use-avinoc-price";
 import { useTranslation } from "react-i18next";
@@ -21,9 +20,9 @@ import {
   ClaimedRewards,
   StakingNftBox,
   TitleBox,
-  claimRewardsMainFlexBox,
 } from "../ui/ClaimRewardsComponents";
 import { usePreventServerSideRendering } from "@/util/util";
+import { claimRewardsMainFlexBox } from "../ui/claim-style";
 
 export type PageState =
   | "PENDING_TOKENID_FETCH"
