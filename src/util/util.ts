@@ -2,15 +2,12 @@ import {
   NomoTheme,
   getCurrentNomoTheme,
   injectNomoCSSVariables,
-  isFallbackModeActive,
   switchNomoTheme,
 } from "nomo-webon-kit";
 import React, { useEffect, useState } from "react";
 
 export async function themeSwitchRotation() {
-  const oldTheme: NomoTheme =
-    (localStorage.getItem("nomoTheme") as NomoTheme) ??
-    ((await getCurrentNomoTheme()).name as NomoTheme);
+  const oldTheme: NomoTheme = (await getCurrentNomoTheme()).name as NomoTheme;
   const newTheme: NomoTheme =
     oldTheme === "LIGHT"
       ? "DARK"
@@ -19,21 +16,12 @@ export async function themeSwitchRotation() {
       : oldTheme == "TUPAN"
       ? "AVINOC"
       : "LIGHT";
-  localStorage.setItem("nomoTheme", newTheme);
   await switchNomoTheme({ theme: newTheme });
   await injectNomoCSSVariables(); // refresh css variables after switching theme
 }
 
 function useNomoTheme() {
   useEffect(() => {
-    if (isFallbackModeActive()) {
-      const nomoTheme = localStorage.getItem("nomoTheme") as NomoTheme;
-      if (nomoTheme) {
-        switchNomoTheme({ theme: nomoTheme }).then(() =>
-          injectNomoCSSVariables()
-        );
-      }
-    }
     injectNomoCSSVariables();
   }, []);
 }
