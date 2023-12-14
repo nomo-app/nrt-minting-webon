@@ -18,8 +18,7 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { avinocIcon, stakingIcon } from "@/asset-paths";
 import { PageState } from "../logic/MintingPage";
 import BackButton from "@/common/BackButton";
-import { getNomoEvmNetwork } from "@/web3/navigation";
-import { getTokenStandard } from "@/util/util";
+import { getTokenStandard, navigateToClaimingPage } from "@/web3/navigation";
 import { formatAVINOCAmount } from "@/util/use-avinoc-price";
 
 export function isErrorState(pageState: PageState) {
@@ -111,7 +110,7 @@ export const StakeButton: React.FC<{
         }}
       >
         <img src={stakingIcon} alt={""} height={"14px"} />
-        {"Stake"}
+        {"Stake " + getTokenStandard()}
       </div>
     </button>
   );
@@ -122,11 +121,12 @@ export const SwitchToRewardPageButton: React.FC<{
 }> = (props) => {
   const { t } = useTranslation();
 
+  function onClick() {
+    navigateToClaimingPage();
+  }
+
   return (
-    <a
-      href={props.disabled ? undefined : "/claiming"}
-      style={{ width: "100%" }}
-    >
+    <a onClick={props.disabled ? undefined : onClick} style={{ width: "100%" }}>
       <button
         style={{
           color: props.disabled ? "white" : undefined,
@@ -142,8 +142,7 @@ export const SwitchToRewardPageButton: React.FC<{
   );
 };
 export const StakingTitleBar: React.FC = () => {
-  const network = getNomoEvmNetwork();
-  const tokenStandard = getTokenStandard(network);
+  const tokenStandard = getTokenStandard();
 
   return (
     <div

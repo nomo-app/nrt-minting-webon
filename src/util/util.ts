@@ -1,21 +1,10 @@
 import {
-  NomoNetwork,
   NomoTheme,
   getCurrentNomoTheme,
   injectNomoCSSVariables,
   switchNomoTheme,
 } from "nomo-webon-kit";
 import React, { useEffect, useState } from "react";
-
-export function getTokenStandard(network: NomoNetwork) {
-  if (network === "ethereum") {
-    return "ERC20";
-  } else if (network === "zeniq-smart-chain") {
-    return "ZEN20";
-  } else {
-    throw new Error("Unsupported network " + network);
-  }
-}
 
 export async function themeSwitchRotation() {
   const oldTheme: NomoTheme = (await getCurrentNomoTheme()).name as NomoTheme;

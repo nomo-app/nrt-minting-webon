@@ -1,6 +1,9 @@
 import React from "react";
 import "@/common/colors.css";
-import { formatTokenDollarPrice } from "@/util/use-avinoc-price";
+import {
+  formatAVINOCAmount,
+  formatTokenDollarPrice,
+} from "@/util/use-avinoc-price";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -42,8 +45,9 @@ export const ClaimedRewards: React.FC<{
   const nftArray: Array<StakingNft> = Object.values(props.stakingNFTs);
   const sumRewards = nftArray.reduce(
     (prev, nft) => prev + nft.claimedRewards,
-    0
+    0n
   );
+  const sumRewardsFormatted = formatAVINOCAmount({ tokenAmount: sumRewards });
   return (
     <Card
       style={{
@@ -62,6 +66,8 @@ export const ClaimedRewards: React.FC<{
       />
       <div
         style={{
+          marginTop: "5px",
+          marginBottom: "5px",
           fontWeight: "Bold",
           fontSize: "14px",
           textAlign: "left",
@@ -72,12 +78,13 @@ export const ClaimedRewards: React.FC<{
       </div>
       <div
         style={{
+          alignSelf: "center",
           fontSize: "14px",
           textAlign: "right",
           flex: "1",
         }}
       >
-        <p>{sumRewards.toFixed(2)}</p>
+        <p>{sumRewardsFormatted}</p>
       </div>
       <img
         src={avinocIcon}
@@ -138,17 +145,26 @@ export const StakingNftBox: React.FC<{
   onClickClaim: (stakingNft: StakingNft) => void;
 }> = (props) => {
   const { t } = useTranslation();
-  usePeriodReRender(1000);
+  usePeriodReRender(1000); // frequent re-rendering to show "live updates" of rewards
 
-  const totalRewards = props.stakingNft.amount * props.stakingNft.payoutFactor;
-  const unclaimedRewards = computeUnclaimedRewards(props.stakingNft);
-  const progress =
-    (100.0 * (props.stakingNft.claimedRewards + unclaimedRewards)) /
-    totalRewards;
-  const stakingPeriod = `${props.stakingNft.start.toLocaleDateString()} - ${props.stakingNft.end.toLocaleDateString()}`;
-  const years =
-    props.stakingNft.end.getFullYear() - props.stakingNft.start.getFullYear();
-  const avinocPerDay = totalRewards / (years * 365);
+  const totalRewards: bigint =
+    (props.stakingNft.amount * props.stakingNft.payoutFactor) / 10n ** 18n;
+  const unclaimedRewards: bigint = computeUnclaimedRewards(props.stakingNft);
+  const unclaimedRewardsFormatted = formatAVINOCAmount({
+    tokenAmount: unclaimedRewards,
+  });
+
+  const progress: number = Number(
+    (100n * (props.stakingNft.claimedRewards + unclaimedRewards)) / totalRewards
+  );
+  const stakingPeriod: string = `${props.stakingNft.start.toLocaleDateString()} - ${props.stakingNft.end.toLocaleDateString()}`;
+  const years: bigint = BigInt(
+    props.stakingNft.end.getFullYear() - props.stakingNft.start.getFullYear()
+  );
+  const avinocPerDay: bigint = totalRewards / (years * 365n);
+  const avinocPerDayFormatted = formatAVINOCAmount({
+    tokenAmount: avinocPerDay,
+  });
 
   function onClickClaimClosure() {
     props.onClickClaim(props.stakingNft);
@@ -186,7 +202,17 @@ export const StakingNftBox: React.FC<{
               fontWeight: "bolder",
             }}
           >
-            {"Staked: " + props.stakingNft.amount + " AVINOC"}
+            {"NFT-ID: " + props.stakingNft.tokenId}
+          </div>
+          <div
+            style={{
+              fontSize: "14px",
+              textAlign: "start",
+              fontWeight: "bolder",
+            }}
+          >
+            {"Staked: " +
+              formatAVINOCAmount({ tokenAmount: props.stakingNft.amount })}
           </div>
           <div
             style={{
@@ -195,7 +221,9 @@ export const StakingNftBox: React.FC<{
               fontSize: "14px",
             }}
           >
-            {t("reward.totalPayout") + ": " + totalRewards + " AVINOC"}
+            {t("reward.totalPayout") +
+              ": " +
+              formatAVINOCAmount({ tokenAmount: totalRewards })}
           </div>
           <div
             style={{
@@ -204,7 +232,7 @@ export const StakingNftBox: React.FC<{
               fontSize: "14px",
             }}
           >
-            {avinocPerDay.toPrecision(4) + " AVINOC/" + t("generic.day")}
+            {avinocPerDayFormatted + " / " + t("generic.day")}
           </div>
           <div style={{ fontWeight: "lighter", fontSize: "14px" }}>
             {"APY: " + props.stakingNft.apy + "%"}
@@ -281,13 +309,11 @@ export const StakingNftBox: React.FC<{
             >
               {t("reward.unclaimedRewards")}
             </div>
-            <div style={{ fontSize: "14px" }}>
-              {unclaimedRewards.toFixed(6) + " AVINOC"}{" "}
-            </div>
+            <div style={{ fontSize: "14px" }}>{unclaimedRewardsFormatted} </div>
             <div style={{ fontSize: "14px", color: "gray" }}>
               {formatTokenDollarPrice({
                 tokenPrice: props.avinocPrice,
-                tokenAmount: Number(unclaimedRewards),
+                tokenAmount: unclaimedRewards,
               })}
             </div>
           </div>

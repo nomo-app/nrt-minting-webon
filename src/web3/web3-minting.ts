@@ -12,6 +12,7 @@ import {
 import { fetchWithRetryEtherScan } from "@/util/util";
 import { getNomoEvmNetwork } from "./navigation";
 import { Contract } from "ethers";
+import { isFallbackModeActive } from "nomo-webon-kit";
 
 export const avinocContractAddress =
   "0xf1ca9cb74685755965c7458528a36934df52a3ef"; // has the same address on both ERC20 and ZEN20
@@ -219,6 +220,10 @@ export async function fetchOwnedTokenIDs(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
   const stakingContract = getStakingContract();
+  const network = getNomoEvmNetwork();
+  if (network === "zeniq-smart-chain") {
+    return await fetchOwnedTokenIDsByEnumeratingAllTokens(args);
+  }
   try {
     const idCandidates = await fetchTokenIDCandidatesFromEtherscan(args);
     const ownerOfPromises = idCandidates.map((idCandidate) =>
@@ -228,7 +233,7 @@ export async function fetchOwnedTokenIDs(args: {
     const ownerOfArray: string[] = await Promise.all(ownerOfPromises);
     console.log("received owners of idCandidates", ownerOfArray);
     return idCandidates.filter(
-      (idCandidate, index) =>
+      (_, index) =>
         ownerOfArray[index].toLowerCase() === args.ethAddress.toLowerCase()
     );
   } catch (e) {
@@ -237,35 +242,72 @@ export async function fetchOwnedTokenIDs(args: {
   return await fetchOwnedTokenIDsByEnumeratingAllTokens(args);
 }
 
+function getFirstPossibleTokenID(): bigint {
+  const network = getNomoEvmNetwork();
+  if (network === "zeniq-smart-chain") {
+    return 1000000000n;
+  } else if (network === "ethereum") {
+    return 1n;
+  } else {
+    throw Error("unsupported network " + network);
+  }
+}
+
 async function fetchOwnedTokenIDsByEnumeratingAllTokens(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
   const stakingContract = getStakingContract();
-  const totalNumberOfNFTs = await stakingContract.totalNFTs();
-  const maxBatchSize = 10;
+  const lastPossibleNFTId: bigint = await stakingContract.totalNFTs();
+  const maxBatchSize: bigint = 10n;
 
   const tokenIDs: Array<bigint> = [];
-  let idCandidate = 1;
-  while (idCandidate < totalNumberOfNFTs) {
-    const batchSize = Math.min(totalNumberOfNFTs - idCandidate, maxBatchSize);
+  let idCandidate: bigint = getFirstPossibleTokenID();
+  console.log(
+    args.ethAddress +
+      ": Starting search for owned tokenIDs between the IDs " +
+      idCandidate +
+      " and " +
+      lastPossibleNFTId +
+      "..."
+  );
+  while (idCandidate < lastPossibleNFTId) {
+    const batchSize: bigint = minimumBigInt(
+      lastPossibleNFTId - idCandidate,
+      maxBatchSize
+    );
     const promiseArray = [];
     const idCandidateArray: Array<bigint> = [];
     for (let i = 0; i < batchSize; i++) {
-      promiseArray.push(stakingContract.ownerOf(idCandidate));
+      const ownerOfPromise = stakingContract.ownerOf(BigInt(idCandidate));
+      promiseArray.push(ownerOfPromise);
       idCandidateArray.push(BigInt(idCandidate));
       idCandidate++;
     }
-    const ownerAddressArray = await Promise.all(promiseArray);
+    const ownerAddressArray: PromiseSettledResult<any>[] =
+      await Promise.allSettled(promiseArray); // can pipe multiple promises over the same HTTP-request
+
     for (let i = 0; i < batchSize; i++) {
-      const ownerAddress = ownerAddressArray[i];
-      if (ownerAddress.toLowerCase() === args.ethAddress.toLowerCase()) {
-        const foundTokenID = idCandidateArray[i];
-        console.log("found owned tokenID", foundTokenID);
-        tokenIDs.push(foundTokenID);
+      const settleResult: PromiseSettledResult<any> = ownerAddressArray[i];
+      if (settleResult.status === "fulfilled") {
+        const ownerAddress: string = settleResult.value;
+        if (
+          ownerAddress.toLowerCase().includes(args.ethAddress.toLowerCase())
+        ) {
+          const foundTokenID = idCandidateArray[i];
+          console.log("found owned tokenID", foundTokenID);
+          tokenIDs.push(foundTokenID);
+        }
       }
+    }
+    if (tokenIDs.length > 0 && isFallbackModeActive()) {
+      break;
     }
   }
   return tokenIDs;
+}
+
+function minimumBigInt(a: bigint, b: bigint): bigint {
+  return a < b ? a : b;
 }
 
 export async function fetchStakingNft(args: {

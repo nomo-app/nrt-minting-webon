@@ -4,6 +4,11 @@ export function navigateToMintingPage(network: NomoEvmNetwork) {
   window.location.assign("/minting?network=" + network);
 }
 
+export function navigateToClaimingPage() {
+  const network = getNomoEvmNetwork();
+  window.location.assign("/claiming?network=" + network);
+}
+
 export const getNomoEvmNetwork = (): NomoEvmNetwork => {
   const searchParams = new URLSearchParams(window.location.search);
   const network = searchParams.get("network");
@@ -12,6 +17,17 @@ export const getNomoEvmNetwork = (): NomoEvmNetwork => {
   }
   return network as NomoEvmNetwork;
 };
+
+export function getTokenStandard() {
+  const network = getNomoEvmNetwork();
+  if (network === "ethereum") {
+    return "ERC20";
+  } else if (network === "zeniq-smart-chain") {
+    return "ZEN20";
+  } else {
+    throw new Error("Unsupported network " + network);
+  }
+}
 
 export const handleGoBack = () => {
   window.history.back(); // Navigate back using the browser's history API

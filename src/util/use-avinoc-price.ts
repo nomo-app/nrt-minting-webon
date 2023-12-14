@@ -1,7 +1,6 @@
 import React from "react";
 import { nomo } from "nomo-webon-kit";
-import { getNomoEvmNetwork } from "@/web3/navigation";
-import { getTokenStandard } from "./util";
+import { getNomoEvmNetwork, getTokenStandard } from "@/web3/navigation";
 import { avinocContractAddress } from "@/web3/web3-minting";
 
 export function useAvinocPrice() {
@@ -29,12 +28,8 @@ export function useAvinocPrice() {
 
 export function formatAVINOCAmount(args: { tokenAmount: bigint }): string {
   const inpreciseTokenAmount = Number(args.tokenAmount) / 1e18;
-
-  const network = getNomoEvmNetwork();
-  const tokenStandard = getTokenStandard(network);
-
+  const tokenStandard = getTokenStandard();
   const visibleAmount = inpreciseTokenAmount.toFixed(2);
-
   return visibleAmount + " AVINOC " + tokenStandard;
 }
 

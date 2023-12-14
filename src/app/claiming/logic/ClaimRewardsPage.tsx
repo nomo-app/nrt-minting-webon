@@ -50,7 +50,7 @@ const ClaimRewardsPage: React.FC = () => {
   const [pageState, setPageState] = React.useState<PageState>(
     "PENDING_TOKENID_FETCH"
   );
-  const [tokenIDs, setTokenIDs] = React.useState<Array<number>>([]);
+  const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
   const [stakingNFTs, setStakingNFTs] = React.useState<
     Record<string, StakingNft>
   >({});
@@ -98,7 +98,7 @@ const ClaimRewardsPage: React.FC = () => {
     setTokenIDs([...tokenIDs]);
   }
 
-  function doClaim(args: { tokenIDs: Array<number> }) {
+  function doClaim(args: { tokenIDs: Array<bigint> }) {
     if (!evmAddress) {
       setPageState("ERROR_INSUFFICIENT_ETH");
       return;
@@ -124,7 +124,9 @@ const ClaimRewardsPage: React.FC = () => {
   }
 
   function onClickClaimAll() {
-    const tokenIDs = Object.keys(stakingNFTs).map((str) => parseInt(str));
+    const tokenIDs = Object.keys(stakingNFTs).map((str) =>
+      BigInt(parseInt(str))
+    );
     if (tokenIDs.length) {
       doClaim({ tokenIDs });
     }

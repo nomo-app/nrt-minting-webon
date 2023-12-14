@@ -1,6 +1,6 @@
 import { AbstractProvider, ethers } from "ethers";
 import { EthersjsNomoSigner, zscProvider } from "ethersjs-nomo-webons";
-import { nomo } from "nomo-webon-kit";
+import { isFallbackModeActive, nomo } from "nomo-webon-kit";
 import { useEffect, useState } from "react";
 import { getNomoEvmNetwork } from "./navigation";
 
@@ -32,6 +32,9 @@ export function useEvmAddress(): { evmAddress: string | null } {
   const [evmAddress, setEvmAddress] = useState<string | null>(null);
   useEffect(() => {
     nomo.getEvmAddress().then((res: string) => {
+      if (isFallbackModeActive()) {
+        res = "0x05870f1507d820212E921e1f39f14660336231D1";
+      }
       setEvmAddress(res);
     });
   }, []);
@@ -70,11 +73,12 @@ export async function checkIfGasCanBePaid(args: {
   ethAddress: string;
   gasLimit: bigint;
 }): Promise<"ERROR_INSUFFICIENT_ETH" | null> {
+  const provider = getEthersProvider();
   const [ethBalance, gasPrice] = await Promise.all([
     fetchEthereumBalance({
       ethAddress: args.ethAddress,
     }),
-    fetchEthGasPriceWithTip(ethProvider),
+    fetchEthGasPriceWithTip(provider),
   ]);
   const costEstimation = args.gasLimit * gasPrice;
   console.log("costEstimation", costEstimation);
