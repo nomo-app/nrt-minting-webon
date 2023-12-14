@@ -6,17 +6,20 @@ import { BonusBox } from "./MintingComponents";
 import { AvinocDollarRewardLabel } from "./MintingComponents";
 import { AvinocRewardLabel } from "./MintingComponents";
 import { AvinocYearsLabel } from "./MintingComponents";
-import { formatTokenDollarPrice } from "@/util/use-avinoc-price";
+import {
+  formatAVINOCAmount,
+  formatTokenDollarPrice,
+} from "@/util/use-avinoc-price";
 
 export const RewardPredictionBox: React.FC<{
-  years: number;
-  avinocAmount: number;
+  years: bigint;
+  avinocAmount: bigint;
   avinocPrice: number | null;
   networkBonus: boolean;
 }> = (props) => {
   const { t } = useTranslation();
 
-  function getApy(years: number): number {
+  function getApy(years: bigint): number {
     if (props.networkBonus) {
       return getApyValues(years).apyWithBonus;
     } else {
@@ -24,31 +27,28 @@ export const RewardPredictionBox: React.FC<{
     }
   }
 
-  function getRewardAmount(years: number): number {
+  function getRewardAmount(years: bigint): bigint {
     const apy = getApy(years);
+    const scaledApy = BigInt(apy * 1e18);
 
-    return (
-      years * (props.avinocAmount * (1 + Number(apy)) - props.avinocAmount)
-    );
+    return (years * props.avinocAmount * scaledApy) / BigInt(1e18);
   }
 
   const apyLabel = props.networkBonus
     ? "+" + 100 * getApy(props.years) + "%"
     : t("reward.disabled");
 
-  function getRewardLabel(years: number): string {
-    if (props.avinocAmount === 0 || isNaN(props.avinocAmount)) {
+  function getRewardLabel(years: bigint): string {
+    if (props.avinocAmount === 0n) {
       return t("staking.enterAmount");
     } else {
       const rewards = getRewardAmount(years);
-      return props.avinocAmount >= 10000
-        ? `+${rewards.toFixed(0)} `
-        : `+${rewards.toFixed(2)} `;
+      return formatAVINOCAmount({ tokenAmount: rewards });
     }
   }
 
-  function getRewardDollarPrice(years: number): string {
-    if (props.avinocAmount === 0 || isNaN(props.avinocAmount)) {
+  function getRewardDollarPrice(years: bigint): string {
+    if (props.avinocAmount === 0n) {
       return t("staking.enterAmount");
     } else {
       const amount = getRewardAmount(years);
@@ -59,15 +59,15 @@ export const RewardPredictionBox: React.FC<{
     }
   }
 
-  function getYearsName(years: number): string {
-    if (years === 1) {
+  function getYearsName(years: bigint): string {
+    if (years === 1n) {
       return years + " " + t("staking.year");
     } else {
       return years + " " + t("staking.years");
     }
   }
 
-  const maxYears = 10;
+  const maxYears = 10n;
   const isMaxYears: boolean = props.years === maxYears;
 
   return (
@@ -94,7 +94,6 @@ export const RewardPredictionBox: React.FC<{
           minHeight: "1rem",
         }}
       >
-        {/*erste col*/}
         <div
           style={{
             display: "flex",
@@ -112,27 +111,6 @@ export const RewardPredictionBox: React.FC<{
           <AvinocYearsLabel label={getYearsName(maxYears)} />
         </div>
 
-        {/*zweite col - münzen*/}
-        {/*<div*/}
-        {/*  style={{*/}
-        {/*    display: "flex",*/}
-        {/*    flexDirection: "column",*/}
-        {/*    justifySelf: "center",*/}
-        {/*    alignItems: "center",*/}
-        {/*  }}*/}
-        {/*>*/}
-        {/*  <img*/}
-        {/*    src={coins_ic}*/}
-        {/*    style={{*/}
-        {/*      maxHeight: "40%",*/}
-        {/*      maxWidth: "40%",*/}
-        {/*      zIndex: "1",*/}
-        {/*      position: "relative",*/}
-        {/*    }}*/}
-        {/*  />*/}
-        {/*</div>*/}
-
-        {/*third col AVI*/}
         <div
           style={{
             display: "flex",
@@ -150,7 +128,6 @@ export const RewardPredictionBox: React.FC<{
           <AvinocRewardLabel label={getRewardLabel(maxYears)} />
         </div>
 
-        {/*vierte col AVI*/}
         <div
           style={{
             display: "flex",

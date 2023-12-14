@@ -17,6 +17,7 @@ import { getApyValues } from "../logic/staking-rewards";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import { avinocIcon } from "@/asset-paths";
+import { formatAVINOCAmount } from "@/util/use-avinoc-price";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -29,8 +30,8 @@ const Transition = React.forwardRef(function Transition(
 
 export const ConfirmDialogSlide: React.FC<{
   isOpen: boolean;
-  years: number;
-  selectedAmount: number;
+  years: bigint;
+  selectedAmount: bigint;
   networkBonus: boolean;
   handleClose: () => void;
   handleConfirm: () => void;
@@ -38,12 +39,16 @@ export const ConfirmDialogSlide: React.FC<{
   const { t } = useTranslation();
 
   function getYearText(): string {
-    if (props.years === 1) {
+    if (props.years === 1n) {
       return t("staking.year");
     } else {
       return t("staking.years");
     }
   }
+
+  const visibleSelectedAmount = formatAVINOCAmount({
+    tokenAmount: props.selectedAmount,
+  });
 
   return (
     <Dialog
@@ -87,7 +92,7 @@ export const ConfirmDialogSlide: React.FC<{
             }}
             id="alert-dialog-slide-description"
           >
-            {t("staking.amount")}: {props.selectedAmount}
+            {t("staking.amount")}: {visibleSelectedAmount}
             <img
               src={avinocIcon}
               className={"avi-logo"}
@@ -103,7 +108,8 @@ export const ConfirmDialogSlide: React.FC<{
               marginBottom: "14px",
             }}
           >
-            {t("reward.stakingPeriod")}: {props.years} {getYearText()}
+            {t("reward.stakingPeriod")}: {props.years.toString()}{" "}
+            {getYearText()}
           </div>
 
           <div

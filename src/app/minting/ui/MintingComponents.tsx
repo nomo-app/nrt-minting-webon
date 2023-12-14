@@ -18,6 +18,9 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { avinocIcon, stakingIcon } from "@/asset-paths";
 import { PageState } from "../logic/MintingPage";
 import BackButton from "@/common/BackButton";
+import { getNomoEvmNetwork } from "@/web3/navigation";
+import { getTokenStandard } from "@/util/util";
+import { formatAVINOCAmount } from "@/util/use-avinoc-price";
 
 export function isErrorState(pageState: PageState) {
   return pageState.startsWith("ERROR");
@@ -139,7 +142,8 @@ export const SwitchToRewardPageButton: React.FC<{
   );
 };
 export const StakingTitleBar: React.FC = () => {
-  const { t } = useTranslation();
+  const network = getNomoEvmNetwork();
+  const tokenStandard = getTokenStandard(network);
 
   return (
     <div
@@ -163,9 +167,9 @@ export const StakingTitleBar: React.FC = () => {
           width: "10%",
         }}
       />
-      <div style={{ flexGrow: 5 }} />
+      <div style={{ flexGrow: 1 }} />
       <div style={{ fontWeight: "bold", fontSize: "large" }}>
-        {t("staking.AvinocStaking")}
+        {"AVINOC " + tokenStandard + " Staking"}
       </div>
       <div style={{ flexGrow: 15 }} />
     </div>
@@ -173,16 +177,17 @@ export const StakingTitleBar: React.FC = () => {
 };
 
 export const AvinocAmountInput: React.FC<{
-  onChange: (value: number) => void;
-  value: number;
-  maxValue: number | null;
+  onChange: (value: bigint) => void;
+  value: bigint;
+  maxValue: bigint | null;
 }> = (props) => {
   const { t } = useTranslation();
 
   const onChangeWrapper = (event: any) => {
-    const value: number = parseInt(event.target.value ?? 0);
-    if (typeof props.maxValue === "number" && value >= props.maxValue) {
-      props.onChange(Math.floor(props.maxValue));
+    const rawValue: number = parseInt(event.target.value ?? 0);
+    const value = BigInt(rawValue) * BigInt(10 ** 18);
+    if (typeof props.maxValue === "bigint" && value >= props.maxValue) {
+      props.onChange(props.maxValue);
     } else {
       props.onChange(value);
     }
@@ -190,10 +195,12 @@ export const AvinocAmountInput: React.FC<{
 
   const availableText =
     props.maxValue !== null && props.maxValue !== undefined
-      ? `${t("staking.available")}: ${props.maxValue} AVINOC`
+      ? `${t("staking.available")}: ${formatAVINOCAmount({
+          tokenAmount: props.maxValue,
+        })}`
       : t("staking.loadBalance");
 
-  const isError = isNaN(props.value) || props.value < 0;
+  const isError = props.value < 0;
 
   return (
     <TextField
@@ -207,7 +214,7 @@ export const AvinocAmountInput: React.FC<{
         margin: "8px",
       }}
       error={isError}
-      value={isNaN(props.value) ? "" : props.value}
+      value={props.value}
       onChange={onChangeWrapper}
       inputProps={{
         inputMode: "decimal",
@@ -238,7 +245,7 @@ export const AvinocAmountInput: React.FC<{
   );
 };
 export const SelectYears: React.FC<{
-  years: number;
+  years: bigint;
   onChange: (e: SelectChangeEvent) => void;
 }> = (props) => {
   const { t } = useTranslation();

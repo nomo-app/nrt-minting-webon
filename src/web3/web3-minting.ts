@@ -3,28 +3,54 @@ import StakingABI from "@/contracts/Staking.json";
 import React from "react";
 import genericErc20Abi from "@/contracts/erc20.json";
 import {
-  bigNumberToNumber,
   checkIfGasCanBePaid,
-  ethProvider,
+  getEthersProvider,
   isWalletBackupAvailable,
   waitForConfirmationOrThrow,
   Web3Error,
 } from "@/web3/web3-common";
 import { fetchWithRetryEtherScan } from "@/util/util";
+import { getNomoEvmNetwork } from "./navigation";
+import { Contract } from "ethers";
 
-const stakingContractAddress = "0x7561DEAf4ECf96dc9F0d50B4136046979ACdAD3e";
-const avinocContractAddress = "0xf1ca9cb74685755965c7458528a36934df52a3ef";
+export const avinocContractAddress =
+  "0xf1ca9cb74685755965c7458528a36934df52a3ef"; // has the same address on both ERC20 and ZEN20
 
-const stakingContract = new ethers.Contract(
-  stakingContractAddress,
-  StakingABI.abi,
-  ethProvider
-);
-const avinocContract = new ethers.Contract(
-  avinocContractAddress,
-  genericErc20Abi,
-  ethProvider
-);
+function getStakingContractAddress(): string {
+  const ethStakingContract = "0x7561DEAf4ECf96dc9F0d50B4136046979ACdAD3e";
+  const smartChainStakingContract =
+    "0x97F51eCDeEdecdb740DD1ff6236D013aFff0417d";
+
+  const network = getNomoEvmNetwork();
+  if (network === "ethereum") {
+    return ethStakingContract;
+  } else if (network === "zeniq-smart-chain") {
+    return smartChainStakingContract;
+  } else {
+    throw Error("unsupported network " + network);
+  }
+}
+
+function getStakingContract(): Contract {
+  const provider = getEthersProvider();
+  const contractAddress = getStakingContractAddress();
+  const stakingContract = new ethers.Contract(
+    contractAddress,
+    StakingABI.abi,
+    provider
+  );
+  return stakingContract;
+}
+
+function getAvinocTokenContract(): Contract {
+  const provider = getEthersProvider();
+  const avinocContract = new ethers.Contract(
+    avinocContractAddress,
+    genericErc20Abi,
+    provider
+  );
+  return avinocContract;
+}
 
 const gasLimits = {
   toApprove: 60000n,
@@ -35,10 +61,10 @@ const gasLimits = {
 };
 
 export interface StakingNft {
-  tokenId: number;
-  amount: number;
-  payoutFactor: number;
-  claimedRewards: number;
+  tokenId: bigint;
+  amount: bigint;
+  payoutFactor: bigint;
+  claimedRewards: bigint;
   apy: number;
   start: Date;
   end: Date;
@@ -46,18 +72,18 @@ export interface StakingNft {
 }
 
 async function checkAvinocReserves(args: {
-  avinocAmount: number;
+  avinocAmount: bigint;
 }): Promise<StakeError | null> {
+  const stakingContract = getStakingContract();
+  const avinocContract = getAvinocTokenContract();
+  const stakingContractAddress = getStakingContractAddress();
   const [remainingPayout, remainingBurn, aviBalance] = await Promise.all([
     stakingContract.remainingPayout(),
     stakingContract.remainingBurn(),
     avinocContract.balanceOf(stakingContractAddress),
   ]);
-  const remainingReserves =
-    bigNumberToNumber(aviBalance) / 1e18 -
-    bigNumberToNumber(remainingPayout) / 1e18 -
-    bigNumberToNumber(remainingBurn) / 1e18;
-  if (remainingReserves < args.avinocAmount * 1.1) {
+  const remainingReserves = aviBalance - remainingPayout - remainingBurn;
+  if (remainingReserves < (args.avinocAmount * 11n) / 10n) {
     return "ERROR_INSUFFICIENT_RESERVES";
   } else {
     return null;
@@ -68,13 +94,14 @@ async function approveIfNecessary(args: {
   avinocAmount: bigint;
   ethAddress: string;
 }) {
-  const allowanceBN = await avinocContract.allowance(
+  const avinocContract = getAvinocTokenContract();
+  const stakingContractAddress = getStakingContractAddress();
+  const allowance: bigint = await avinocContract.allowance(
     args.ethAddress,
     stakingContractAddress
   );
-  const allowance = bigNumberToNumber(allowanceBN);
   console.log("allowance", allowance);
-  if (bigNumberToNumber(args.avinocAmount) > allowance) {
+  if (args.avinocAmount > allowance) {
     const txApprove = await avinocContract.approve(
       stakingContractAddress,
       ethers.MaxUint256,
@@ -95,8 +122,8 @@ export type StakeError =
   | "ERROR_INSUFFICIENT_AVINOC";
 
 export async function submitStakeTransaction(args: {
-  years: number;
-  avinocAmount: number;
+  years: bigint;
+  avinocAmount: bigint;
   safirSig: string | null;
   ethAddress: string;
 }): Promise<StakeError | null> {
@@ -129,6 +156,7 @@ export async function submitStakeTransaction(args: {
   // const bonusSigExampleDevWallet =
   //   "0x2db5eaa08e1b09c50ce6625ed3c2d259fefeb40d51c7c8a9dffae3986a11c528524da168622c776bf179fc81a20f2742a8552ed0b8bea9df4c017f25809424251b";
   const bonusSigs = args.safirSig ? [args.safirSig] : [];
+  const stakingContract = getStakingContract();
   const txStake = await stakingContract.stake(
     args.years,
     avinocAmount,
@@ -142,7 +170,7 @@ export async function submitStakeTransaction(args: {
 }
 
 export async function submitClaimTransaction(args: {
-  tokenIDs: Array<number>;
+  tokenIDs: Array<bigint>;
   ethAddress: string;
 }): Promise<"ERROR_INSUFFICIENT_ETH" | null> {
   const gasLimit = gasLimits.toClaim(BigInt(args.tokenIDs.length));
@@ -154,6 +182,7 @@ export async function submitClaimTransaction(args: {
     return gasError;
   }
 
+  const stakingContract = getStakingContract();
   const txResponse = await stakingContract.claim(args.tokenIDs, {
     gasLimit, // in some cases the automatic gasLimit-estimation seems to fail
   });
@@ -163,11 +192,16 @@ export async function submitClaimTransaction(args: {
 
 async function fetchTokenIDCandidatesFromEtherscan(args: {
   ethAddress: string;
-}): Promise<Array<number>> {
+}): Promise<Array<bigint>> {
+  const network = getNomoEvmNetwork();
+  if (network !== "ethereum") {
+    throw Error("etherscan does not work on ZENIQ Smartchain!");
+  }
+  const contractAddress = getStakingContractAddress();
   // https://docs.etherscan.io/getting-started/endpoint-urls
   const etherScanNFTEndpoint =
     "https://api.etherscan.io/api?module=account&action=tokennfttx&contractaddress=" +
-    stakingContractAddress +
+    contractAddress +
     "&address=" +
     args.ethAddress +
     "&page=1&offset=100&startblock=0&endblock=27025780&sort=asc";
@@ -176,12 +210,15 @@ async function fetchTokenIDCandidatesFromEtherscan(args: {
   if (!Array.isArray(result)) {
     throw Error("did not receive tokenIDs from etherscan");
   }
-  return result.map((r) => parseInt(r.tokenID)).filter((tokenId) => !!tokenId);
+  return result
+    .map((r) => BigInt(parseInt(r.tokenID)))
+    .filter((tokenId) => !!tokenId);
 }
 
 export async function fetchOwnedTokenIDs(args: {
   ethAddress: string;
-}): Promise<Array<number>> {
+}): Promise<Array<bigint>> {
+  const stakingContract = getStakingContract();
   try {
     const idCandidates = await fetchTokenIDCandidatesFromEtherscan(args);
     const ownerOfPromises = idCandidates.map((idCandidate) =>
@@ -202,21 +239,20 @@ export async function fetchOwnedTokenIDs(args: {
 
 async function fetchOwnedTokenIDsByEnumeratingAllTokens(args: {
   ethAddress: string;
-}): Promise<Array<number>> {
-  const totalNumberOfNFTs = bigNumberToNumber(
-    await stakingContract.totalNFTs()
-  );
+}): Promise<Array<bigint>> {
+  const stakingContract = getStakingContract();
+  const totalNumberOfNFTs = await stakingContract.totalNFTs();
   const maxBatchSize = 10;
 
-  const tokenIDs: Array<number> = [];
+  const tokenIDs: Array<bigint> = [];
   let idCandidate = 1;
   while (idCandidate < totalNumberOfNFTs) {
     const batchSize = Math.min(totalNumberOfNFTs - idCandidate, maxBatchSize);
     const promiseArray = [];
-    const idCandidateArray = [];
+    const idCandidateArray: Array<bigint> = [];
     for (let i = 0; i < batchSize; i++) {
       promiseArray.push(stakingContract.ownerOf(idCandidate));
-      idCandidateArray.push(idCandidate);
+      idCandidateArray.push(BigInt(idCandidate));
       idCandidate++;
     }
     const ownerAddressArray = await Promise.all(promiseArray);
@@ -233,22 +269,24 @@ async function fetchOwnedTokenIDsByEnumeratingAllTokens(args: {
 }
 
 export async function fetchStakingNft(args: {
-  tokenId: number;
+  tokenId: bigint;
 }): Promise<StakingNft> {
+  const stakingContract = getStakingContract();
   const rawStakingNft = await stakingContract.stakingNFTs(args.tokenId);
-  const amount = Number(rawStakingNft["amount"]) / 1e18;
-  const payoutFactor = Number(rawStakingNft["payoutFactor"]) / 1e18;
+  const amount: bigint = rawStakingNft["amount"];
+  const payoutFactor: bigint = rawStakingNft["payoutFactor"];
   const start = new Date(Number(rawStakingNft["start"]) * 1000);
   const end = new Date(Number(rawStakingNft["end"]) * 1000);
   const lastClaim = new Date(Number(rawStakingNft["lastClaim"]) * 1000);
-  const years = end.getFullYear() - start.getFullYear();
-  const apy = parseFloat(((100 * (payoutFactor - 1.0)) / years).toFixed(3));
+  const years: bigint = BigInt(end.getFullYear() - start.getFullYear());
+  const inprecisePayoutFactor = Number(payoutFactor) / 1e18;
+  const apy = parseFloat(
+    ((100 * (inprecisePayoutFactor - 1.0)) / Number(years)).toFixed(3)
+  );
 
   const claimedRewards =
-    amount *
-    payoutFactor *
-    ((lastClaim!.getTime() - start.getTime()) /
-      (end.getTime() - start.getTime()));
+    (amount * payoutFactor * BigInt(lastClaim!.getTime() - start.getTime())) /
+    (BigInt(end.getTime() - start.getTime()) * 10n ** 18n);
 
   const stakingNft: StakingNft = {
     tokenId: args.tokenId,
@@ -265,21 +303,27 @@ export async function fetchStakingNft(args: {
   return stakingNft;
 }
 
-function getClaimFraction(stakingNft: StakingNft): number {
+function getClaimFraction(stakingNft: StakingNft): bigint {
   return (
-    (Date.now() - stakingNft.lastClaim.getTime()) /
-    (stakingNft.end.getTime() - stakingNft.start.getTime())
+    (10n ** 18n * BigInt(Date.now() - stakingNft.lastClaim.getTime())) /
+    BigInt(stakingNft.end.getTime() - stakingNft.start.getTime())
   );
 }
 
-export function computeUnclaimedRewards(stakingNft: StakingNft): number {
+export function computeUnclaimedRewards(stakingNft: StakingNft): bigint {
   return (
-    stakingNft.amount * stakingNft.payoutFactor * getClaimFraction(stakingNft)
+    (stakingNft.amount *
+      stakingNft.payoutFactor *
+      getClaimFraction(stakingNft)) /
+    10n ** 18n
   );
 }
 
-export function useAvinocBalance(args: { ethAddress: string | null }) {
-  const [avinocBalance, setAvinocBalance] = React.useState<number | null>(null);
+export function useAvinocBalance(args: { ethAddress: string | null }): {
+  avinocBalance: bigint | null;
+  fetchError: boolean;
+} {
+  const [avinocBalance, setAvinocBalance] = React.useState<bigint | null>(null);
   const [fetchError, setFetchError] = React.useState<boolean>(false);
   React.useEffect(() => {
     if (args.ethAddress) {
@@ -288,9 +332,10 @@ export function useAvinocBalance(args: { ethAddress: string | null }) {
   }, [args.ethAddress]);
 
   async function fetchAvinocBalance(ethAddress: string) {
+    const avinocContract = getAvinocTokenContract();
     try {
-      const balance =
-        bigNumberToNumber(await avinocContract.balanceOf(ethAddress)) / 1e18;
+      const balance = await avinocContract.balanceOf(ethAddress);
+      console.log("fetched avincocBalance", ethAddress, balance.toString());
       setAvinocBalance(balance);
     } catch (e) {
       setFetchError(true);

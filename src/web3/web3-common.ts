@@ -1,10 +1,22 @@
 import { AbstractProvider, ethers } from "ethers";
-import { EthersjsNomoSigner } from "ethersjs-nomo-webons";
+import { EthersjsNomoSigner, zscProvider } from "ethersjs-nomo-webons";
 import { nomo } from "nomo-webon-kit";
 import { useEffect, useState } from "react";
+import { getNomoEvmNetwork } from "./navigation";
 
-export const ethProvider = ethers.getDefaultProvider("mainnet");
-export const ethSigner = new EthersjsNomoSigner(ethProvider);
+export const ethProviderInstance = ethers.getDefaultProvider("mainnet");
+export const ethSignerInstance = new EthersjsNomoSigner(ethProviderInstance);
+
+export function getEthersProvider(): AbstractProvider {
+  const network = getNomoEvmNetwork();
+  if (network === "ethereum") {
+    return ethProviderInstance;
+  } else if (network === "zeniq-smart-chain") {
+    return zscProvider;
+  } else {
+    throw Error("unsupported network " + network);
+  }
+}
 
 export type Web3Error =
   | "ERROR_INSUFFICIENT_ETH"
@@ -27,15 +39,12 @@ export function useEvmAddress(): { evmAddress: string | null } {
 }
 
 export async function waitForConfirmationOrThrow(txResponse: any) {
+  const provider = getEthersProvider();
   console.log("txResponse", txResponse);
   await txResponse.wait(1);
   const txHash = txResponse.hash;
-  const txReceipt = await ethProvider.getTransactionReceipt(txHash);
+  const txReceipt = await provider.getTransactionReceipt(txHash);
   console.log("txReceipt", txReceipt);
-}
-
-export function bigNumberToNumber(bigNumber: any) {
-  return parseInt(bigNumber._hex);
 }
 
 export async function fetchEthGasPriceWithTip(
@@ -52,8 +61,8 @@ export async function fetchEthGasPriceWithTip(
 }
 
 export async function fetchEthereumBalance(args: { ethAddress: string }) {
-  const ethBalance =
-    bigNumberToNumber(await ethProvider.getBalance(args.ethAddress)) / 1e18;
+  const provider = getEthersProvider();
+  const ethBalance = await provider.getBalance(args.ethAddress);
   return ethBalance;
 }
 

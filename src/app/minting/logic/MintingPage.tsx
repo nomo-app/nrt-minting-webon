@@ -39,19 +39,19 @@ const MintingPage: React.FC = () => {
   const { avinocPrice } = useAvinocPrice();
   const { address: ethAddress } = {
     address: "0x05870f1507d820212E921e1f39f14660336231D1",
-  }; // TODO
+  };
   const { avinocBalance, fetchError: balanceFetchError } = useAvinocBalance({
     ethAddress,
   });
   const { safirSig } = { safirSig: null }; // TODO useSafirAvinocSig();
-  const [avinocAmount, setAvinocAmount] = React.useState<number>(0);
-  const [years, setYears] = React.useState<number>(10);
+  const [avinocAmount, setAvinocAmount] = React.useState<bigint>(0n);
+  const [years, setYears] = React.useState<bigint>(10n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
   const networkBonus = !!safirSig;
 
   useEffect(() => {
-    if (typeof avinocBalance === "number") {
-      setAvinocAmount(Math.floor(avinocBalance));
+    if (typeof avinocBalance === "bigint") {
+      setAvinocAmount(avinocBalance);
     }
   }, [avinocBalance]);
 
@@ -63,7 +63,7 @@ const MintingPage: React.FC = () => {
 
   const handleYearChange = (event: SelectChangeEvent) => {
     const yearString: string = event.target.value as string;
-    const yearNumber: number = parseInt(yearString);
+    const yearNumber: bigint = BigInt(parseInt(yearString));
     setYears(yearNumber);
   };
 
@@ -71,7 +71,7 @@ const MintingPage: React.FC = () => {
   const [successDialogOpen, setSuccessDialogOpen] = React.useState(false);
 
   function onClickStakeButton() {
-    if (avinocAmount < 1 || isNaN(avinocAmount)) {
+    if (avinocAmount < 1) {
       setPageState("ERROR_INSUFFICIENT_AVINOC");
       return;
     }
@@ -112,9 +112,7 @@ const MintingPage: React.FC = () => {
       <Card variant={"elevation"} elevation={3} className={"input-card"}>
         <AvinocAmountInput
           value={avinocAmount}
-          maxValue={
-            typeof avinocBalance === "number" ? Math.floor(avinocBalance) : null
-          }
+          maxValue={avinocBalance}
           onChange={(value) => setAvinocAmount(value)}
         />
         <SelectYears years={years} onChange={handleYearChange} />

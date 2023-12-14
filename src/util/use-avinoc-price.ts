@@ -1,5 +1,8 @@
 import React from "react";
 import { nomo } from "nomo-webon-kit";
+import { getNomoEvmNetwork } from "@/web3/navigation";
+import { getTokenStandard } from "./util";
+import { avinocContractAddress } from "@/web3/web3-minting";
 
 export function useAvinocPrice() {
   const [avinocPrice, setAvinocPrice] = React.useState<number | null>(null);
@@ -9,9 +12,11 @@ export function useAvinocPrice() {
 
   async function fetchAvinocPrice() {
     try {
+      const network = getNomoEvmNetwork();
       const priceState = await nomo.getAssetPrice({
-        name: "AVINOC",
         symbol: "AVINOC",
+        contractAddress: avinocContractAddress,
+        network,
       });
       setAvinocPrice(priceState.price);
     } catch (e) {
@@ -22,16 +27,28 @@ export function useAvinocPrice() {
   return { avinocPrice };
 }
 
+export function formatAVINOCAmount(args: { tokenAmount: bigint }): string {
+  const inpreciseTokenAmount = Number(args.tokenAmount) / 1e18;
+
+  const network = getNomoEvmNetwork();
+  const tokenStandard = getTokenStandard(network);
+
+  const visibleAmount = inpreciseTokenAmount.toFixed(2);
+
+  return visibleAmount + " AVINOC " + tokenStandard;
+}
+
 export function formatTokenDollarPrice(args: {
   tokenPrice: number | null;
-  tokenAmount: number;
+  tokenAmount: bigint;
 }): string {
   if (!args.tokenPrice) {
     return "-";
   }
+  const inpreciseTokenAmount = Number(args.tokenAmount) / 1e18;
   const fixedPrice =
     args.tokenAmount >= 10000
-      ? (args.tokenPrice * args.tokenAmount).toFixed(0)
-      : (args.tokenPrice * args.tokenAmount).toFixed(2);
+      ? (args.tokenPrice * inpreciseTokenAmount).toFixed(0)
+      : (args.tokenPrice * inpreciseTokenAmount).toFixed(2);
   return "$" + fixedPrice;
 }

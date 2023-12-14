@@ -1,10 +1,21 @@
 import {
+  NomoNetwork,
   NomoTheme,
   getCurrentNomoTheme,
   injectNomoCSSVariables,
   switchNomoTheme,
 } from "nomo-webon-kit";
 import React, { useEffect, useState } from "react";
+
+export function getTokenStandard(network: NomoNetwork) {
+  if (network === "ethereum") {
+    return "ERC20";
+  } else if (network === "zeniq-smart-chain") {
+    return "ZEN20";
+  } else {
+    throw new Error("Unsupported network " + network);
+  }
+}
 
 export async function themeSwitchRotation() {
   const oldTheme: NomoTheme = (await getCurrentNomoTheme()).name as NomoTheme;
@@ -68,14 +79,6 @@ export async function fetchWithRetryEtherScan(args: {
   const etherScanAPIKey = "AC72N833U9MKUNXS44MV27T3HKEN4WYYT3";
   return (await (await fetch(args.url + "&apikey=" + etherScanAPIKey)).json())
     .result;
-}
-
-export function formatFiat(num: number) {
-  return num.toString();
-}
-
-export function formatCrypto(num: number) {
-  return num.toString();
 }
 
 export function textShortener(text: string, length: number): string {
