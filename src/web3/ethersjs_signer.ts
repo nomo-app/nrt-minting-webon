@@ -107,6 +107,9 @@ export class EthersjsNomoSigner extends AbstractSigner {
       return signTxDevWallet(unsignedTx);
     }
 
+    if (unsignedTx.from) {
+      unsignedTx.from = undefined; // prevent TypeError: unsigned transaction cannot define "from"
+    }
     const unsignedRawTx = Transaction.from(unsignedTx).unsignedSerialized;
     console.log("unsignedRawTx", unsignedRawTx);
 

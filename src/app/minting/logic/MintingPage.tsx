@@ -46,6 +46,7 @@ const MintingPage: React.FC = () => {
   const [avinocAmount, setAvinocAmount] = React.useState<bigint>(-1n);
   const [years, setYears] = React.useState<bigint>(10n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
+  const [txError, setTxError] = React.useState<Error | null>(null);
   const networkBonus = !!safirSig;
 
   useEffect(() => {
@@ -90,6 +91,7 @@ const MintingPage: React.FC = () => {
       })
       .catch((e) => {
         setPageState("ERROR_TX_FAILED");
+        setTxError(e);
         console.error(e);
       });
   }
@@ -102,6 +104,11 @@ const MintingPage: React.FC = () => {
       <div style={{ flexGrow: 10 }} />
       <StakingTitleBar />
       <StatusBox pageState={pageState} />
+      {txError && (
+        <div style={{ width: "100%", overflowWrap: "anywhere" }}>
+          {txError.message || txError.toString()}
+        </div>
+      )}
       <Card variant={"elevation"} elevation={3} className={"input-card"}>
         <AvinocAmountInput
           value={avinocAmount}
