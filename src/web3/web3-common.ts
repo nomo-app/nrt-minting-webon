@@ -1,9 +1,8 @@
 import { AbstractProvider, ethers, Signer } from "ethers";
-import { zscProvider } from "ethersjs-nomo-webons";
+import { EthersjsNomoSigner, zscProvider } from "ethersjs-nomo-webons";
 import { nomo } from "nomo-webon-kit";
 import { useEffect, useState } from "react";
 import { getNomoEvmNetwork } from "./navigation";
-import { EthersjsNomoSigner } from "./ethersjs_signer";
 
 export const ethProviderInstance = ethers.getDefaultProvider("mainnet");
 export const ethSignerInstance = new EthersjsNomoSigner(ethProviderInstance);

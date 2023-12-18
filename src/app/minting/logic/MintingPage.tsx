@@ -52,6 +52,7 @@ const MintingPage: React.FC = () => {
   useEffect(() => {
     if (balanceFetchError) {
       setPageState("ERROR_FETCH_FAILED");
+      setTxError(balanceFetchError);
     }
   }, [balanceFetchError]);
 
@@ -105,7 +106,14 @@ const MintingPage: React.FC = () => {
       <StakingTitleBar />
       <StatusBox pageState={pageState} />
       {txError && (
-        <div style={{ width: "100%", overflowWrap: "anywhere" }}>
+        <div
+          style={{
+            width: "100%",
+            color: "red",
+            fontSize: "small",
+            overflowWrap: "anywhere",
+          }}
+        >
           {txError.message || txError.toString()}
         </div>
       )}

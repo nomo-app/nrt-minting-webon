@@ -363,10 +363,10 @@ export function computeUnclaimedRewards(stakingNft: StakingNft): bigint {
 
 export function useAvinocBalance(args: { ethAddress: string | null }): {
   avinocBalance: bigint | null;
-  fetchError: boolean;
+  fetchError: Error | null;
 } {
   const [avinocBalance, setAvinocBalance] = React.useState<bigint | null>(null);
-  const [fetchError, setFetchError] = React.useState<boolean>(false);
+  const [fetchError, setFetchError] = React.useState<Error | null>(null);
   React.useEffect(() => {
     if (args.ethAddress) {
       fetchAvinocBalance(args.ethAddress);
@@ -380,7 +380,7 @@ export function useAvinocBalance(args: { ethAddress: string | null }): {
       console.log("fetched avincocBalance", ethAddress, balance.toString());
       setAvinocBalance(balance);
     } catch (e) {
-      setFetchError(true);
+      setFetchError(e as Error);
       console.error(e);
     }
   }
