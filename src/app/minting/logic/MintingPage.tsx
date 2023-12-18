@@ -22,6 +22,7 @@ import { AvinocAmountInput } from "@/app/minting/ui/MintingComponents";
 import { SelectYears } from "@/app/minting/ui/MintingComponents";
 import { mintingMainFlexBox } from "@/app/minting/ui/minting-style";
 import { useAvinocPrice } from "@/util/use-avinoc-price";
+import { useEvmAddress } from "@/web3/web3-common";
 
 export type PageState =
   | "IDLE"
@@ -37,23 +38,15 @@ const MintingPage: React.FC = () => {
   const { isClient } = usePreventServerSideRendering();
 
   const { avinocPrice } = useAvinocPrice();
-  const { address: ethAddress } = {
-    address: "0x05870f1507d820212E921e1f39f14660336231D1",
-  };
+  const { evmAddress: ethAddress } = useEvmAddress();
   const { avinocBalance, fetchError: balanceFetchError } = useAvinocBalance({
     ethAddress,
   });
   const { safirSig } = { safirSig: null }; // TODO useSafirAvinocSig();
-  const [avinocAmount, setAvinocAmount] = React.useState<bigint>(0n);
+  const [avinocAmount, setAvinocAmount] = React.useState<bigint>(-1n);
   const [years, setYears] = React.useState<bigint>(10n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
   const networkBonus = !!safirSig;
-
-  useEffect(() => {
-    if (typeof avinocBalance === "bigint") {
-      setAvinocAmount(avinocBalance);
-    }
-  }, [avinocBalance]);
 
   useEffect(() => {
     if (balanceFetchError) {
@@ -71,7 +64,7 @@ const MintingPage: React.FC = () => {
   const [successDialogOpen, setSuccessDialogOpen] = React.useState(false);
 
   function onClickStakeButton() {
-    if (avinocAmount < 1) {
+    if (avinocAmount <= 0n) {
       setPageState("ERROR_INSUFFICIENT_AVINOC");
       return;
     }

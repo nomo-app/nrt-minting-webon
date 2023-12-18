@@ -175,6 +175,8 @@ export const StakingTitleBar: React.FC = () => {
   );
 };
 
+const INPUT_ERROR_TRHESHOLD = -2n;
+
 export const AvinocAmountInput: React.FC<{
   onChange: (value: bigint) => void;
   value: bigint;
@@ -183,13 +185,24 @@ export const AvinocAmountInput: React.FC<{
   const { t } = useTranslation();
 
   const onChangeWrapper = (event: any) => {
-    const rawValue: number = parseInt(event.target.value ?? 0);
-    const value = BigInt(rawValue) * BigInt(10 ** 18);
-    if (typeof props.maxValue === "bigint" && value >= props.maxValue) {
-      props.onChange(props.maxValue);
-    } else {
-      props.onChange(value);
+    const rawString: string = event.target.value ?? "";
+    console.log("rawString", rawString);
+    if (typeof rawString !== "string") {
+      return;
     }
+    if (rawString === "") {
+      props.onChange(INPUT_ERROR_TRHESHOLD);
+      return;
+    }
+    const valueString = rawString.trim();
+    const floatValue: number = parseFloat(valueString) * 1e18;
+    if (isNaN(floatValue)) {
+      return;
+    }
+    const bigintValue = BigInt(Math.floor(floatValue));
+    console.log("bigintValue", bigintValue);
+
+    props.onChange(bigintValue);
   };
 
   const availableText =
@@ -199,7 +212,9 @@ export const AvinocAmountInput: React.FC<{
         })}`
       : t("staking.loadBalance");
 
-  const isError = props.value < 0;
+  const isError = props.value <= INPUT_ERROR_TRHESHOLD;
+
+  const userVisibleProp = props.value >= 0 ? Number(props.value) / 1e18 : "";
 
   return (
     <TextField
@@ -213,7 +228,7 @@ export const AvinocAmountInput: React.FC<{
         margin: "8px",
       }}
       error={isError}
-      value={props.value}
+      value={userVisibleProp}
       onChange={onChangeWrapper}
       inputProps={{
         inputMode: "decimal",

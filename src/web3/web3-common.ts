@@ -1,8 +1,9 @@
-import { AbstractProvider, ethers } from "ethers";
-import { EthersjsNomoSigner, zscProvider } from "ethersjs-nomo-webons";
-import { isFallbackModeActive, nomo } from "nomo-webon-kit";
+import { AbstractProvider, ethers, Signer } from "ethers";
+import { zscProvider } from "ethersjs-nomo-webons";
+import { nomo } from "nomo-webon-kit";
 import { useEffect, useState } from "react";
 import { getNomoEvmNetwork } from "./navigation";
+import { EthersjsNomoSigner } from "./ethersjs_signer";
 
 export const ethProviderInstance = ethers.getDefaultProvider("mainnet");
 export const ethSignerInstance = new EthersjsNomoSigner(ethProviderInstance);
@@ -13,6 +14,18 @@ export function getEthersProvider(): AbstractProvider {
     return ethProviderInstance;
   } else if (network === "zeniq-smart-chain") {
     return zscProvider;
+  } else {
+    throw Error("unsupported network " + network);
+  }
+}
+
+export function getEthersSigner(): Signer {
+  const network = getNomoEvmNetwork();
+  if (network === "ethereum") {
+    const provider = getEthersProvider();
+    return new EthersjsNomoSigner(provider);
+  } else if (network === "zeniq-smart-chain") {
+    return new EthersjsNomoSigner(zscProvider);
   } else {
     throw Error("unsupported network " + network);
   }
@@ -31,10 +44,8 @@ export async function isWalletBackupAvailable(): Promise<boolean> {
 export function useEvmAddress(): { evmAddress: string | null } {
   const [evmAddress, setEvmAddress] = useState<string | null>(null);
   useEffect(() => {
-    nomo.getEvmAddress().then((res: string) => {
-      if (isFallbackModeActive()) {
-        res = "0x05870f1507d820212E921e1f39f14660336231D1";
-      }
+    const signer = getEthersSigner();
+    signer.getAddress().then((res: string) => {
       setEvmAddress(res);
     });
   }, []);

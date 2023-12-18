@@ -5,6 +5,7 @@ import genericErc20Abi from "@/contracts/erc20.json";
 import {
   checkIfGasCanBePaid,
   getEthersProvider,
+  getEthersSigner,
   isWalletBackupAvailable,
   waitForConfirmationOrThrow,
   Web3Error,
@@ -33,22 +34,22 @@ function getStakingContractAddress(): string {
 }
 
 function getStakingContract(): Contract {
-  const provider = getEthersProvider();
+  const signer = getEthersSigner();
   const contractAddress = getStakingContractAddress();
   const stakingContract = new ethers.Contract(
     contractAddress,
     StakingABI.abi,
-    provider
+    signer
   );
   return stakingContract;
 }
 
 function getAvinocTokenContract(): Contract {
-  const provider = getEthersProvider();
+  const signer = getEthersSigner();
   const avinocContract = new ethers.Contract(
     avinocContractAddress,
     genericErc20Abi,
-    provider
+    signer
   );
   return avinocContract;
 }
@@ -128,7 +129,7 @@ export async function submitStakeTransaction(args: {
   safirSig: string | null;
   ethAddress: string;
 }): Promise<StakeError | null> {
-  if (!(await isWalletBackupAvailable())) {
+  if (!isFallbackModeActive() && !(await isWalletBackupAvailable())) {
     return "ERROR_MISSING_WALLET_BACKUP";
   }
 
@@ -147,9 +148,8 @@ export async function submitStakeTransaction(args: {
     return gasError;
   }
 
-  const avinocAmount = ethers.parseEther("" + args.avinocAmount);
   await approveIfNecessary({
-    avinocAmount,
+    avinocAmount: args.avinocAmount,
     ethAddress: args.ethAddress,
   });
 
@@ -160,7 +160,7 @@ export async function submitStakeTransaction(args: {
   const stakingContract = getStakingContract();
   const txStake = await stakingContract.stake(
     args.years,
-    avinocAmount,
+    args.avinocAmount,
     bonusSigs,
     {
       gasLimit: gasLimits.toStake, // for the case that a gasLimit cannot be automatically estimated
