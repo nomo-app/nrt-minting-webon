@@ -23,6 +23,7 @@ import {
 import { usePreventServerSideRendering } from "@/util/util";
 import { claimRewardsMainFlexBox } from "../ui/claim-style";
 import { fetchStakingTokenIDs } from "@/web3/nft-fetching";
+import ErrorDetails from "@/common/ErrorDetails";
 
 export type PageState =
   | "PENDING_TOKENID_FETCH"
@@ -51,6 +52,7 @@ const ClaimRewardsPage: React.FC = () => {
     "PENDING_TOKENID_FETCH"
   );
   const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
+  const [fetchError, setFetchError] = React.useState<Error | null>(null);
   const [stakingNFTs, setStakingNFTs] = React.useState<
     Record<string, StakingNft>
   >({});
@@ -65,10 +67,12 @@ const ClaimRewardsPage: React.FC = () => {
           } else {
             setPageState("ERROR_NO_NFTS_CLAIM");
           }
+          tokenIDs.sort((a: bigint, b: bigint) => Number(a - b));
           setTokenIDs(tokenIDs);
         })
         .catch((e) => {
           console.error(e);
+          setFetchError(e);
           setPageState("ERROR_FETCH_FAILED");
         });
     }
@@ -139,6 +143,8 @@ const ClaimRewardsPage: React.FC = () => {
     <div style={claimRewardsMainFlexBox}>
       <div style={{ flexGrow: "10" }} />
       <TitleBox />
+      {!!fetchError && <ErrorDetails error={fetchError} />}
+
       <div className={"scroll-container"}>
         {Object.values(stakingNFTs).map((stakingNft) => {
           return (

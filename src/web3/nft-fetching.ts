@@ -3,14 +3,25 @@ import { getNomoEvmNetwork } from "./navigation";
 import { getStakingContract, getStakingContractAddress } from "./web3-minting";
 import {
   NomoEvmNetwork,
+  hasMinimumNomoVersion,
   invokeNomoFunction,
   isFallbackModeActive,
+  nomoGetPlatformInfo,
 } from "nomo-webon-kit";
 
 export async function fetchStakingTokenIDs(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
-  if (isFallbackModeActive()) {
+  let { minVersionFulfilled: hasNftAPI } = await hasMinimumNomoVersion({
+    minVersion: "0.3.5",
+  });
+  const platformInfo = await nomoGetPlatformInfo();
+  if (platformInfo.version.includes("debug")) {
+    console.log("debug build, not using fallback mode...");
+    hasNftAPI = true;
+  }
+
+  if (isFallbackModeActive() || !hasNftAPI) {
     return await fetchStakingTokenIDsFallback(args);
   }
 
@@ -143,8 +154,8 @@ async function fetchOwnedTokenIDsByEnumeratingAllTokens(args: {
         }
       }
     }
-    if (tokenIDs.length > 0 && isFallbackModeActive()) {
-      break;
+    if (tokenIDs.length > 0) {
+      break; // only for the fallback-mode, will skip some NFTs for performance reasons
     }
   }
   return tokenIDs;

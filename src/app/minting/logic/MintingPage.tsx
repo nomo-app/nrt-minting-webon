@@ -24,6 +24,7 @@ import { SelectYears } from "@/app/minting/ui/MintingComponents";
 import { mintingMainFlexBox } from "@/app/minting/ui/minting-style";
 import { useAvinocPrice } from "@/util/use-avinoc-price";
 import { useEvmAddress } from "@/web3/web3-common";
+import ErrorDetails from "@/common/ErrorDetails";
 
 export type PageState =
   | "IDLE"
@@ -106,18 +107,7 @@ const MintingPage: React.FC = () => {
       <div style={{ flexGrow: 10 }} />
       <StakingTitleBar />
       <StatusBox pageState={pageState} />
-      {txError && (
-        <div
-          style={{
-            width: "100%",
-            color: "red",
-            fontSize: "small",
-            overflowWrap: "anywhere",
-          }}
-        >
-          {txError.message || txError.toString()}
-        </div>
-      )}
+      {!!txError && <ErrorDetails error={txError} />}
       <Card variant={"elevation"} elevation={3} className={"input-card"}>
         <AvinocAmountInput
           value={avinocAmount}
