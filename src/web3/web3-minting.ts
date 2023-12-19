@@ -4,13 +4,11 @@ import React from "react";
 import genericErc20Abi from "@/contracts/erc20.json";
 import {
   checkIfGasCanBePaid,
-  getEthersProvider,
   getEthersSigner,
   isWalletBackupAvailable,
   waitForConfirmationOrThrow,
   Web3Error,
 } from "@/web3/web3-common";
-import { fetchWithRetryEtherScan } from "@/util/util";
 import { getNomoEvmNetwork } from "./navigation";
 import { Contract } from "ethers";
 import { invokeNomoFunction, isFallbackModeActive } from "nomo-webon-kit";
@@ -18,7 +16,7 @@ import { invokeNomoFunction, isFallbackModeActive } from "nomo-webon-kit";
 export const avinocContractAddress =
   "0xf1ca9cb74685755965c7458528a36934df52a3ef"; // has the same address on both ERC20 and ZEN20
 
-function getStakingContractAddress(): string {
+export function getStakingContractAddress(): string {
   const ethStakingContract = "0x7561DEAf4ECf96dc9F0d50B4136046979ACdAD3e";
   const smartChainStakingContract =
     "0x97F51eCDeEdecdb740DD1ff6236D013aFff0417d";
@@ -33,7 +31,7 @@ function getStakingContractAddress(): string {
   }
 }
 
-function getStakingContract(): Contract {
+export function getStakingContract(): Contract {
   const signer = getEthersSigner();
   const contractAddress = getStakingContractAddress();
   const stakingContract = new ethers.Contract(
@@ -189,125 +187,6 @@ export async function submitClaimTransaction(args: {
   });
   await waitForConfirmationOrThrow(txResponse);
   return null;
-}
-
-async function fetchTokenIDCandidatesFromEtherscan(args: {
-  ethAddress: string;
-}): Promise<Array<bigint>> {
-  const network = getNomoEvmNetwork();
-  if (network !== "ethereum") {
-    throw Error("etherscan does not work on ZENIQ Smartchain!");
-  }
-  const contractAddress = getStakingContractAddress();
-  // https://docs.etherscan.io/getting-started/endpoint-urls
-  const etherScanNFTEndpoint =
-    "https://api.etherscan.io/api?module=account&action=tokennfttx&contractaddress=" +
-    contractAddress +
-    "&address=" +
-    args.ethAddress +
-    "&page=1&offset=100&startblock=0&endblock=27025780&sort=asc";
-
-  const result = await fetchWithRetryEtherScan({ url: etherScanNFTEndpoint });
-  if (!Array.isArray(result)) {
-    throw Error("did not receive tokenIDs from etherscan");
-  }
-  return result
-    .map((r) => BigInt(parseInt(r.tokenID)))
-    .filter((tokenId) => !!tokenId);
-}
-
-export async function fetchOwnedTokenIDs(args: {
-  ethAddress: string;
-}): Promise<Array<bigint>> {
-  const stakingContract = getStakingContract();
-  const network = getNomoEvmNetwork();
-  if (network === "zeniq-smart-chain") {
-    return await fetchOwnedTokenIDsByEnumeratingAllTokens(args);
-  }
-  try {
-    const idCandidates = await fetchTokenIDCandidatesFromEtherscan(args);
-    const ownerOfPromises = idCandidates.map((idCandidate) =>
-      stakingContract.ownerOf(idCandidate)
-    );
-    console.log("received idCandidates from etherscan", idCandidates);
-    const ownerOfArray: string[] = await Promise.all(ownerOfPromises);
-    console.log("received owners of idCandidates", ownerOfArray);
-    return idCandidates.filter(
-      (_, index) =>
-        ownerOfArray[index].toLowerCase() === args.ethAddress.toLowerCase()
-    );
-  } catch (e) {
-    console.error(e);
-  }
-  return await fetchOwnedTokenIDsByEnumeratingAllTokens(args);
-}
-
-function getFirstPossibleTokenID(): bigint {
-  const network = getNomoEvmNetwork();
-  if (network === "zeniq-smart-chain") {
-    return 1000000000n;
-  } else if (network === "ethereum") {
-    return 1n;
-  } else {
-    throw Error("unsupported network " + network);
-  }
-}
-
-async function fetchOwnedTokenIDsByEnumeratingAllTokens(args: {
-  ethAddress: string;
-}): Promise<Array<bigint>> {
-  const stakingContract = getStakingContract();
-  const lastPossibleNFTId: bigint = await stakingContract.totalNFTs();
-  const maxBatchSize: bigint = 10n;
-
-  const tokenIDs: Array<bigint> = [];
-  let idCandidate: bigint = getFirstPossibleTokenID();
-  console.log(
-    args.ethAddress +
-      ": Starting search for owned tokenIDs between the IDs " +
-      idCandidate +
-      " and " +
-      lastPossibleNFTId +
-      "..."
-  );
-  while (idCandidate < lastPossibleNFTId) {
-    const batchSize: bigint = minimumBigInt(
-      lastPossibleNFTId - idCandidate,
-      maxBatchSize
-    );
-    const promiseArray = [];
-    const idCandidateArray: Array<bigint> = [];
-    for (let i = 0; i < batchSize; i++) {
-      const ownerOfPromise = stakingContract.ownerOf(BigInt(idCandidate));
-      promiseArray.push(ownerOfPromise);
-      idCandidateArray.push(BigInt(idCandidate));
-      idCandidate++;
-    }
-    const ownerAddressArray: PromiseSettledResult<any>[] =
-      await Promise.allSettled(promiseArray); // can pipe multiple promises over the same HTTP-request
-
-    for (let i = 0; i < batchSize; i++) {
-      const settleResult: PromiseSettledResult<any> = ownerAddressArray[i];
-      if (settleResult.status === "fulfilled") {
-        const ownerAddress: string = settleResult.value;
-        if (
-          ownerAddress.toLowerCase().includes(args.ethAddress.toLowerCase())
-        ) {
-          const foundTokenID = idCandidateArray[i];
-          console.log("found owned tokenID", foundTokenID);
-          tokenIDs.push(foundTokenID);
-        }
-      }
-    }
-    if (tokenIDs.length > 0 && isFallbackModeActive()) {
-      break;
-    }
-  }
-  return tokenIDs;
-}
-
-function minimumBigInt(a: bigint, b: bigint): bigint {
-  return a < b ? a : b;
 }
 
 export async function fetchStakingNft(args: {

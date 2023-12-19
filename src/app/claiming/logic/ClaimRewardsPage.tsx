@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 import { Alert, Card, CircularProgress } from "@mui/material";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
 import {
-  fetchOwnedTokenIDs,
   fetchStakingNft,
   StakingNft,
   submitClaimTransaction,
@@ -23,6 +22,7 @@ import {
 } from "../ui/ClaimRewardsComponents";
 import { usePreventServerSideRendering } from "@/util/util";
 import { claimRewardsMainFlexBox } from "../ui/claim-style";
+import { fetchOwnedTokenIDs } from "@/web3/nft-fetching";
 
 export type PageState =
   | "PENDING_TOKENID_FETCH"

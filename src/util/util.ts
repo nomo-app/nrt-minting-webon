@@ -64,10 +64,7 @@ export async function fetchWithRetryEtherScan(args: {
     return res1;
   }
 
-  // retry with an api key
-  const etherScanAPIKey = "AC72N833U9MKUNXS44MV27T3HKEN4WYYT3";
-  return (await (await fetch(args.url + "&apikey=" + etherScanAPIKey)).json())
-    .result;
+  return (await (await fetch(args.url)).json()).result;
 }
 
 export function textShortener(text: string, length: number): string {
