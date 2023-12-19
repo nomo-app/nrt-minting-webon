@@ -22,7 +22,7 @@ import {
 } from "../ui/ClaimRewardsComponents";
 import { usePreventServerSideRendering } from "@/util/util";
 import { claimRewardsMainFlexBox } from "../ui/claim-style";
-import { fetchOwnedTokenIDs } from "@/web3/nft-fetching";
+import { fetchStakingTokenIDs } from "@/web3/nft-fetching";
 
 export type PageState =
   | "PENDING_TOKENID_FETCH"
@@ -58,7 +58,7 @@ const ClaimRewardsPage: React.FC = () => {
 
   useEffect(() => {
     if (evmAddress) {
-      fetchOwnedTokenIDs({ ethAddress: evmAddress })
+      fetchStakingTokenIDs({ ethAddress: evmAddress })
         .then((tokenIDs: any) => {
           if (tokenIDs.length) {
             setPageState("PENDING_DETAILS_FETCH");

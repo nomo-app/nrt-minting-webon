@@ -1,9 +1,37 @@
 import { fetchWithRetryEtherScan } from "@/util/util";
 import { getNomoEvmNetwork } from "./navigation";
 import { getStakingContract, getStakingContractAddress } from "./web3-minting";
-import { isFallbackModeActive } from "nomo-webon-kit";
+import {
+  NomoEvmNetwork,
+  invokeNomoFunction,
+  isFallbackModeActive,
+} from "nomo-webon-kit";
 
-export async function fetchOwnedTokenIDs(args: {
+export async function fetchStakingTokenIDs(args: {
+  ethAddress: string;
+}): Promise<Array<bigint>> {
+  if (isFallbackModeActive()) {
+    return await fetchStakingTokenIDsFallback(args);
+  }
+
+  const network: NomoEvmNetwork = getNomoEvmNetwork();
+  const { nfts: allNFTs } = await invokeNomoFunction("nomoGetNFTs", {
+    network,
+  });
+  console.log("allNFTs", allNFTs);
+  const contractAddress = getStakingContractAddress();
+  const stakingNFTs = allNFTs.filter(
+    (nft: any) =>
+      nft.contractAddress.toLowerCase() === contractAddress.toLowerCase()
+  );
+  console.log("stakingNFTs", stakingNFTs);
+
+  const tokenIDs = stakingNFTs.map((nft: any) => BigInt(nft.tokenID));
+  console.log("tokenIDs", tokenIDs);
+  return tokenIDs;
+}
+
+async function fetchStakingTokenIDsFallback(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
   const stakingContract = getStakingContract();
