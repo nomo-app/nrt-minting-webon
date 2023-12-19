@@ -4,3 +4,4 @@ node_modules
 out
 gcloud_service_account.json
 .env.local
+nomo.tar.gz
