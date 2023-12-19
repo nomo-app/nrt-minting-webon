@@ -58,6 +58,13 @@ const MintingPage: React.FC = () => {
     }
   }, [balanceFetchError]);
 
+  useEffect(() => {
+    if (avinocBalance) {
+      const roundedAvinocBalance = avinocBalance - (avinocBalance % 10n ** 18n);
+      setAvinocAmount(roundedAvinocBalance);
+    }
+  }, [avinocBalance]);
+
   const handleYearChange = (event: SelectChangeEvent) => {
     const yearString: string = event.target.value as string;
     const yearNumber: bigint = BigInt(parseInt(yearString));

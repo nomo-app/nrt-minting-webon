@@ -159,20 +159,17 @@ export const StakingTitleBar: React.FC = () => {
       }}
     >
       <BackButton />
-      <div style={{ flexGrow: 11 }} />
-      <img
+      {/* <img
         src={avinocIcon}
         className="Avinoc-Hex"
         alt="hex"
         style={{
           width: "10%",
         }}
-      />
-      <div style={{ flexGrow: 1 }} />
+      /> */}
       <div style={{ fontWeight: "bold", fontSize: "large" }}>
         {"AVINOC " + tokenStandard + " Staking"}
       </div>
-      <div style={{ flexGrow: 15 }} />
     </div>
   );
 };
