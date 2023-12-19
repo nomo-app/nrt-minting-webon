@@ -13,7 +13,7 @@ import {
 import { fetchWithRetryEtherScan } from "@/util/util";
 import { getNomoEvmNetwork } from "./navigation";
 import { Contract } from "ethers";
-import { isFallbackModeActive } from "nomo-webon-kit";
+import { invokeNomoFunction, isFallbackModeActive } from "nomo-webon-kit";
 
 export const avinocContractAddress =
   "0xf1ca9cb74685755965c7458528a36934df52a3ef"; // has the same address on both ERC20 and ZEN20
@@ -359,6 +359,36 @@ export function computeUnclaimedRewards(stakingNft: StakingNft): bigint {
       getClaimFraction(stakingNft)) /
     10n ** 18n
   );
+}
+
+export function useSafirAvinocSig(): {
+  safirSig: string | null;
+} {
+  const [sigObject, setSigObject] = React.useState<Record<
+    string,
+    string
+  > | null>(null);
+  React.useEffect(() => {
+    getSafirAvinocSig();
+  }, []);
+
+  async function getSafirAvinocSig() {
+    try {
+      const safirPubKey =
+        "0483739a0844d78c72b77f0ca24f51d390daf8f212122052e3bd4b3b591f0d43ba";
+      const name = "SAFIR-AVINOC";
+      const sigObject = await invokeNomoFunction("getValueFromNomoID", {
+        pubKeyHex: safirPubKey,
+        name,
+      });
+      console.log("sigObject", sigObject);
+      setSigObject(sigObject);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  const safirSig = sigObject ? sigObject["data"] : null;
+  return { safirSig };
 }
 
 export function useAvinocBalance(args: { ethAddress: string | null }): {

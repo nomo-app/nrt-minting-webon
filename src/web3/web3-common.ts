@@ -1,5 +1,9 @@
 import { AbstractProvider, ethers, Signer } from "ethers";
-import { EthersjsNomoSigner, zscProvider } from "ethersjs-nomo-webons";
+import {
+  EthersjsNomoSigner,
+  zscProvider,
+  zscSigner,
+} from "ethersjs-nomo-webons";
 import { nomo } from "nomo-webon-kit";
 import { useEffect, useState } from "react";
 import { getNomoEvmNetwork } from "./navigation";
@@ -24,7 +28,7 @@ export function getEthersSigner(): Signer {
     const provider = getEthersProvider();
     return new EthersjsNomoSigner(provider);
   } else if (network === "zeniq-smart-chain") {
-    return new EthersjsNomoSigner(zscProvider);
+    return zscSigner;
   } else {
     throw Error("unsupported network " + network);
   }

@@ -11,6 +11,7 @@ import {
   StakeError,
   submitStakeTransaction,
   useAvinocBalance,
+  useSafirAvinocSig,
 } from "@/web3/web3-minting";
 import { usePreventServerSideRendering } from "@/util/util";
 import { RewardPredictionBox } from "@/app/minting/ui/RewardPredictionBox";
@@ -42,7 +43,7 @@ const MintingPage: React.FC = () => {
   const { avinocBalance, fetchError: balanceFetchError } = useAvinocBalance({
     ethAddress,
   });
-  const { safirSig } = { safirSig: null }; // TODO useSafirAvinocSig();
+  const { safirSig } = useSafirAvinocSig();
   const [avinocAmount, setAvinocAmount] = React.useState<bigint>(-1n);
   const [years, setYears] = React.useState<bigint>(10n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
