@@ -9,25 +9,28 @@ import { avinocIcon, stakingIcon } from "@/asset-paths";
 import { mintingMainFlexBox } from "./minting/ui/minting-style";
 import { navigateToMintingPage } from "@/web3/navigation";
 import { nomo } from "nomo-webon-kit";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { isClient } = usePreventServerSideRendering();
+  const router = useRouter();
 
   if (!isClient) {
     return <div />;
   }
+
   return (
     <div style={mintingMainFlexBox}>
       <WelcomeTitleBar />
       <ChainSelectButton
         onClick={() => {
-          navigateToMintingPage("zeniq-smart-chain");
+          navigateToMintingPage("zeniq-smart-chain", router);
         }}
         text={"ZEN20 (ZENIQ Smartchain)"}
       />
       <ChainSelectButton
         onClick={() => {
-          navigateToMintingPage("ethereum");
+          navigateToMintingPage("ethereum", router);
         }}
         text={"ERC20 (Ethereum)"}
       />

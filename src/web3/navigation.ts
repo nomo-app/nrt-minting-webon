@@ -1,12 +1,16 @@
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { NomoEvmNetwork } from "nomo-webon-kit";
 
-export function navigateToMintingPage(network: NomoEvmNetwork) {
-  window.location.assign("/minting?network=" + network);
+export function navigateToMintingPage(
+  network: NomoEvmNetwork,
+  router: AppRouterInstance
+) {
+  router.push("/minting?network=" + network);
 }
 
-export function navigateToClaimingPage() {
+export function navigateToClaimingPage(router: AppRouterInstance) {
   const network = getNomoEvmNetwork();
-  window.location.assign("/claiming?network=" + network);
+  router.push("/claiming?network=" + network);
 }
 
 export const getNomoEvmNetwork = (): NomoEvmNetwork => {
