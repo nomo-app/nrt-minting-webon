@@ -236,7 +236,7 @@ export function computeUnclaimedRewards(stakingNft: StakingNft): bigint {
     (stakingNft.amount *
       stakingNft.payoutFactor *
       getClaimFraction(stakingNft)) /
-    10n ** 18n
+    (10n ** 18n * 10n ** 18n)
   );
 }
 

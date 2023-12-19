@@ -15,7 +15,7 @@ import {
 import { UnreachableCaseError } from "../../../util/typesafe";
 import { useEvmAddress } from "@/web3/web3-common";
 import {
-  ClaimAllButton,
+  //ClaimAllButton,
   ClaimedRewards,
   StakingNftBox,
   TitleBox,
@@ -123,14 +123,14 @@ const ClaimRewardsPage: React.FC = () => {
     doClaim({ tokenIDs: [stakingNft.tokenId] });
   }
 
-  function onClickClaimAll() {
-    const tokenIDs = Object.keys(stakingNFTs).map((str) =>
-      BigInt(parseInt(str))
-    );
-    if (tokenIDs.length) {
-      doClaim({ tokenIDs });
-    }
-  }
+  // function onClickClaimAll() {
+  //   const tokenIDs = Object.keys(stakingNFTs).map((str) =>
+  //     BigInt(parseInt(str))
+  //   );
+  //   if (tokenIDs.length) {
+  //     doClaim({ tokenIDs });
+  //   }
+  // }
 
   if (!isClient) {
     return <div />;
@@ -153,7 +153,7 @@ const ClaimRewardsPage: React.FC = () => {
         })}
       </div>
 
-      <Card
+      {/* <Card
         style={{
           display: Object.values(stakingNFTs).length >= 2 ? undefined : "none",
           width: "90%",
@@ -164,7 +164,7 @@ const ClaimRewardsPage: React.FC = () => {
           disabled={isPendingState(pageState)}
           onClick={onClickClaimAll}
         />
-      </Card>
+      </Card> */}
 
       {pageState === "IDLE" ? (
         <ClaimedRewards stakingNFTs={stakingNFTs} />

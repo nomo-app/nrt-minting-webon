@@ -202,7 +202,7 @@ export const StakingNftBox: React.FC<{
               fontWeight: "bolder",
             }}
           >
-            {"NFT-ID: " + props.stakingNft.tokenId}
+            {"NFT-ID: #" + props.stakingNft.tokenId}
           </div>
           <div
             style={{
