@@ -1,34 +1,17 @@
 import { fetchWithRetryEtherScan } from "@/util/util";
 import { getNomoEvmNetwork } from "./navigation";
 import { getStakingContract, getStakingContractAddress } from "./web3-minting";
-import {
-  NomoEvmNetwork,
-  hasMinimumNomoVersion,
-  invokeNomoFunction,
-  isFallbackModeActive,
-  nomoGetPlatformInfo,
-} from "nomo-webon-kit";
+import { NomoEvmNetwork, nomo, isFallbackModeActive } from "nomo-webon-kit";
 
 export async function fetchStakingTokenIDs(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
-  let { minVersionFulfilled: hasNftAPI } = await hasMinimumNomoVersion({
-    minVersion: "0.3.5",
-  });
-  const platformInfo = await nomoGetPlatformInfo();
-  if (platformInfo.version.includes("debug")) {
-    console.log("debug build, not using fallback mode...");
-    hasNftAPI = true;
-  }
-
-  if (isFallbackModeActive() || !hasNftAPI) {
+  if (isFallbackModeActive()) {
     return await fetchStakingTokenIDsFallback(args);
   }
 
   const network: NomoEvmNetwork = getNomoEvmNetwork();
-  const { nfts: allNFTs } = await invokeNomoFunction("nomoGetNFTs", {
-    network,
-  });
+  const { nfts: allNFTs } = await nomo.getNFTs({ network });
   console.log("allNFTs", allNFTs);
   const contractAddress = getStakingContractAddress();
   const stakingNFTs = allNFTs.filter(
