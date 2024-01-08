@@ -1,4 +1,3 @@
-"use client";
 
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
@@ -13,7 +12,6 @@ import {
   useAvinocBalance,
   useSafirAvinocSig,
 } from "@/web3/web3-minting";
-import { usePreventServerSideRendering } from "@/util/util";
 import { RewardPredictionBox } from "@/app/minting/ui/RewardPredictionBox";
 import { StatusBox } from "@/app/minting/ui/MintingComponents";
 import { StakeButton } from "@/app/minting/ui/MintingComponents";
@@ -25,6 +23,7 @@ import { mintingMainFlexBox } from "@/app/minting/ui/minting-style";
 import { useAvinocPrice } from "@/util/use-avinoc-price";
 import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
+import { useNomoTheme } from "@/util/util";
 
 export type PageState =
   | "IDLE"
@@ -37,7 +36,7 @@ function isPendingState(pageState: PageState) {
 }
 
 const MintingPage: React.FC = () => {
-  const { isClient } = usePreventServerSideRendering();
+  useNomoTheme();
 
   const { avinocPrice } = useAvinocPrice();
   const { evmAddress: ethAddress } = useEvmAddress();
@@ -106,9 +105,6 @@ const MintingPage: React.FC = () => {
       });
   }
 
-  if (!isClient) {
-    return <div />;
-  }
   return (
     <div style={mintingMainFlexBox}>
       <div style={{ flexGrow: 10 }} />

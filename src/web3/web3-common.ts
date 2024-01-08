@@ -1,15 +1,10 @@
 import { AbstractProvider, ethers, Signer } from "ethers";
-import {
-  EthersjsNomoSigner,
-  zscProvider,
-  zscSigner,
-} from "ethersjs-nomo-webons";
+import { EthersjsNomoSigner, zscProvider } from "ethersjs-nomo-webons";
 import { nomo } from "nomo-webon-kit";
 import { useEffect, useState } from "react";
 import { getNomoEvmNetwork } from "./navigation";
 
 export const ethProviderInstance = ethers.getDefaultProvider("mainnet");
-export const ethSignerInstance = new EthersjsNomoSigner(ethProviderInstance);
 
 export function getEthersProvider(): AbstractProvider {
   const network = getNomoEvmNetwork();
@@ -24,11 +19,16 @@ export function getEthersProvider(): AbstractProvider {
 
 export function getEthersSigner(): Signer {
   const network = getNomoEvmNetwork();
+  const publicTestMnemonicHello =
+    "hello upon mirror situate cradle execute cute negative sudden city mean square";
+
+  const fallbackMnemonic =
+    import.meta.env.VITE_FALLBACK_MNEMONIC ?? publicTestMnemonicHello;
   if (network === "ethereum") {
     const provider = getEthersProvider();
-    return new EthersjsNomoSigner(provider);
+    return new EthersjsNomoSigner(provider, fallbackMnemonic);
   } else if (network === "zeniq-smart-chain") {
-    return zscSigner;
+    return new EthersjsNomoSigner(zscProvider, fallbackMnemonic);
   } else {
     throw Error("unsupported network " + network);
   }

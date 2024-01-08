@@ -1,4 +1,3 @@
-"use client";
 
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
@@ -20,10 +19,10 @@ import {
   StakingNftBox,
   TitleBox,
 } from "../ui/ClaimRewardsComponents";
-import { usePreventServerSideRendering } from "@/util/util";
 import { claimRewardsMainFlexBox } from "../ui/claim-style";
 import { fetchStakingTokenIDs } from "@/web3/nft-fetching";
 import ErrorDetails from "@/common/ErrorDetails";
+import { useNomoTheme } from "@/util/util";
 
 export type PageState =
   | "PENDING_TOKENID_FETCH"
@@ -44,7 +43,7 @@ export function isErrorState(pageState: PageState) {
 }
 
 const ClaimRewardsPage: React.FC = () => {
-  const { isClient } = usePreventServerSideRendering();
+  useNomoTheme();
 
   const { evmAddress } = useEvmAddress();
   const { avinocPrice } = useAvinocPrice();
@@ -136,9 +135,6 @@ const ClaimRewardsPage: React.FC = () => {
   //   }
   // }
 
-  if (!isClient) {
-    return <div />;
-  }
   return (
     <div style={claimRewardsMainFlexBox}>
       <div style={{ flexGrow: "10" }} />

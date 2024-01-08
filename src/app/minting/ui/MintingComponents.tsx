@@ -20,7 +20,7 @@ import { PageState } from "../logic/MintingPage";
 import BackButton from "@/common/BackButton";
 import { getTokenStandard, navigateToClaimingPage } from "@/web3/navigation";
 import { formatAVINOCAmount } from "@/util/use-avinoc-price";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 
 export function isErrorState(pageState: PageState) {
   return pageState.startsWith("ERROR");
@@ -121,10 +121,10 @@ export const SwitchToRewardPageButton: React.FC<{
   disabled: boolean;
 }> = (props) => {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   function onClick() {
-    navigateToClaimingPage(router);
+    navigateToClaimingPage(navigate);
   }
 
   return (

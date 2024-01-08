@@ -20,19 +20,10 @@ export async function themeSwitchRotation() {
   await injectNomoCSSVariables(); // refresh css variables after switching theme
 }
 
-function useNomoTheme() {
+export function useNomoTheme() {
   useEffect(() => {
     injectNomoCSSVariables();
   }, []);
-}
-
-export function usePreventServerSideRendering() {
-  const [isClient, setIsClient] = useState(false);
-  useNomoTheme();
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  return { isClient };
 }
 
 export function arrayBufferToBase64(buffer: any) {
