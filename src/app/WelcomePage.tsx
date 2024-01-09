@@ -3,33 +3,16 @@ import { themeSwitchRotation, useNomoTheme } from "@/util/util";
 import { avinocIcon, stakingIcon } from "@/asset-paths";
 import { mintingMainFlexBox } from "./minting/ui/minting-style";
 import {
-  getNFTID,
-  navigateToClaimingPage,
   navigateToMintingPage,
 } from "@/web3/navigation";
 import { nomo } from "nomo-webon-kit";
 import { useNavigate } from "react-router-dom";
 import "./minting/ui/MintingPage.css";
-import { useEffect } from "react";
-
-let forwardedToClaimingPage = false; // only forward once to enable back button
 
 export default function Home() {
   useNomoTheme();
 
   const navigate = useNavigate();
-  const nftID = getNFTID();
-  useEffect(() => {
-    if (nftID && navigate && !forwardedToClaimingPage) {
-      try {
-        console.log("Navigating to claiming page for nftID: " + nftID);
-        navigateToClaimingPage(navigate);
-        forwardedToClaimingPage = true;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, [nftID, navigate]);
   return (
     <div style={mintingMainFlexBox}>
       <WelcomeTitleBar />

@@ -126,15 +126,6 @@ const ClaimRewardsPage: React.FC = () => {
     doClaim({ tokenIDs: [stakingNft.tokenId] });
   }
 
-  // function onClickClaimAll() {
-  //   const tokenIDs = Object.keys(stakingNFTs).map((str) =>
-  //     BigInt(parseInt(str))
-  //   );
-  //   if (tokenIDs.length) {
-  //     doClaim({ tokenIDs });
-  //   }
-  // }
-
   const nftID = getNFTID();
   const selectedNFT = nftID ? stakingNFTs[Number(nftID)] : undefined;
   console.log("selectedNFT", selectedNFT);
@@ -142,7 +133,7 @@ const ClaimRewardsPage: React.FC = () => {
   return (
     <div style={claimRewardsMainFlexBox}>
       <div style={{ flexGrow: "10" }} />
-      <TitleBox />
+      <TitleBox showBackButton={!selectedNFT} />
       {!!fetchError && <ErrorDetails error={fetchError} />}
 
       {selectedNFT ? (

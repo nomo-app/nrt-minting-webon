@@ -20,7 +20,7 @@ import { isPendingState } from "@/app/claiming/logic/ClaimRewardsPage";
 import { avinocIcon, boxLogo, doubleBoxLogo, rocketIcon } from "@/asset-paths";
 import BackButton from "@/common/BackButton";
 
-export const TitleBox: React.FC = () => {
+export const TitleBox: React.FC<{ showBackButton: boolean }> = (props) => {
   const { t } = useTranslation();
   return (
     <div
@@ -32,7 +32,7 @@ export const TitleBox: React.FC = () => {
         fontWeight: "bold",
       }}
     >
-      <BackButton />
+      {props.showBackButton && <BackButton />}
       {t("reward.claimRewards")}
     </div>
   );

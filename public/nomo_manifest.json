@@ -2,7 +2,7 @@
   "nomo_manifest_version": "1.2.0",
   "webon_id": "com.avinoc.defi",
   "webon_name": "AVINOC DeFi",
-  "webon_version": "0.1.7",
+  "webon_version": "0.1.8",
   "min_nomo_version": "0.3.5",
   "dependencies": [],
   "permissions": [
