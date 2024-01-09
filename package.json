@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && mv dist out && nomo-webon-cli build out",
+    "build": "tsc && vite build && rm -rf out && mv dist out && nomo-webon-cli build out",
     "deploy": "nomo-webon-cli deploy nomo.tar.gz production && ./scripts/clear_cloudflare_cache.sh",
     "preview": "vite preview out"
   },
@@ -30,7 +30,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "attranslate": "^2.1.1",
-    "nomo-webon-cli": "^0.1.6",
+    "nomo-webon-cli": "^0.1.7",
     "typescript": "^5.2.2",
     "@vitejs/plugin-react": "^4.2.1",
     "vite": "^5.0.8"
