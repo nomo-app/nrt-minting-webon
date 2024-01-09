@@ -10,7 +10,8 @@ export function navigateToMintingPage(
 
 export function navigateToClaimingPage(navigate: NavigateFunction) {
   const network = getNomoEvmNetwork();
-  navigate("/claiming?network=" + network);
+  const nftid = getNFTID();
+  navigate("/claiming?network=" + network + (!!nftid ? "&nftid=" + nftid : ""));
 }
 
 export const getNomoEvmNetwork = (): NomoEvmNetwork => {
@@ -20,6 +21,15 @@ export const getNomoEvmNetwork = (): NomoEvmNetwork => {
     throw new Error("Network not found in URL");
   }
   return network as NomoEvmNetwork;
+};
+
+export const getNFTID = (): bigint | null => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const rawNftId = searchParams.get("nftid");
+  if (!rawNftId || rawNftId === "null") {
+    return null;
+  }
+  return BigInt(rawNftId);
 };
 
 export function getTokenStandard() {

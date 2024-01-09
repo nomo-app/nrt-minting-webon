@@ -1,10 +1,9 @@
-
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
 import "@/common/colors.css";
 import { useAvinocPrice } from "../../../util/use-avinoc-price";
 import { useTranslation } from "react-i18next";
-import { Alert, Card, CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
 import {
   fetchStakingNft,
@@ -23,6 +22,7 @@ import { claimRewardsMainFlexBox } from "../ui/claim-style";
 import { fetchStakingTokenIDs } from "@/web3/nft-fetching";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
+import { getNFTID } from "@/web3/navigation";
 
 export type PageState =
   | "PENDING_TOKENID_FETCH"
@@ -135,25 +135,39 @@ const ClaimRewardsPage: React.FC = () => {
   //   }
   // }
 
+  const nftID = getNFTID();
+  const selectedNFT = nftID ? stakingNFTs[Number(nftID)] : undefined;
+  console.log("selectedNFT", selectedNFT);
+
   return (
     <div style={claimRewardsMainFlexBox}>
       <div style={{ flexGrow: "10" }} />
       <TitleBox />
       {!!fetchError && <ErrorDetails error={fetchError} />}
 
-      <div className={"scroll-container"}>
-        {Object.values(stakingNFTs).map((stakingNft) => {
-          return (
-            <StakingNftBox
-              key={stakingNft.tokenId}
-              avinocPrice={avinocPrice}
-              stakingNft={stakingNft}
-              pageState={pageState as any}
-              onClickClaim={onClickClaim}
-            />
-          );
-        })}
-      </div>
+      {selectedNFT ? (
+        <StakingNftBox
+          key={selectedNFT.tokenId}
+          avinocPrice={avinocPrice}
+          stakingNft={selectedNFT}
+          pageState={pageState as any}
+          onClickClaim={onClickClaim}
+        />
+      ) : (
+        <div className={"scroll-container"}>
+          {Object.values(stakingNFTs).map((stakingNft) => {
+            return (
+              <StakingNftBox
+                key={stakingNft.tokenId}
+                avinocPrice={avinocPrice}
+                stakingNft={stakingNft}
+                pageState={pageState as any}
+                onClickClaim={onClickClaim}
+              />
+            );
+          })}
+        </div>
+      )}
 
       {/* <Card
         style={{
