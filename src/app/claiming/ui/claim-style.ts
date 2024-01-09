@@ -2,6 +2,8 @@ import { CSSProperties } from "react";
 import "./ClaimRewardsComponents.css";
 
 export const claimRewardsMainFlexBox: CSSProperties = {
+  /* The css variables that are prefixed with "nomo" adjust themselves according to the current Nomo theme */
+  background: "linear-gradient(to bottom right, white, var(--nomoBackground))",
   display: "flex",
   flexDirection: "column",
   rowGap: "10px",

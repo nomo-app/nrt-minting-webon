@@ -1,8 +1,6 @@
 
 body {
     height: 100%;
-    /* The css variables that are prefixed with "nomo" adjust themselves according to the current Nomo theme */
-    background: linear-gradient(to bottom right, white, var(--nomoBackground));
 }
 
 table {
