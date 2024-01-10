@@ -32,7 +32,7 @@ export function formatAVINOCAmount(args: { tokenAmount: bigint, ultraPrecision?:
 
   if (args.ultraPrecision && inpreciseTokenAmount > 0) {
     const log2 = Math.floor(Math.log2(inpreciseTokenAmount));
-    const precision = Math.max(0, 5 - log2);
+    const precision = Math.max(0, 10 - log2);
     return inpreciseTokenAmount.toFixed(precision) + " AVINOC " + tokenStandard;
   }
 
