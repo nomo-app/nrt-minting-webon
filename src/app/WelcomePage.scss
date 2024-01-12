@@ -1,16 +1,15 @@
-.content {
+.welcome-page-content {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100vh;
   padding: 2rem;
 
-  .header {
+  .welcome-page-header {
     display: flex;
     flex-direction: column;
     justify-content: end;
     align-items: center;
-    height: 30vh;
 
     img {
       width: 20%;
@@ -23,7 +22,7 @@
     }
   }
 
-  .body {
+  .welcome-page-body {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -60,7 +59,7 @@
     }
   }
 
-  .footer {
+  .welcome-page-footer {
     display: flex;
     flex-direction: column;
     justify-content: center;

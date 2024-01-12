@@ -6,9 +6,13 @@ import { handleGoBack } from "@/web3/navigation";
 const BackButton: React.FC = () => {
   return (
     <Button
-      style={{ color: "var(--nomoOnPrimary)" }}
-      variant="outlined"
-      startIcon={<ArrowBackIcon />}
+      sx={{
+        backgroundColor: '#2c04fe',
+        '&:hover': {
+          backgroundColor: '#5432fd', // Slightly darker for the hover state
+        },
+      }}
+      startIcon={<ArrowBackIcon style={{fill: 'white'}} />}
       onClick={handleGoBack}
     />
   );

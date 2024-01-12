@@ -76,7 +76,13 @@ export const RewardPredictionBox: React.FC<{
       elevation={0}
       style={{
         width: "100%",
-        margin: "10px",
+        margin: "1rem",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center"
+      }}
+      sx={{
+        backgroundColor: '#13111a',
       }}
     >
       {/*row 1 network bonus*/}
@@ -90,8 +96,10 @@ export const RewardPredictionBox: React.FC<{
           justifyContent: "space-evenly",
           alignItems: "center",
           width: "100%",
-          padding: "5px",
+          padding: "1rem",
           minHeight: "1rem",
+          color: "white",
+          marginTop: ".25rem",
         }}
       >
         <div
@@ -99,8 +107,9 @@ export const RewardPredictionBox: React.FC<{
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-end",
-            rowGap: "8px",
+            rowGap: ".5rem",
             justifyContent: "left",
+            fontSize: "1rem"
           }}
         >
           {isMaxYears ? (
@@ -117,7 +126,7 @@ export const RewardPredictionBox: React.FC<{
             flexDirection: "column",
             alignItems: "flex-end",
             justifyContent: "left",
-            rowGap: "8px",
+            rowGap: ".5rem",
           }}
         >
           {isMaxYears ? (
