@@ -1,4 +1,3 @@
-
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
 import "@/common/colors.css";
@@ -6,12 +5,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { Card } from "@mui/material";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
 import { ConfirmDialogSlide } from "@/app/minting/ui/ConfirmDialog";
-import {
-  StakeError,
-  submitStakeTransaction,
-  useAvinocBalance,
-  useSafirAvinocSig,
-} from "@/web3/web3-minting";
+import { StakeError, submitStakeTransaction, useAvinocBalance, useSafirAvinocSig } from "@/web3/web3-minting";
 import { RewardPredictionBox } from "@/app/minting/ui/RewardPredictionBox";
 import { StatusBox } from "@/app/minting/ui/MintingComponents";
 import { StakeButton } from "@/app/minting/ui/MintingComponents";
@@ -24,12 +18,9 @@ import { useAvinocPrice } from "@/util/use-avinoc-price";
 import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
+import "./MintingPage.scss";
 
-export type PageState =
-  | "IDLE"
-  | "PENDING_SUBMIT_TX"
-  | "ERROR_FETCH_FAILED"
-  | StakeError;
+export type PageState = "IDLE" | "PENDING_SUBMIT_TX" | "ERROR_FETCH_FAILED" | StakeError;
 
 function isPendingState(pageState: PageState) {
   return pageState.startsWith("PENDING");
@@ -106,29 +97,37 @@ const MintingPage: React.FC = () => {
   }
 
   return (
-    <div style={mintingMainFlexBox}>
-      <div style={{ flexGrow: 10 }} />
-      <StakingTitleBar />
-      <StatusBox pageState={pageState} />
-      {!!txError && <ErrorDetails error={txError} />}
-      <Card variant={"elevation"} elevation={3} className={"input-card"}>
-        <AvinocAmountInput
-          value={avinocAmount}
-          maxValue={avinocBalance}
-          onChange={(value) => setAvinocAmount(value)}
-        />
+    <div className="minting-page-content">
+      <div className="staking-title-bar">
+        <StakingTitleBar />
+      </div>
+      <div className="minting-card">
+        <AvinocAmountInput value={avinocAmount} maxValue={avinocBalance} onChange={(value) => setAvinocAmount(value)} />
         <SelectYears years={years} onChange={handleYearChange} />
-      </Card>
-      <RewardPredictionBox
-        years={years}
-        avinocAmount={avinocAmount}
-        avinocPrice={avinocPrice}
-        networkBonus={networkBonus}
-      />
-      <StakeButton
-        disabled={isPendingState(pageState)}
-        onClick={onClickStakeButton}
-      />
+      </div>
+      <div className="minting-reward-prediction-box">
+        <RewardPredictionBox
+          years={years}
+          avinocAmount={avinocAmount}
+          avinocPrice={avinocPrice}
+          networkBonus={networkBonus}
+        />
+      </div>
+
+      <div className="minting-footer">
+        <StakeButton disabled={isPendingState(pageState)} onClick={onClickStakeButton} />
+        <SwitchToRewardPageButton disabled={isPendingState(pageState)} />
+      </div>
+
+      <div className="minting-status-box">
+        <StatusBox pageState={pageState} />
+      </div>
+      {!!txError && (
+        <div className="minting-error-details">
+          <ErrorDetails error={txError} />
+        </div>
+      )}
+
       <ConfirmDialogSlide
         isOpen={confirmDialogOpen}
         years={years}
@@ -142,9 +141,46 @@ const MintingPage: React.FC = () => {
         handleClose={() => setSuccessDialogOpen(false)}
         translationKey={"staking.DialogSuccess"}
       />
-      <SwitchToRewardPageButton disabled={isPendingState(pageState)} />
-      <div style={{ flexGrow: 50 }} />
     </div>
+    // <div style={mintingMainFlexBox}>
+    //   <div style={{ flexGrow: 10 }} />
+    //   <StakingTitleBar />
+    //   <StatusBox pageState={pageState} />
+    //   {!!txError && <ErrorDetails error={txError} />}
+    //   <Card variant={"elevation"} elevation={3} className={"input-card"}>
+    //     <AvinocAmountInput
+    //       value={avinocAmount}
+    //       maxValue={avinocBalance}
+    //       onChange={(value) => setAvinocAmount(value)}
+    //     />
+    //     <SelectYears years={years} onChange={handleYearChange} />
+    //   </Card>
+    //   <RewardPredictionBox
+    //     years={years}
+    //     avinocAmount={avinocAmount}
+    //     avinocPrice={avinocPrice}
+    //     networkBonus={networkBonus}
+    //   />
+    //   <StakeButton
+    //     disabled={isPendingState(pageState)}
+    //     onClick={onClickStakeButton}
+    //   />
+    //   <ConfirmDialogSlide
+    //     isOpen={confirmDialogOpen}
+    //     years={years}
+    //     selectedAmount={avinocAmount}
+    //     networkBonus={networkBonus}
+    //     handleClose={() => setConfirmDialogOpen(false)}
+    //     handleConfirm={() => submitStaking()}
+    //   />
+    //   <CongratDialogSlide
+    //     isOpen={successDialogOpen}
+    //     handleClose={() => setSuccessDialogOpen(false)}
+    //     translationKey={"staking.DialogSuccess"}
+    //   />
+    //   <SwitchToRewardPageButton disabled={isPendingState(pageState)} />
+    //   <div style={{ flexGrow: 50 }} />
+    // </div>
   );
 };
 

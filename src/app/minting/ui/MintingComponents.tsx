@@ -21,6 +21,7 @@ import BackButton from "@/common/BackButton";
 import { getTokenStandard, navigateToClaimingPage } from "@/web3/navigation";
 import { formatAVINOCAmount } from "@/util/use-avinoc-price";
 import { useNavigate } from "react-router-dom";
+import "./MintingComponents.scss";
 
 export function isErrorState(pageState: PageState) {
   return pageState.startsWith("ERROR");
@@ -89,15 +90,12 @@ export const StakeButton: React.FC<{
 }> = (props) => {
   return (
     <button
+      className="minting-page-button"
       disabled={props.disabled}
-      className="primary-button"
-      type="button"
       onClick={() => props.disabled || props.onClick()}
       style={{
         color: props.disabled ? "white" : undefined,
-        backgroundColor: props.disabled
-          ? "gray"
-          : "var(--color-primary-button-background)",
+        // backgroundColor: props.disabled ? "grey" : "var(--color-primary-button-background)",
       }}
     >
       <div
@@ -105,12 +103,10 @@ export const StakeButton: React.FC<{
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
-          columnGap: "8px",
-          alignItems: "center",
-          fontSize: "small",
+          fontSize: "large",
         }}
       >
-        <img src={stakingIcon} alt={""} height={"14px"} />
+        {/* <img src={stakingIcon} alt={""} height={"14px"} /> */}
         {"Stake " + getTokenStandard()}
       </div>
     </button>
@@ -128,19 +124,38 @@ export const SwitchToRewardPageButton: React.FC<{
   }
 
   return (
-    <a onClick={props.disabled ? undefined : onClick} style={{ width: "100%" }}>
-      <button
+    <button
+      className="minting-page-button"
+      disabled={props.disabled}
+      onClick={() => props.disabled || onClick()}
+      style={{
+        color: props.disabled ? "grey" : undefined,
+        backgroundColor: props.disabled ? "grey" : "var(--color-primary-button-background)",
+      }}
+    >
+      <div
         style={{
-          color: props.disabled ? "white" : undefined,
-          backgroundColor: props.disabled
-            ? "gray"
-            : "var(--color-secondary-button-background)",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          fontSize: "large",
         }}
-        className="secondary-button"
       >
-        {t("staking.claimRewards")}
-      </button>
-    </a>
+      {t("staking.claimRewards")}
+      </div>
+    </button>
+
+    // <a onClick={props.disabled ? undefined : onClick} style={{ width: "100%" }}>
+    //   <button
+    //     style={{
+    //       color: props.disabled ? "white" : undefined,
+    //       backgroundColor: props.disabled ? "gray" : "var(--color-secondary-button-background)",
+    //     }}
+    //     className="secondary-button"
+    //   >
+    //     {t("staking.claimRewards")}
+    //   </button>
+    // </a>
   );
 };
 export const StakingTitleBar: React.FC = () => {
@@ -152,24 +167,11 @@ export const StakingTitleBar: React.FC = () => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        alignContent: "space-around",
-        width: "100%",
-        justifyContent: "center",
-        marginTop: "20px",
+        justifyContent: "space-between",
       }}
     >
       <BackButton />
-      {/* <img
-        src={avinocIcon}
-        className="Avinoc-Hex"
-        alt="hex"
-        style={{
-          width: "10%",
-        }}
-      /> */}
-      <div style={{ fontWeight: "bold", fontSize: "large" }}>
-        {"AVINOC " + tokenStandard + " Staking"}
-      </div>
+      <div style={{ fontWeight: "bold", fontSize: "large" }}>{"AVINOC " + tokenStandard + " Staking"}</div>
     </div>
   );
 };
@@ -220,11 +222,42 @@ export const AvinocAmountInput: React.FC<{
       id="textfield_outline"
       helperText={availableText}
       label={t("staking.amountStaking")}
-      variant="standard"
+      variant="outlined"
       type={"number"}
       style={{
         width: "90%",
-        margin: "8px",
+        marginLeft: "1rem",
+        marginRight: "1rem",
+        marginTop: "2rem",
+      }}
+      sx={{
+        input: { color: "white" },
+        label: { color: "white" },
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": {
+            borderColor: "white",
+          },
+          "&:hover fieldset": {
+            borderColor: "white",
+          },
+          "&.Mui-focused fieldset": {
+            borderColor: "white",
+          },
+        },
+        "& .MuiFormHelperText-root": {
+          color: "white",
+          fontSize: "medium",
+          textAlign: "center",
+          marginTop: "2rem",
+        },
+        "& .MuiInput-underline:before": {
+          // underline color when textfield is not focused
+          borderBottomColor: "white",
+        },
+        "& .MuiInput-underline:after": {
+          // underline color when textfield is focused
+          borderBottomColor: "white",
+        },
       }}
       error={isError}
       value={userVisibleProp}
@@ -234,10 +267,7 @@ export const AvinocAmountInput: React.FC<{
       }}
       InputProps={{
         endAdornment: (
-          <InputAdornment
-            onClick={() => !props.maxValue || props.onChange(props.maxValue)}
-            position="end"
-          >
+          <InputAdornment onClick={() => !props.maxValue || props.onChange(props.maxValue)} position="end">
             <div id={"max_button"} className={"MaxButton"}>
               MAX
             </div>
@@ -245,12 +275,7 @@ export const AvinocAmountInput: React.FC<{
         ),
         startAdornment: (
           <InputAdornment position="start">
-            <img
-              src={avinocIcon}
-              className="Zeniq-Logo"
-              alt="logo"
-              style={{ width: 20, height: 20 }}
-            />
+            <img src={avinocIcon} className="Zeniq-Logo" alt="logo" style={{ width: 25, height: 25 }} />
           </InputAdornment>
         ),
       }}
@@ -264,17 +289,34 @@ export const SelectYears: React.FC<{
   const { t } = useTranslation();
 
   return (
-    <FormControl
-      variant={"standard"}
-      sx={{ m: 1 }}
-      style={{ width: "90%", margin: "8px" }}
-    >
-      <InputLabel id="stakingTimeTitle">{t("reward.stakingPeriod")}</InputLabel>
+    <FormControl variant={"outlined"} sx={{ m: 1 }} style={{ width: "90%", marginTop: "2rem", marginBottom: "2rem" }}>
+      <InputLabel
+        id="stakingTimeTitle"
+        sx={{ color: "white", "&::before": { borderBottomColor: "white" }, "&::after": { borderBottomColor: "white" } }}
+      >
+        {t("reward.stakingPeriod")}
+      </InputLabel>
       <Select
         label="Staking Time"
         value={"" + props.years}
         onChange={props.onChange}
         style={{ fontWeight: "bold" }}
+        sx={{
+          color: "white",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white",
+          },
+          "& .MuiSvgIcon-root": {
+            // Directly targeting the SVG icon
+            fill: "white!important",
+          },
+        }}
       >
         <MenuItem value={1}>{"1 " + t("staking.year")}</MenuItem>
         <MenuItem value={3}>{"3 " + t("staking.years")}</MenuItem>
@@ -291,7 +333,7 @@ export const AvinocYearsLabel: React.FC<{ label: string }> = (props) => {
       className={"Col"}
       style={{
         fontWeight: "bold",
-        fontSize: "smaller",
+        fontSize: "medium",
       }}
     >
       {props.label}
@@ -305,8 +347,8 @@ export const AvinocRewardLabel: React.FC<{ label: string }> = (props) => {
       id={"reward_15"}
       style={{
         fontWeight: "light",
-        fontSize: "smaller",
-        color: "#252837",
+        fontSize: "medium",
+        color: "white",
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
@@ -314,7 +356,7 @@ export const AvinocRewardLabel: React.FC<{ label: string }> = (props) => {
       }}
     >
       {props.label}
-      <img src={avinocIcon} className={"avi-logo"} />
+      {/* <img src={avinocIcon} className={"avi-logo"}  /> */}
     </div>
   );
 };
@@ -324,8 +366,8 @@ export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
     <div
       style={{
         fontWeight: "light",
-        fontSize: "smaller",
-        color: "#B1B1B1",
+        fontSize: "medium",
+        color: "white",
       }}
     >
       {props.label}
@@ -333,9 +375,7 @@ export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
   );
 };
 
-export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (
-  props
-) => {
+export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (props) => {
   const { t } = useTranslation();
 
   if (props.networkBonus) {
@@ -345,22 +385,17 @@ export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (
         style={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          width: "100%",
+          justifyContent: "center",
           minHeight: "1rem",
           fontWeight: "bold",
           color: "white",
-          fontSize: "small",
+          fontSize: "medium",
           background: "linear-gradient(45deg, blue, lightblue)",
-          borderRadius: "0px",
+          borderRadius: ".5rem",
+          padding: ".5rem",
         }}
       >
-        <div style={{ flexGrow: 50 }} />
-        <EmojiEventsIcon />
-        <div style={{ flexGrow: 2 }} />
         <div>{t("staking.networkBonus") + ": " + props.apyLabel}</div>
-        <div style={{ flexGrow: 50 }} />
       </div>
     );
   } else {
@@ -369,22 +404,16 @@ export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (
         style={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          width: "100%",
+          justifyContent: "center",
           minHeight: "1rem",
           fontWeight: "bold",
           color: "black",
-          fontSize: "small",
+          fontSize: "medium",
           background: "var(--color-warning)",
-          borderRadius: "0px",
+          borderRadius: ".25rem",
         }}
       >
-        <div style={{ flexGrow: 50 }} />
-        <WarningAmberIcon color={"error"} />
-        <div style={{ flexGrow: 2 }} />
         <div>{t("staking.networkBonus") + ": " + props.apyLabel}</div>
-        <div style={{ flexGrow: 50 }} />
       </div>
     );
   }
