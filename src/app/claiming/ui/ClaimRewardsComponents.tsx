@@ -152,6 +152,7 @@ export const StakingNftBox: React.FC<{
   const unclaimedRewards: bigint = computeUnclaimedRewards(props.stakingNft);
   const unclaimedRewardsFormatted = formatAVINOCAmount({
     tokenAmount: unclaimedRewards,
+    ultraPrecision: true, // ultraPrecision to see every second that the rewards are increasing
   });
 
   const progress: number = Number(
