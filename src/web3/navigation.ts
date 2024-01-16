@@ -21,12 +21,7 @@ function getSearchParams() {
 }
 
 export const getNomoEvmNetwork = (): NomoEvmNetwork => {
-  const searchParams = getSearchParams();
-  const network = searchParams.get("network");
-  if (!network) {
-    throw new Error("Network not found in URL");
-  }
-  return network as NomoEvmNetwork;
+  return "zeniq-smart-chain";
 };
 
 export const getNFTID = (): bigint | null => {
@@ -39,14 +34,7 @@ export const getNFTID = (): bigint | null => {
 };
 
 export function getTokenStandard() {
-  const network = getNomoEvmNetwork();
-  if (network === "ethereum") {
-    return "ERC20";
-  } else if (network === "zeniq-smart-chain") {
-    return "ZEN20";
-  } else {
-    throw new Error("Unsupported network " + network);
-  }
+  return "ZEN20";
 }
 
 export const handleGoBack = () => {

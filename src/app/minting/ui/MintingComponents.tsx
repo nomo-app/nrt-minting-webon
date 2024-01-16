@@ -107,7 +107,7 @@ export const StakeButton: React.FC<{
         }}
       >
         {/* <img src={stakingIcon} alt={""} height={"14px"} /> */}
-        {"Stake " + getTokenStandard()}
+        {"Link " + getTokenStandard()}
       </div>
     </button>
   );
