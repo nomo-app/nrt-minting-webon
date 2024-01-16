@@ -45,7 +45,7 @@
   },
   "reward": {
     "totalPayout": "Total payout",
-    "stakingPeriod": "Minting Period",
+    "stakingPeriod": "Linking Period",
     "claimRewards": "Claim Rewards",
     "claim": "Claim",
     "claimAll": "Claim All",

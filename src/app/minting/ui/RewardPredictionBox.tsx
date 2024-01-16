@@ -1,15 +1,10 @@
 import { Card } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { getApyValues } from "@/app/minting/logic/staking-rewards";
 import { BonusBox } from "./MintingComponents";
 import { AvinocDollarRewardLabel } from "./MintingComponents";
-import { AvinocRewardLabel } from "./MintingComponents";
-import { AvinocYearsLabel } from "./MintingComponents";
-import {
-  formatNRTAmount,
-  formatTokenDollarPrice,
-} from "@/util/use-avinoc-price";
+import { MintingRewardLabel } from "./MintingComponents";
+import { MintingYearsLabel } from "./MintingComponents";
 
 export const RewardPredictionBox: React.FC<{
   years: bigint;
@@ -20,51 +15,15 @@ export const RewardPredictionBox: React.FC<{
   const { t } = useTranslation();
 
   function getApy(years: bigint): number {
-    if (props.networkBonus) {
-      return getApyValues(years).apyWithBonus;
-    } else {
-      return getApyValues(years).apyWithoutBonus;
-    }
-  }
-
-  function getRewardAmount(years: bigint): bigint {
-    const apy = getApy(years);
-    const scaledApy = BigInt(apy * 1e18);
-
-    return (years * props.avinocAmount * scaledApy) / BigInt(1e18);
+    return 2.6;
   }
 
   const apyLabel = props.networkBonus
     ? "+" + 100 * getApy(props.years) + "%"
     : t("reward.disabled");
 
-  function getRewardLabel(years: bigint): string {
-    if (props.avinocAmount === 0n) {
-      return t("staking.enterAmount");
-    } else {
-      const rewards = getRewardAmount(years);
-      return formatNRTAmount({ tokenAmount: rewards });
-    }
-  }
-
-  function getRewardDollarPrice(years: bigint): string {
-    if (props.avinocAmount === 0n) {
-      return t("staking.enterAmount");
-    } else {
-      const amount = getRewardAmount(years);
-      return `${formatTokenDollarPrice({
-        tokenPrice: props.avinocPrice,
-        tokenAmount: amount,
-      })} `;
-    }
-  }
-
   function getYearsName(years: bigint): string {
-    if (years === 1n) {
-      return years + " " + t("staking.year");
-    } else {
-      return years + " " + t("staking.years");
-    }
+    return "720 Days";
   }
 
   const maxYears = 10n;
@@ -79,10 +38,10 @@ export const RewardPredictionBox: React.FC<{
         margin: "1rem",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "center",
       }}
       sx={{
-        backgroundColor: '#13111a',
+        backgroundColor: "#13111a",
       }}
     >
       {/*row 1 network bonus*/}
@@ -109,15 +68,11 @@ export const RewardPredictionBox: React.FC<{
             alignItems: "flex-end",
             rowGap: ".5rem",
             justifyContent: "left",
-            fontSize: "1rem"
+            fontSize: "1rem",
           }}
         >
-          {isMaxYears ? (
-            <div style={{ display: "none" }} />
-          ) : (
-            <AvinocYearsLabel label={getYearsName(props.years)} />
-          )}
-          <AvinocYearsLabel label={getYearsName(maxYears)} />
+          <MintingYearsLabel label={"Daily rewards"} />
+          <MintingYearsLabel label={"Rewards after 720 days"} />
         </div>
 
         <div
@@ -129,12 +84,8 @@ export const RewardPredictionBox: React.FC<{
             rowGap: ".5rem",
           }}
         >
-          {isMaxYears ? (
-            <div style={{ display: "none" }} />
-          ) : (
-            <AvinocRewardLabel label={getRewardLabel(props.years)} />
-          )}
-          <AvinocRewardLabel label={getRewardLabel(maxYears)} />
+          <MintingRewardLabel label={"+ 3.33 NRT Daily"} />
+          <MintingRewardLabel label={"+ " + 1000 * 2.4 + " NRT Total"} />
         </div>
 
         <div
@@ -147,14 +98,8 @@ export const RewardPredictionBox: React.FC<{
             flexShrink: "10",
           }}
         >
-          {isMaxYears ? (
-            <div style={{ display: "none" }} />
-          ) : (
-            <AvinocDollarRewardLabel
-              label={getRewardDollarPrice(props.years)}
-            />
-          )}
-          <AvinocDollarRewardLabel label={getRewardDollarPrice(maxYears)} />
+          <AvinocDollarRewardLabel label={"$0.49"} />
+          <AvinocDollarRewardLabel label={"$360"} />
         </div>
       </div>
     </Card>

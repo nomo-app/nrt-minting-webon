@@ -130,7 +130,9 @@ export const SwitchToRewardPageButton: React.FC<{
       onClick={() => props.disabled || onClick()}
       style={{
         color: props.disabled ? "grey" : undefined,
-        backgroundColor: props.disabled ? "grey" : "var(--color-primary-button-background)",
+        backgroundColor: props.disabled
+          ? "grey"
+          : "var(--color-primary-button-background)",
       }}
     >
       <div
@@ -141,7 +143,7 @@ export const SwitchToRewardPageButton: React.FC<{
           fontSize: "large",
         }}
       >
-      {t("staking.claimRewards")}
+        {t("staking.claimRewards")}
       </div>
     </button>
 
@@ -171,14 +173,22 @@ export const MintingTitleBar: React.FC = () => {
       }}
     >
       <BackButton />
-      <div style={{ fontWeight: "bold", fontSize: "large" }}>{"NRT " + tokenStandard + " Minting"}</div>
+      <div
+        style={{
+          fontWeight: "bold",
+          fontSize: "large",
+          fontFamily: "Helvetica",
+        }}
+      >
+        {"NRT " + tokenStandard + " Minting"}
+      </div>
     </div>
   );
 };
 
 const INPUT_ERROR_TRHESHOLD = -2n;
 
-export const AvinocAmountInput: React.FC<{
+export const TokenAmountInput: React.FC<{
   onChange: (value: bigint) => void;
   value: bigint;
   maxValue: bigint | null;
@@ -208,14 +218,14 @@ export const AvinocAmountInput: React.FC<{
 
   const availableText =
     props.maxValue !== null && props.maxValue !== undefined
-      ? `${t("staking.available")}: ${formatNRTAmount({
-          tokenAmount: props.maxValue,
+      ? `Available in wallet: ${formatNRTAmount({
+          tokenAmount: 1500n * (10n ** 18n),
         })}`
       : t("staking.loadBalance");
 
   const isError = props.value <= INPUT_ERROR_TRHESHOLD;
 
-  const userVisibleProp = props.value >= 0 ? Number(props.value) / 1e18 : "";
+  const userVisibleProp = 1000; //props.value >= 0 ? Number(props.value) / 1e18 : "";
 
   return (
     <TextField
@@ -267,7 +277,10 @@ export const AvinocAmountInput: React.FC<{
       }}
       InputProps={{
         endAdornment: (
-          <InputAdornment onClick={() => !props.maxValue || props.onChange(props.maxValue)} position="end">
+          <InputAdornment
+            onClick={() => !props.maxValue || props.onChange(props.maxValue)}
+            position="end"
+          >
             <div id={"max_button"} className={"MaxButton"}>
               MAX
             </div>
@@ -275,7 +288,12 @@ export const AvinocAmountInput: React.FC<{
         ),
         startAdornment: (
           <InputAdornment position="start">
-            <img src={nrtIcon} className="Zeniq-Logo" alt="logo" style={{ width: 25, height: 25 }} />
+            <img
+              src={nrtIcon}
+              className="Zeniq-Logo"
+              alt="logo"
+              style={{ width: 25, height: 25 }}
+            />
           </InputAdornment>
         ),
       }}
@@ -289,10 +307,18 @@ export const SelectYears: React.FC<{
   const { t } = useTranslation();
 
   return (
-    <FormControl variant={"outlined"} sx={{ m: 1 }} style={{ width: "90%", marginTop: "2rem", marginBottom: "2rem" }}>
+    <FormControl
+      variant={"outlined"}
+      sx={{ m: 1 }}
+      style={{ width: "90%", marginTop: "2rem", marginBottom: "2rem" }}
+    >
       <InputLabel
         id="stakingTimeTitle"
-        sx={{ color: "white", "&::before": { borderBottomColor: "white" }, "&::after": { borderBottomColor: "white" } }}
+        sx={{
+          color: "white",
+          "&::before": { borderBottomColor: "white" },
+          "&::after": { borderBottomColor: "white" },
+        }}
       >
         {t("reward.stakingPeriod")}
       </InputLabel>
@@ -327,20 +353,21 @@ export const SelectYears: React.FC<{
     </FormControl>
   );
 };
-export const AvinocYearsLabel: React.FC<{ label: string }> = (props) => {
+export const MintingYearsLabel: React.FC<{ label: string }> = (props) => {
   return (
     <div
       className={"Col"}
       style={{
         fontWeight: "bold",
         fontSize: "medium",
+        fontFamily: "Helvetica",
       }}
     >
       {props.label}
     </div>
   );
 };
-export const AvinocRewardLabel: React.FC<{ label: string }> = (props) => {
+export const MintingRewardLabel: React.FC<{ label: string }> = (props) => {
   return (
     <div
       className={"Reward"}
@@ -353,6 +380,7 @@ export const AvinocRewardLabel: React.FC<{ label: string }> = (props) => {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
+        fontFamily: "Helvetica",
       }}
     >
       {props.label}
@@ -368,6 +396,7 @@ export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
         fontWeight: "light",
         fontSize: "medium",
         color: "white",
+        fontFamily: "Helvetica",
       }}
     >
       {props.label}
@@ -375,46 +404,28 @@ export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
   );
 };
 
-export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (props) => {
-  const { t } = useTranslation();
+export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (
+  props
+) => {
 
-  if (props.networkBonus) {
-    return (
-      <div
-        className="bonus-box"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          minHeight: "1rem",
-          fontWeight: "bold",
-          color: "white",
-          fontSize: "medium",
-          background: "linear-gradient(45deg, blue, lightblue)",
-          borderRadius: ".5rem",
-          padding: ".5rem",
-        }}
-      >
-        <div>{t("staking.networkBonus") + ": " + props.apyLabel}</div>
-      </div>
-    );
-  } else {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          minHeight: "1rem",
-          fontWeight: "bold",
-          color: "black",
-          fontSize: "medium",
-          background: "var(--color-warning)",
-          borderRadius: ".25rem",
-        }}
-      >
-        <div>{t("staking.networkBonus") + ": " + props.apyLabel}</div>
-      </div>
-    );
-  }
+  return (
+    <div
+      className="bonus-box"
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        minHeight: "1rem",
+        fontWeight: "bold",
+        color: "white",
+        fontSize: "medium",
+        background: "linear-gradient(45deg, blue, lightblue)",
+        borderRadius: ".5rem",
+        padding: ".5rem",
+        fontFamily: "Helvetica",
+      }}
+    >
+      <div>{"Minting Rewards"}</div>
+    </div>
+  );
 };

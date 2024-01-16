@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { getApyValues } from "../logic/staking-rewards";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import { nrtIcon } from "@/asset-paths";
@@ -122,7 +121,7 @@ export const ConfirmDialogSlide: React.FC<{
             <div style={{ flexGrow: 1, textAlign: "left", marginRight: "2px" }}>
               {t("staking.apyWithoutBonus")}:{" "}
             </div>
-            <div>{getApyValues(props.years).apyWithoutBonus * 100} %</div>
+            <div>APY</div>
           </div>
 
           <div
@@ -137,7 +136,7 @@ export const ConfirmDialogSlide: React.FC<{
             <div style={{ flexGrow: 1, textAlign: "left", marginRight: "2px" }}>
               {t("staking.apyWithBonus")}:{" "}
             </div>
-            <div>{getApyValues(props.years).apyWithBonus * 100} %</div>
+            <div>{"APY"}</div>
           </div>
         </DialogContent>
         <div>
