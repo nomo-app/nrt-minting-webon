@@ -19,7 +19,7 @@ import { avinocIcon, stakingIcon } from "@/asset-paths";
 import { PageState } from "../logic/MintingPage";
 import BackButton from "@/common/BackButton";
 import { getTokenStandard, navigateToClaimingPage } from "@/web3/navigation";
-import { formatAVINOCAmount } from "@/util/use-avinoc-price";
+import { formatNRTAmount } from "@/util/use-avinoc-price";
 import { useNavigate } from "react-router-dom";
 import "./MintingComponents.scss";
 
@@ -37,7 +37,7 @@ export const StatusBox: React.FC<{ pageState: PageState }> = (props) => {
   function getStatusMessage() {
     switch (props.pageState) {
       case "ERROR_INSUFFICIENT_ETH":
-      case "ERROR_INSUFFICIENT_AVINOC":
+      case "ERROR_INSUFFICIENT_NRT":
       case "ERROR_FETCH_FAILED":
       case "ERROR_MISSING_WALLET_BACKUP":
       case "ERROR_TX_FAILED":
@@ -158,7 +158,7 @@ export const SwitchToRewardPageButton: React.FC<{
     // </a>
   );
 };
-export const StakingTitleBar: React.FC = () => {
+export const MintingTitleBar: React.FC = () => {
   const tokenStandard = getTokenStandard();
 
   return (
@@ -171,7 +171,7 @@ export const StakingTitleBar: React.FC = () => {
       }}
     >
       <BackButton />
-      <div style={{ fontWeight: "bold", fontSize: "large" }}>{"AVINOC " + tokenStandard + " Staking"}</div>
+      <div style={{ fontWeight: "bold", fontSize: "large" }}>{"NRT " + tokenStandard + " Minting"}</div>
     </div>
   );
 };
@@ -208,7 +208,7 @@ export const AvinocAmountInput: React.FC<{
 
   const availableText =
     props.maxValue !== null && props.maxValue !== undefined
-      ? `${t("staking.available")}: ${formatAVINOCAmount({
+      ? `${t("staking.available")}: ${formatNRTAmount({
           tokenAmount: props.maxValue,
         })}`
       : t("staking.loadBalance");
@@ -221,7 +221,7 @@ export const AvinocAmountInput: React.FC<{
     <TextField
       id="textfield_outline"
       helperText={availableText}
-      label={t("staking.amountStaking")}
+      label={t("staking.amountMinting")}
       variant="outlined"
       type={"number"}
       style={{
@@ -297,7 +297,7 @@ export const SelectYears: React.FC<{
         {t("reward.stakingPeriod")}
       </InputLabel>
       <Select
-        label="Staking Time"
+        label="Minting Time"
         value={"" + props.years}
         onChange={props.onChange}
         style={{ fontWeight: "bold" }}

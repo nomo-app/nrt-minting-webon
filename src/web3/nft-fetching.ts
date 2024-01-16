@@ -1,19 +1,19 @@
 import { fetchWithRetryEtherScan } from "@/util/util";
 import { getNomoEvmNetwork } from "./navigation";
-import { getStakingContract, getStakingContractAddress } from "./web3-minting";
+import { getMintingContract, getMintingContractAddress } from "./web3-minting";
 import { NomoEvmNetwork, nomo, isFallbackModeActive } from "nomo-webon-kit";
 
-export async function fetchStakingTokenIDs(args: {
+export async function fetchMintingTokenIDs(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
   if (isFallbackModeActive()) {
-    return await fetchStakingTokenIDsFallback(args);
+    return await fetchMintingTokenIDsFallback(args);
   }
 
   const network: NomoEvmNetwork = getNomoEvmNetwork();
   const { nfts: allNFTs } = await nomo.getNFTs({ network });
   console.log("allNFTs", allNFTs);
-  const contractAddress = getStakingContractAddress();
+  const contractAddress = getMintingContractAddress();
   const stakingNFTs = allNFTs.filter(
     (nft: any) =>
       nft.contractAddress.toLowerCase() === contractAddress.toLowerCase()
@@ -25,10 +25,10 @@ export async function fetchStakingTokenIDs(args: {
   return tokenIDs;
 }
 
-async function fetchStakingTokenIDsFallback(args: {
+async function fetchMintingTokenIDsFallback(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
-  const stakingContract = getStakingContract();
+  const stakingContract = getMintingContract();
   const network = getNomoEvmNetwork();
   if (network === "zeniq-smart-chain") {
     return await fetchOwnedTokenIDsByEnumeratingAllTokens(args);
@@ -58,7 +58,7 @@ async function fetchTokenIDCandidatesFromEtherscan(args: {
   if (network !== "ethereum") {
     throw Error("etherscan does not work on ZENIQ Smartchain!");
   }
-  const contractAddress = getStakingContractAddress();
+  const contractAddress = getMintingContractAddress();
   // https://docs.etherscan.io/getting-started/endpoint-urls
   const etherScanNFTEndpoint =
     "https://api.etherscan.io/api?module=account&action=tokennfttx&contractaddress=" +
@@ -94,7 +94,7 @@ function getFirstPossibleTokenID(): bigint {
 async function fetchOwnedTokenIDsByEnumeratingAllTokens(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
-  const stakingContract = getStakingContract();
+  const stakingContract = getMintingContract();
   const lastPossibleNFTId: bigint = await stakingContract.totalNFTs();
   const maxBatchSize: bigint = 10n;
 

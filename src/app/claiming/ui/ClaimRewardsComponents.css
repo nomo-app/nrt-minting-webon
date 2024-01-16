@@ -65,7 +65,7 @@ body {
     transition: ease-in-out all 0.3s;
 }
 
-.secondary-button, .AvinocStakingButton {
+.secondary-button, .AvinocMintingButton {
     height: 50px;
     width: 80%;
     color: var(--color-secondary-button-text);
@@ -79,7 +79,7 @@ body {
     justify-items: center;
 }
 
-.secondary-button:active, .AvinocStakingButton:active {
+.secondary-button:active, .AvinocMintingButton:active {
     transform: scale(1.1);
 }
 

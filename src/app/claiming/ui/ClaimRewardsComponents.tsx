@@ -1,7 +1,7 @@
 import React from "react";
 import "@/common/colors.css";
 import {
-  formatAVINOCAmount,
+  formatNRTAmount,
   formatTokenDollarPrice,
 } from "@/util/use-avinoc-price";
 import { useTranslation } from "react-i18next";
@@ -13,7 +13,7 @@ import {
   LinearProgressProps,
   Typography,
 } from "@mui/material";
-import { computeUnclaimedRewards, StakingNft } from "@/web3/web3-minting";
+import { computeUnclaimedRewards, MintingNft } from "@/web3/web3-minting";
 import { usePeriodReRender } from "../../../util/util";
 import { PageState } from "@/app/minting/logic/MintingPage";
 import { isPendingState } from "@/app/claiming/logic/ClaimRewardsPage";
@@ -39,15 +39,15 @@ export const TitleBox: React.FC<{ showBackButton: boolean }> = (props) => {
 };
 
 export const ClaimedRewards: React.FC<{
-  stakingNFTs: Record<number, StakingNft>;
+  stakingNFTs: Record<number, MintingNft>;
 }> = (props) => {
   const { t } = useTranslation();
-  const nftArray: Array<StakingNft> = Object.values(props.stakingNFTs);
+  const nftArray: Array<MintingNft> = Object.values(props.stakingNFTs);
   const sumRewards = nftArray.reduce(
     (prev, nft) => prev + nft.claimedRewards,
     0n
   );
-  const sumRewardsFormatted = formatAVINOCAmount({ tokenAmount: sumRewards });
+  const sumRewardsFormatted = formatNRTAmount({ tokenAmount: sumRewards });
   return (
     <Card
       style={{
@@ -138,11 +138,11 @@ export const ClaimAllButton: React.FC<{
   );
 };
 
-export const StakingNftBox: React.FC<{
+export const MintingNftBox: React.FC<{
   avinocPrice: number | null;
-  stakingNft: StakingNft;
+  stakingNft: MintingNft;
   pageState: PageState;
-  onClickClaim: (stakingNft: StakingNft) => void;
+  onClickClaim: (stakingNft: MintingNft) => void;
 }> = (props) => {
   const { t } = useTranslation();
   usePeriodReRender(1000); // frequent re-rendering to show "live updates" of rewards
@@ -150,7 +150,7 @@ export const StakingNftBox: React.FC<{
   const totalRewards: bigint =
     (props.stakingNft.amount * props.stakingNft.payoutFactor) / 10n ** 18n;
   const unclaimedRewards: bigint = computeUnclaimedRewards(props.stakingNft);
-  const unclaimedRewardsFormatted = formatAVINOCAmount({
+  const unclaimedRewardsFormatted = formatNRTAmount({
     tokenAmount: unclaimedRewards,
     ultraPrecision: true, // ultraPrecision to see every second that the rewards are increasing
   });
@@ -163,7 +163,7 @@ export const StakingNftBox: React.FC<{
     props.stakingNft.end.getFullYear() - props.stakingNft.start.getFullYear()
   );
   const avinocPerDay: bigint = totalRewards / (years * 365n);
-  const avinocPerDayFormatted = formatAVINOCAmount({
+  const avinocPerDayFormatted = formatNRTAmount({
     tokenAmount: avinocPerDay,
   });
 
@@ -213,7 +213,7 @@ export const StakingNftBox: React.FC<{
             }}
           >
             {"Staked: " +
-              formatAVINOCAmount({ tokenAmount: props.stakingNft.amount })}
+              formatNRTAmount({ tokenAmount: props.stakingNft.amount })}
           </div>
           <div
             style={{
@@ -224,7 +224,7 @@ export const StakingNftBox: React.FC<{
           >
             {t("reward.totalPayout") +
               ": " +
-              formatAVINOCAmount({ tokenAmount: totalRewards })}
+              formatNRTAmount({ tokenAmount: totalRewards })}
           </div>
           <div
             style={{

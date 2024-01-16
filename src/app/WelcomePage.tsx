@@ -13,7 +13,7 @@ export default function Home() {
     <div className="welcome-page-content">
       <div className="welcome-page-header">
         <img src={avinocIcon} className="avinoc-icon" />
-        <h1>AVINOC Staking</h1>
+        <h1>NRT Minting</h1>
       </div>
       <div className="welcome-page-body">
         <div className="card">

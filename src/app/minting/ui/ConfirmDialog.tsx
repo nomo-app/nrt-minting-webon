@@ -16,7 +16,7 @@ import { getApyValues } from "../logic/staking-rewards";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import { avinocIcon } from "@/asset-paths";
-import { formatAVINOCAmount } from "@/util/use-avinoc-price";
+import { formatNRTAmount } from "@/util/use-avinoc-price";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -45,7 +45,7 @@ export const ConfirmDialogSlide: React.FC<{
     }
   }
 
-  const visibleSelectedAmount = formatAVINOCAmount({
+  const visibleSelectedAmount = formatNRTAmount({
     tokenAmount: props.selectedAmount,
   });
 

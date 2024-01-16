@@ -13,7 +13,7 @@ export function useAvinocPrice() {
     try {
       const network = getNomoEvmNetwork();
       const priceState = await nomo.getAssetPrice({
-        symbol: "AVINOC",
+        symbol: "NRT",
         contractAddress: avinocContractAddress,
         network,
       });
@@ -26,18 +26,18 @@ export function useAvinocPrice() {
   return { avinocPrice };
 }
 
-export function formatAVINOCAmount(args: { tokenAmount: bigint, ultraPrecision?: boolean }): string {
+export function formatNRTAmount(args: { tokenAmount: bigint, ultraPrecision?: boolean }): string {
   const inpreciseTokenAmount = Number(args.tokenAmount) / 1e18;
   const tokenStandard = getTokenStandard();
 
   if (args.ultraPrecision && inpreciseTokenAmount > 0) {
     const log2 = Math.floor(Math.log2(inpreciseTokenAmount));
     const precision = Math.max(0, 10 - log2);
-    return inpreciseTokenAmount.toFixed(precision) + " AVINOC " + tokenStandard;
+    return inpreciseTokenAmount.toFixed(precision) + " NRT " + tokenStandard;
   }
 
   const visibleAmount = inpreciseTokenAmount.toFixed(2);
-  return visibleAmount + " AVINOC " + tokenStandard;
+  return visibleAmount + " NRT " + tokenStandard;
 }
 
 export function formatTokenDollarPrice(args: {

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import StakingABI from "@/contracts/Staking.json";
+import MintingABI from "@/contracts/Staking.json";
 import React from "react";
 import genericErc20Abi from "@/contracts/erc20.json";
 import {
@@ -16,27 +16,27 @@ import { invokeNomoFunction, isFallbackModeActive } from "nomo-webon-kit";
 export const avinocContractAddress =
   "0xf1ca9cb74685755965c7458528a36934df52a3ef"; // has the same address on both ERC20 and ZEN20
 
-export function getStakingContractAddress(): string {
-  const ethStakingContract = "0x7561DEAf4ECf96dc9F0d50B4136046979ACdAD3e";
-  const smartChainStakingContract =
+export function getMintingContractAddress(): string {
+  const ethMintingContract = "0x7561DEAf4ECf96dc9F0d50B4136046979ACdAD3e";
+  const smartChainMintingContract =
     "0x97F51eCDeEdecdb740DD1ff6236D013aFff0417d";
 
   const network = getNomoEvmNetwork();
   if (network === "ethereum") {
-    return ethStakingContract;
+    return ethMintingContract;
   } else if (network === "zeniq-smart-chain") {
-    return smartChainStakingContract;
+    return smartChainMintingContract;
   } else {
     throw Error("unsupported network " + network);
   }
 }
 
-export function getStakingContract(): Contract {
+export function getMintingContract(): Contract {
   const signer = getEthersSigner();
-  const contractAddress = getStakingContractAddress();
+  const contractAddress = getMintingContractAddress();
   const stakingContract = new ethers.Contract(
     contractAddress,
-    StakingABI.abi,
+    MintingABI.abi,
     signer
   );
   return stakingContract;
@@ -60,7 +60,7 @@ const gasLimits = {
   },
 };
 
-export interface StakingNft {
+export interface MintingNft {
   tokenId: bigint;
   amount: bigint;
   payoutFactor: bigint;
@@ -74,9 +74,9 @@ export interface StakingNft {
 async function checkAvinocReserves(args: {
   avinocAmount: bigint;
 }): Promise<StakeError | null> {
-  const stakingContract = getStakingContract();
+  const stakingContract = getMintingContract();
   const avinocContract = getAvinocTokenContract();
-  const stakingContractAddress = getStakingContractAddress();
+  const stakingContractAddress = getMintingContractAddress();
   const [remainingPayout, remainingBurn, aviBalance] = await Promise.all([
     stakingContract.remainingPayout(),
     stakingContract.remainingBurn(),
@@ -95,7 +95,7 @@ async function approveIfNecessary(args: {
   ethAddress: string;
 }) {
   const avinocContract = getAvinocTokenContract();
-  const stakingContractAddress = getStakingContractAddress();
+  const stakingContractAddress = getMintingContractAddress();
   const allowance: bigint = await avinocContract.allowance(
     args.ethAddress,
     stakingContractAddress
@@ -119,7 +119,7 @@ export type StakeError =
   | Web3Error
   | "ERROR_INSUFFICIENT_RESERVES"
   | "ERROR_LIMIT_EXCEEDED"
-  | "ERROR_INSUFFICIENT_AVINOC";
+  | "ERROR_INSUFFICIENT_NRT";
 
 export async function submitStakeTransaction(args: {
   years: bigint;
@@ -155,7 +155,7 @@ export async function submitStakeTransaction(args: {
   // const bonusSigExampleDevWallet =
   //   "0x2db5eaa08e1b09c50ce6625ed3c2d259fefeb40d51c7c8a9dffae3986a11c528524da168622c776bf179fc81a20f2742a8552ed0b8bea9df4c017f25809424251b";
   const bonusSigs = args.safirSig ? [args.safirSig] : [];
-  const stakingContract = getStakingContract();
+  const stakingContract = getMintingContract();
   const txStake = await stakingContract.stake(
     args.years,
     args.avinocAmount,
@@ -181,7 +181,7 @@ export async function submitClaimTransaction(args: {
     return gasError;
   }
 
-  const stakingContract = getStakingContract();
+  const stakingContract = getMintingContract();
   const txResponse = await stakingContract.claim(args.tokenIDs, {
     gasLimit, // in some cases the automatic gasLimit-estimation seems to fail
   });
@@ -189,16 +189,16 @@ export async function submitClaimTransaction(args: {
   return null;
 }
 
-export async function fetchStakingNft(args: {
+export async function fetchMintingNft(args: {
   tokenId: bigint;
-}): Promise<StakingNft> {
-  const stakingContract = getStakingContract();
-  const rawStakingNft = await stakingContract.stakingNFTs(args.tokenId);
-  const amount: bigint = rawStakingNft["amount"];
-  const payoutFactor: bigint = rawStakingNft["payoutFactor"];
-  const start = new Date(Number(rawStakingNft["start"]) * 1000);
-  const end = new Date(Number(rawStakingNft["end"]) * 1000);
-  const lastClaim = new Date(Number(rawStakingNft["lastClaim"]) * 1000);
+}): Promise<MintingNft> {
+  const stakingContract = getMintingContract();
+  const rawMintingNft = await stakingContract.stakingNFTs(args.tokenId);
+  const amount: bigint = rawMintingNft["amount"];
+  const payoutFactor: bigint = rawMintingNft["payoutFactor"];
+  const start = new Date(Number(rawMintingNft["start"]) * 1000);
+  const end = new Date(Number(rawMintingNft["end"]) * 1000);
+  const lastClaim = new Date(Number(rawMintingNft["lastClaim"]) * 1000);
   const years: bigint = BigInt(end.getFullYear() - start.getFullYear());
   const inprecisePayoutFactor = Number(payoutFactor) / 1e18;
   const apy = parseFloat(
@@ -209,7 +209,7 @@ export async function fetchStakingNft(args: {
     (amount * payoutFactor * BigInt(lastClaim!.getTime() - start.getTime())) /
     (BigInt(end.getTime() - start.getTime()) * 10n ** 18n);
 
-  const stakingNft: StakingNft = {
+  const stakingNft: MintingNft = {
     tokenId: args.tokenId,
     amount,
     payoutFactor,
@@ -219,19 +219,19 @@ export async function fetchStakingNft(args: {
     end,
     lastClaim,
   };
-  // console.log("rawStakingNft", rawStakingNft);
+  // console.log("rawMintingNft", rawMintingNft);
   // console.log("stakingNft", stakingNft);
   return stakingNft;
 }
 
-function getClaimFraction(stakingNft: StakingNft): bigint {
+function getClaimFraction(stakingNft: MintingNft): bigint {
   return (
     (10n ** 18n * BigInt(Date.now() - stakingNft.lastClaim.getTime())) /
     BigInt(stakingNft.end.getTime() - stakingNft.start.getTime())
   );
 }
 
-export function computeUnclaimedRewards(stakingNft: StakingNft): bigint {
+export function computeUnclaimedRewards(stakingNft: MintingNft): bigint {
   return (
     (stakingNft.amount *
       stakingNft.payoutFactor *
@@ -255,7 +255,7 @@ export function useSafirAvinocSig(): {
     try {
       const safirPubKey =
         "0483739a0844d78c72b77f0ca24f51d390daf8f212122052e3bd4b3b591f0d43ba";
-      const name = "SAFIR-AVINOC";
+      const name = "SAFIR-NRT";
       const sigObject = await invokeNomoFunction("getValueFromNomoID", {
         pubKeyHex: safirPubKey,
         name,

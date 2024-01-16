@@ -10,7 +10,7 @@ import { RewardPredictionBox } from "@/app/minting/ui/RewardPredictionBox";
 import { StatusBox } from "@/app/minting/ui/MintingComponents";
 import { StakeButton } from "@/app/minting/ui/MintingComponents";
 import { SwitchToRewardPageButton } from "@/app/minting/ui/MintingComponents";
-import { StakingTitleBar } from "@/app/minting/ui/MintingComponents";
+import { MintingTitleBar } from "@/app/minting/ui/MintingComponents";
 import { AvinocAmountInput } from "@/app/minting/ui/MintingComponents";
 import { SelectYears } from "@/app/minting/ui/MintingComponents";
 import { mintingMainFlexBox } from "@/app/minting/ui/minting-style";
@@ -66,13 +66,13 @@ const MintingPage: React.FC = () => {
 
   function onClickStakeButton() {
     if (avinocAmount <= 0n) {
-      setPageState("ERROR_INSUFFICIENT_AVINOC");
+      setPageState("ERROR_INSUFFICIENT_NRT");
       return;
     }
     setConfirmDialogOpen(true);
   }
 
-  function submitStaking() {
+  function submitMinting() {
     setConfirmDialogOpen(false);
     if (!ethAddress) {
       setPageState("ERROR_INSUFFICIENT_ETH");
@@ -99,7 +99,7 @@ const MintingPage: React.FC = () => {
   return (
     <div className="minting-page-content">
       <div className="staking-title-bar">
-        <StakingTitleBar />
+        <MintingTitleBar />
       </div>
       <div className="minting-card">
         <AvinocAmountInput value={avinocAmount} maxValue={avinocBalance} onChange={(value) => setAvinocAmount(value)} />
@@ -134,7 +134,7 @@ const MintingPage: React.FC = () => {
         selectedAmount={avinocAmount}
         networkBonus={networkBonus}
         handleClose={() => setConfirmDialogOpen(false)}
-        handleConfirm={() => submitStaking()}
+        handleConfirm={() => submitMinting()}
       />
       <CongratDialogSlide
         isOpen={successDialogOpen}
@@ -144,7 +144,7 @@ const MintingPage: React.FC = () => {
     </div>
     // <div style={mintingMainFlexBox}>
     //   <div style={{ flexGrow: 10 }} />
-    //   <StakingTitleBar />
+    //   <MintingTitleBar />
     //   <StatusBox pageState={pageState} />
     //   {!!txError && <ErrorDetails error={txError} />}
     //   <Card variant={"elevation"} elevation={3} className={"input-card"}>
@@ -171,7 +171,7 @@ const MintingPage: React.FC = () => {
     //     selectedAmount={avinocAmount}
     //     networkBonus={networkBonus}
     //     handleClose={() => setConfirmDialogOpen(false)}
-    //     handleConfirm={() => submitStaking()}
+    //     handleConfirm={() => submitMinting()}
     //   />
     //   <CongratDialogSlide
     //     isOpen={successDialogOpen}

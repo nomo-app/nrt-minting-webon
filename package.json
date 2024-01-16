@@ -1,5 +1,5 @@
 {
-  "name": "avinoc-defi-webon",
+  "name": "nrt-minting-webon",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -30,7 +30,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "^4.2.1",
-    "attranslate": "^2.1.1",
+    "attranslate": "^2.1.2",
     "nomo-webon-cli": "^0.1.7",
     "sass": "^1.69.7",
     "typescript": "^5.2.2",

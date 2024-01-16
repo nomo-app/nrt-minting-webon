@@ -14,7 +14,7 @@ export async function themeSwitchRotation() {
       : oldTheme == "DARK"
       ? "TUPAN"
       : oldTheme == "TUPAN"
-      ? "AVINOC"
+      ? "NRT"
       : "LIGHT";
   await switchNomoTheme({ theme: newTheme });
   await injectNomoCSSVariables(); // refresh css variables after switching theme
