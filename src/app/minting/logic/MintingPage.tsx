@@ -38,9 +38,10 @@ const MintingPage: React.FC = () => {
 
   const { avinocPrice } = useAvinocPrice();
   const { evmAddress: ethAddress } = useEvmAddress();
-  const { avinocBalance: tokenBalance, fetchError: balanceFetchError } = useAvinocBalance({
-    ethAddress,
-  });
+  const { avinocBalance: tokenBalance, fetchError: balanceFetchError } =
+    useAvinocBalance({
+      ethAddress,
+    });
   const { safirSig } = useSafirAvinocSig();
   const [tokenAmount, setAvinocAmount] = React.useState<bigint>(-1n);
   const [years, setYears] = React.useState<bigint>(10n);
@@ -87,7 +88,12 @@ const MintingPage: React.FC = () => {
     }
 
     setPageState("PENDING_SUBMIT_TX");
-    submitStakeTransaction({ avinocAmount: tokenAmount, years, safirSig, ethAddress })
+    submitStakeTransaction({
+      avinocAmount: tokenAmount,
+      years,
+      safirSig,
+      ethAddress,
+    })
       .then((stakeError) => {
         if (stakeError) {
           setPageState(stakeError);
@@ -120,7 +126,10 @@ const MintingPage: React.FC = () => {
               tokenAmount: 1000n * 10n ** 18n,
             })}
         </div>
-        <SelectYears years={years} onChange={handleYearChange} />
+        <div style={{ color: "white", fontFamily: "Helvetica", paddingBottom: "15px" }}>
+          {"Linking period: 720 Days"}
+        </div>
+        {/* <SelectYears years={years} onChange={handleYearChange} /> */}
       </div>
       <div className="minting-reward-prediction-box">
         <RewardPredictionBox
