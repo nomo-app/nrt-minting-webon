@@ -15,7 +15,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { getApyValues } from "../logic/staking-rewards";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import { avinocIcon } from "@/asset-paths";
+import { nrtIcon } from "@/asset-paths";
 import { formatNRTAmount } from "@/util/use-avinoc-price";
 
 const Transition = React.forwardRef(function Transition(
@@ -93,7 +93,7 @@ export const ConfirmDialogSlide: React.FC<{
           >
             {t("staking.amount")}: {visibleSelectedAmount}
             <img
-              src={avinocIcon}
+              src={nrtIcon}
               className={"avi-logo"}
               style={{ height: "12px" }}
             />

@@ -17,7 +17,7 @@ import { computeUnclaimedRewards, MintingNft } from "@/web3/web3-minting";
 import { usePeriodReRender } from "../../../util/util";
 import { PageState } from "@/app/minting/logic/MintingPage";
 import { isPendingState } from "@/app/claiming/logic/ClaimRewardsPage";
-import { avinocIcon, boxLogo, doubleBoxLogo, rocketIcon } from "@/asset-paths";
+import { nrtIcon, boxLogo, doubleBoxLogo, rocketIcon } from "@/asset-paths";
 import BackButton from "@/common/BackButton";
 
 export const TitleBox: React.FC<{ showBackButton: boolean }> = (props) => {
@@ -87,7 +87,7 @@ export const ClaimedRewards: React.FC<{
         <p>{sumRewardsFormatted}</p>
       </div>
       <img
-        src={avinocIcon}
+        src={nrtIcon}
         className={"avi-logo"}
         style={{ padding: "8px", height: "14px", alignSelf: "center" }}
       />

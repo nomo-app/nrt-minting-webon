@@ -1,5 +1,5 @@
 import "@/util/i18n";
-import { avinocIcon } from "@/asset-paths";
+import { nrtIcon } from "@/asset-paths";
 import { navigateToMintingPage } from "@/web3/navigation";
 import { nomo } from "nomo-webon-kit";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="welcome-page-content">
       <div className="welcome-page-header">
-        <img src={avinocIcon} className="avinoc-icon" />
+        <img src={nrtIcon} className="avinoc-icon" />
         <h1>NRT Minting</h1>
       </div>
       <div className="welcome-page-body">

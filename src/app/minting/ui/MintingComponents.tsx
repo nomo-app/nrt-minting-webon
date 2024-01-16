@@ -15,7 +15,7 @@ import { UnreachableCaseError } from "@/util/typesafe";
 
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import { avinocIcon, stakingIcon } from "@/asset-paths";
+import { nrtIcon, stakingIcon } from "@/asset-paths";
 import { PageState } from "../logic/MintingPage";
 import BackButton from "@/common/BackButton";
 import { getTokenStandard, navigateToClaimingPage } from "@/web3/navigation";
@@ -275,7 +275,7 @@ export const AvinocAmountInput: React.FC<{
         ),
         startAdornment: (
           <InputAdornment position="start">
-            <img src={avinocIcon} className="Zeniq-Logo" alt="logo" style={{ width: 25, height: 25 }} />
+            <img src={nrtIcon} className="Zeniq-Logo" alt="logo" style={{ width: 25, height: 25 }} />
           </InputAdornment>
         ),
       }}
