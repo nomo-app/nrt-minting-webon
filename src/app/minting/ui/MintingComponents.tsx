@@ -324,7 +324,7 @@ export const SelectYears: React.FC<{
       </InputLabel>
       <Select
         label="Minting Time"
-        value={"" + props.years}
+        value={"" + 720}
         onChange={props.onChange}
         style={{ fontWeight: "bold" }}
         sx={{
@@ -344,10 +344,7 @@ export const SelectYears: React.FC<{
           },
         }}
       >
-        <MenuItem value={1}>{"1 " + t("staking.year")}</MenuItem>
-        <MenuItem value={3}>{"3 " + t("staking.years")}</MenuItem>
-        <MenuItem value={5}>{"5 " + t("staking.years")}</MenuItem>
-        <MenuItem value={10}>{"10 " + t("staking.years")}</MenuItem>
+        <MenuItem value={720}>{"720 Days"}</MenuItem>
         {/*<MenuItem value={15}>{"15 " + t("staking.years")}</MenuItem>*/}
       </Select>
     </FormControl>
