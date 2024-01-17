@@ -1,7 +1,7 @@
 import React from "react";
 import { nomo } from "nomo-webon-kit";
 import { getNomoEvmNetwork, getTokenStandard } from "@/web3/navigation";
-import { avinocContractAddress } from "@/web3/web3-minting";
+import { mintingContractAddress } from "@/web3/web3-minting";
 
 export function useAvinocPrice() {
   const [avinocPrice, setAvinocPrice] = React.useState<number | null>(null);
@@ -14,7 +14,7 @@ export function useAvinocPrice() {
       const network = getNomoEvmNetwork();
       const priceState = await nomo.getAssetPrice({
         symbol: "NRT",
-        contractAddress: avinocContractAddress,
+        contractAddress: mintingContractAddress,
         network,
       });
       setAvinocPrice(priceState.price);

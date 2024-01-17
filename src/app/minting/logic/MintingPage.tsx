@@ -8,7 +8,6 @@ import {
   StakeError,
   submitStakeTransaction,
   useAvinocBalance,
-  useSafirAvinocSig,
 } from "@/web3/web3-minting";
 import { RewardPredictionBox } from "@/app/minting/ui/RewardPredictionBox";
 import { StatusBox } from "@/app/minting/ui/MintingComponents";
@@ -42,12 +41,11 @@ const MintingPage: React.FC = () => {
     useAvinocBalance({
       ethAddress,
     });
-  const { safirSig } = useSafirAvinocSig();
   const [tokenAmount, setAvinocAmount] = React.useState<bigint>(-1n);
   const [years, setYears] = React.useState<bigint>(10n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
   const [txError, setTxError] = React.useState<Error | null>(null);
-  const networkBonus = !!safirSig;
+  const networkBonus = true;
 
   useEffect(() => {
     if (balanceFetchError) {

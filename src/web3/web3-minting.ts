@@ -1,5 +1,4 @@
 import { ethers } from "ethers";
-import MintingABI from "@/contracts/Staking.json";
 import React from "react";
 import genericErc20Abi from "@/contracts/erc20.json";
 import {
@@ -9,26 +8,14 @@ import {
   waitForConfirmationOrThrow,
   Web3Error,
 } from "@/web3/web3-common";
-import { getNomoEvmNetwork } from "./navigation";
 import { Contract } from "ethers";
-import { invokeNomoFunction, isFallbackModeActive } from "nomo-webon-kit";
+import { isFallbackModeActive } from "nomo-webon-kit";
+import { mintingAbi } from "@/contracts/minting-abi";
 
-export const avinocContractAddress =
-  "0xf1ca9cb74685755965c7458528a36934df52a3ef"; // has the same address on both ERC20 and ZEN20
+export const mintingContractAddress = "0xB5680e3E462F14F77b665D820097C5ec1445431A";
 
 export function getMintingContractAddress(): string {
-  const ethMintingContract = "0x7561DEAf4ECf96dc9F0d50B4136046979ACdAD3e";
-  const smartChainMintingContract =
-    "0x97F51eCDeEdecdb740DD1ff6236D013aFff0417d";
-
-  const network = getNomoEvmNetwork();
-  if (network === "ethereum") {
-    return ethMintingContract;
-  } else if (network === "zeniq-smart-chain") {
-    return smartChainMintingContract;
-  } else {
-    throw Error("unsupported network " + network);
-  }
+  return mintingContractAddress;
 }
 
 export function getMintingContract(): Contract {
@@ -36,7 +23,7 @@ export function getMintingContract(): Contract {
   const contractAddress = getMintingContractAddress();
   const stakingContract = new ethers.Contract(
     contractAddress,
-    MintingABI.abi,
+    mintingAbi,
     signer
   );
   return stakingContract;
@@ -45,7 +32,7 @@ export function getMintingContract(): Contract {
 function getAvinocTokenContract(): Contract {
   const signer = getEthersSigner();
   const avinocContract = new ethers.Contract(
-    avinocContractAddress,
+    mintingContractAddress,
     genericErc20Abi,
     signer
   );
@@ -238,36 +225,6 @@ export function computeUnclaimedRewards(stakingNft: MintingNft): bigint {
       getClaimFraction(stakingNft)) /
     (10n ** 18n * 10n ** 18n)
   );
-}
-
-export function useSafirAvinocSig(): {
-  safirSig: string | null;
-} {
-  const [sigObject, setSigObject] = React.useState<Record<
-    string,
-    string
-  > | null>(null);
-  React.useEffect(() => {
-    getSafirAvinocSig();
-  }, []);
-
-  async function getSafirAvinocSig() {
-    try {
-      const safirPubKey =
-        "0483739a0844d78c72b77f0ca24f51d390daf8f212122052e3bd4b3b591f0d43ba";
-      const name = "SAFIR-NRT";
-      const sigObject = await invokeNomoFunction("getValueFromNomoID", {
-        pubKeyHex: safirPubKey,
-        name,
-      });
-      console.log("sigObject", sigObject);
-      setSigObject(sigObject);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-  const safirSig = sigObject ? sigObject["data"] : null;
-  return { safirSig };
 }
 
 export function useAvinocBalance(args: { ethAddress: string | null }): {
