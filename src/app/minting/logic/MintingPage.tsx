@@ -53,7 +53,7 @@ const MintingPage: React.FC = () => {
 
   useEffect(() => {
     if (nrtBalance) {
-      const roundedBalance = nrtBalance - (nrtBalance % 10n ** 18n);
+      const roundedBalance = nrtBalance - (nrtBalance % 10n ** 8n);
       setNrtAmount(roundedBalance);
     }
   }, [nrtBalance]);

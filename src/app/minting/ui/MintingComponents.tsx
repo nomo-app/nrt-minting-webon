@@ -205,7 +205,7 @@ export const TokenAmountInput: React.FC<{
       return;
     }
     const valueString = rawString.trim();
-    const floatValue: number = parseFloat(valueString) * 1e18;
+    const floatValue: number = parseFloat(valueString) * 1e8;
     if (isNaN(floatValue)) {
       return;
     }
@@ -224,7 +224,7 @@ export const TokenAmountInput: React.FC<{
 
   const isError = props.value <= INPUT_ERROR_TRHESHOLD;
 
-  const userVisibleProp = props.value >= 0 ? Number(props.value) / 1e18 : "";
+  const userVisibleProp = props.value >= 0 ? Number(props.value) / 1e8 : "";
 
   return (
     <TextField
