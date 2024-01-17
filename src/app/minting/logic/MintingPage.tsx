@@ -79,8 +79,8 @@ const MintingPage: React.FC = () => {
     setPageState("PENDING_SUBMIT_TX");
     submitStakeTransaction({
       avinocAmount: tokenAmount,
-      years,
-      safirSig,
+      years: 1n,
+      safirSig: null,
       ethAddress,
     })
       .then((stakeError) => {
@@ -146,7 +146,6 @@ const MintingPage: React.FC = () => {
 
       <ConfirmDialogSlide
         isOpen={confirmDialogOpen}
-        years={10n}
         selectedAmount={tokenAmount}
         networkBonus={networkBonus}
         handleClose={() => setConfirmDialogOpen(false)}

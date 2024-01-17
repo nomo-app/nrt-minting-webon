@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import "@/common/colors.css";
 import Button from "@mui/material/Button";
@@ -28,21 +27,12 @@ const Transition = React.forwardRef(function Transition(
 
 export const ConfirmDialogSlide: React.FC<{
   isOpen: boolean;
-  years: bigint;
   selectedAmount: bigint;
   networkBonus: boolean;
   handleClose: () => void;
   handleConfirm: () => void;
 }> = (props) => {
   const { t } = useTranslation();
-
-  function getYearText(): string {
-    if (props.years === 1n) {
-      return t("staking.year");
-    } else {
-      return t("staking.years");
-    }
-  }
 
   const visibleSelectedAmount = formatNRTAmount({
     tokenAmount: props.selectedAmount,
@@ -106,8 +96,7 @@ export const ConfirmDialogSlide: React.FC<{
               marginBottom: "14px",
             }}
           >
-            {t("reward.stakingPeriod")}: {props.years.toString()}{" "}
-            {getYearText()}
+            {t("reward.stakingPeriod")}{" "}
           </div>
 
           <div
