@@ -8,7 +8,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { useTranslation } from "react-i18next";
-import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import { nrtIcon } from "@/asset-paths";
@@ -95,7 +94,7 @@ export const ConfirmDialogSlide: React.FC<{
               marginBottom: "14px",
             }}
           >
-            {t("reward.stakingPeriod")}
+            {t("reward.stakingPeriod") + ": "}
             {" 720 Days"}
           </div>
 
@@ -112,7 +111,6 @@ export const ConfirmDialogSlide: React.FC<{
             <div
               style={{
                 fontSize: "small",
-                marginBottom: "2px",
                 display: "flex",
                 textAlign: "left",
               }}
@@ -127,9 +125,6 @@ export const ConfirmDialogSlide: React.FC<{
             </div>
           ))}
         </DialogContent>
-        <div>
-          <AlertDialog networkBonus={true} />
-        </div>
 
         <DialogActions>
           <Button
@@ -142,7 +137,7 @@ export const ConfirmDialogSlide: React.FC<{
               width: "100%",
               height: "50px",
               alignSelf: "center",
-              margin: "20px",
+              margin: "10px",
               fontSize: "small",
               fontWeight: "bold",
               transition: "ease-in-out all 0.3s",
@@ -155,46 +150,4 @@ export const ConfirmDialogSlide: React.FC<{
       </div>
     </Dialog>
   );
-};
-
-const AlertDialog: React.FC<{ networkBonus: boolean }> = (props) => {
-  const { t } = useTranslation();
-
-  if (props.networkBonus) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
-        <CheckIcon
-          style={{ color: "var(--color-primary-button-background)" }}
-        />
-        <div
-          style={{
-            fontSize: "small",
-            color: "var(--color-primary-button-background)",
-          }}
-        >
-          {t("staking.networkBonusEnabled")}
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div
-        style={{
-          backgroundColor: "var(--color-warning)",
-          padding: "12px",
-          fontSize: "small",
-          fontWeight: "bold",
-        }}
-      >
-        {t("staking.networkBonusWarning")}
-      </div>
-    );
-  }
 };

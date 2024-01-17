@@ -5,7 +5,7 @@ import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
 import { ConfirmDialogSlide } from "@/app/minting/ui/ConfirmDialog";
 import {
   StakeError,
-  submitStakeTransaction,
+  submitMintingTx,
   useNrtBalance,
 } from "@/web3/web3-minting";
 import { RewardPredictionBox } from "@/app/minting/ui/RewardPredictionBox";
@@ -88,10 +88,8 @@ const MintingPage: React.FC = () => {
     }
 
     setPageState("PENDING_SUBMIT_TX");
-    submitStakeTransaction({
-      nrtAmount: nrtAmount,
-      years: 1n,
-      safirSig: null,
+    submitMintingTx({
+      mintingPlan,
       ethAddress,
     })
       .then((stakeError) => {

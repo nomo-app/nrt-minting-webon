@@ -11,6 +11,7 @@ import {
 import { Contract } from "ethers";
 import { isFallbackModeActive } from "nomo-webon-kit";
 import { mintingAbi } from "@/contracts/minting-abi";
+import { MintingPlan } from "./minting-plan";
 
 export const mintingContractAddress =
   "0xB5680e3E462F14F77b665D820097C5ec1445431A";
@@ -55,33 +56,17 @@ export interface MintingNft {
   endTime: Date;
 }
 
-async function checkNrtReserves(args: {
-  nrtAmount: bigint;
-}): Promise<StakeError | null> {
-  const stakingContract = getMintingContract();
-  const tokenContract = getNrtTokenContract();
-  const [remainingPayout, remainingBurn, aviBalance] = await Promise.all([
-    stakingContract.remainingPayout(),
-    stakingContract.remainingBurn(),
-    tokenContract.balanceOf(mintingContractAddress),
-  ]);
-  const remainingReserves = aviBalance - remainingPayout - remainingBurn;
-  if (remainingReserves < (args.nrtAmount * 11n) / 10n) {
-    return "ERROR_INSUFFICIENT_RESERVES";
-  } else {
-    return null;
-  }
-}
-
 async function approveIfNecessary(args: {
   nrtAmount: bigint;
   ethAddress: string;
-}) {
+}): Promise<{ nonce: number }> {
+  const signer = getEthersSigner();
   const tokenContract = getNrtTokenContract();
   const allowance: bigint = await tokenContract.allowance(
     args.ethAddress,
     mintingContractAddress
   );
+  const nonce = await signer.getNonce();
   console.log("allowance", allowance);
   if (args.nrtAmount > allowance) {
     const txApprove = await tokenContract.approve(
@@ -92,8 +77,10 @@ async function approveIfNecessary(args: {
       }
     );
     console.log("txApprove", txApprove);
+    return { nonce: nonce + 1 };
   } else {
     console.log("skip approve tx");
+    return { nonce };
   }
 }
 
@@ -103,22 +90,14 @@ export type StakeError =
   | "ERROR_LIMIT_EXCEEDED"
   | "ERROR_INSUFFICIENT_NRT";
 
-export async function submitStakeTransaction(args: {
-  years: bigint;
-  nrtAmount: bigint;
-  safirSig: string | null;
+export async function submitMintingTx(args: {
+  mintingPlan: MintingPlan;
   ethAddress: string;
 }): Promise<StakeError | null> {
   if (!isFallbackModeActive() && !(await isWalletBackupAvailable())) {
     return "ERROR_MISSING_WALLET_BACKUP";
   }
 
-  const reserveError = await checkNrtReserves({
-    nrtAmount: args.nrtAmount,
-  });
-  if (reserveError) {
-    return reserveError;
-  }
   const totalGasLimit = gasLimits.toApprove + gasLimits.toStake;
   const gasError = await checkIfGasCanBePaid({
     ethAddress: args.ethAddress,
@@ -128,22 +107,22 @@ export async function submitStakeTransaction(args: {
     return gasError;
   }
 
-  await approveIfNecessary({
-    nrtAmount: args.nrtAmount,
+  const { nonce } = await approveIfNecessary({
+    nrtAmount: args.mintingPlan.totalAmountToLink,
     ethAddress: args.ethAddress,
   });
 
-  const bonusSigs = args.safirSig ? [args.safirSig] : [];
-  const stakingContract = getMintingContract();
-  const txStake = await stakingContract.stake(
-    args.years,
-    args.nrtAmount,
-    bonusSigs,
+  const mintingContract = getMintingContract();
+  const mintingOp = args.mintingPlan.mintingOps[0];
+  const txMint = await mintingContract.stake(
+    mintingOp.amountToLink,
+    mintingOp.nft.tokenId,
     {
       gasLimit: gasLimits.toStake, // for the case that a gasLimit cannot be automatically estimated
+      nonce,
     }
   );
-  await waitForConfirmationOrThrow(txStake);
+  await waitForConfirmationOrThrow(txMint);
   return null;
 }
 
