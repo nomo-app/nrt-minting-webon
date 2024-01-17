@@ -13,30 +13,26 @@ import { isFallbackModeActive } from "nomo-webon-kit";
 import { mintingAbi } from "@/contracts/minting-abi";
 
 export const mintingContractAddress = "0xB5680e3E462F14F77b665D820097C5ec1445431A";
-
-export function getMintingContractAddress(): string {
-  return mintingContractAddress;
-}
+export const nrtTokenContractAddress = "0xEdF221F8C1957b6aC950430836e7aa0d7Db5b4dA";
 
 export function getMintingContract(): Contract {
   const signer = getEthersSigner();
-  const contractAddress = getMintingContractAddress();
   const stakingContract = new ethers.Contract(
-    contractAddress,
+    mintingContractAddress,
     mintingAbi,
     signer
   );
   return stakingContract;
 }
 
-function getAvinocTokenContract(): Contract {
+function getNrtTokenContract(): Contract {
   const signer = getEthersSigner();
-  const avinocContract = new ethers.Contract(
-    mintingContractAddress,
+  const tokenContract = new ethers.Contract(
+    nrtTokenContractAddress,
     genericErc20Abi,
     signer
   );
-  return avinocContract;
+  return tokenContract;
 }
 
 const gasLimits = {
@@ -58,16 +54,15 @@ export interface MintingNft {
   lastClaim: Date;
 }
 
-async function checkAvinocReserves(args: {
+async function checkNrtReserves(args: {
   avinocAmount: bigint;
 }): Promise<StakeError | null> {
   const stakingContract = getMintingContract();
-  const avinocContract = getAvinocTokenContract();
-  const stakingContractAddress = getMintingContractAddress();
+  const tokenContract = getNrtTokenContract();
   const [remainingPayout, remainingBurn, aviBalance] = await Promise.all([
     stakingContract.remainingPayout(),
     stakingContract.remainingBurn(),
-    avinocContract.balanceOf(stakingContractAddress),
+    tokenContract.balanceOf(mintingContractAddress),
   ]);
   const remainingReserves = aviBalance - remainingPayout - remainingBurn;
   if (remainingReserves < (args.avinocAmount * 11n) / 10n) {
@@ -81,16 +76,15 @@ async function approveIfNecessary(args: {
   avinocAmount: bigint;
   ethAddress: string;
 }) {
-  const avinocContract = getAvinocTokenContract();
-  const stakingContractAddress = getMintingContractAddress();
-  const allowance: bigint = await avinocContract.allowance(
+  const tokenContract = getNrtTokenContract();
+  const allowance: bigint = await tokenContract.allowance(
     args.ethAddress,
-    stakingContractAddress
+    mintingContractAddress,
   );
   console.log("allowance", allowance);
   if (args.avinocAmount > allowance) {
-    const txApprove = await avinocContract.approve(
-      stakingContractAddress,
+    const txApprove = await tokenContract.approve(
+      mintingContractAddress,
       ethers.MaxUint256,
       {
         gasLimit: gasLimits.toApprove,
@@ -118,7 +112,7 @@ export async function submitStakeTransaction(args: {
     return "ERROR_MISSING_WALLET_BACKUP";
   }
 
-  const reserveError = await checkAvinocReserves({
+  const reserveError = await checkNrtReserves({
     avinocAmount: args.avinocAmount,
   });
   if (reserveError) {
@@ -227,28 +221,28 @@ export function computeUnclaimedRewards(stakingNft: MintingNft): bigint {
   );
 }
 
-export function useAvinocBalance(args: { ethAddress: string | null }): {
-  avinocBalance: bigint | null;
+export function useNrtBalance(args: { ethAddress: string | null }): {
+  nrtBalance: bigint | null;
   fetchError: Error | null;
 } {
-  const [avinocBalance, setAvinocBalance] = React.useState<bigint | null>(null);
+  const [nrtBalance, setNrtBalance] = React.useState<bigint | null>(null);
   const [fetchError, setFetchError] = React.useState<Error | null>(null);
   React.useEffect(() => {
     if (args.ethAddress) {
-      fetchAvinocBalance(args.ethAddress);
+      fetchNrtBalance(args.ethAddress);
     }
   }, [args.ethAddress]);
 
-  async function fetchAvinocBalance(ethAddress: string) {
-    const avinocContract = getAvinocTokenContract();
+  async function fetchNrtBalance(ethAddress: string) {
+    const tokenContract = getNrtTokenContract();
     try {
-      const balance = await avinocContract.balanceOf(ethAddress);
-      console.log("fetched avincocBalance", ethAddress, balance.toString());
-      setAvinocBalance(balance);
+      const balance = await tokenContract.balanceOf(ethAddress);
+      console.log("fetched nrtBalance", ethAddress, balance.toString());
+      setNrtBalance(balance);
     } catch (e) {
       setFetchError(e as Error);
       console.error(e);
     }
   }
-  return { avinocBalance, fetchError };
+  return { nrtBalance: nrtBalance, fetchError };
 }

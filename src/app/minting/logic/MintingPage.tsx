@@ -1,13 +1,12 @@
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
 import "@/common/colors.css";
-import { SelectChangeEvent } from "@mui/material/Select";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
 import { ConfirmDialogSlide } from "@/app/minting/ui/ConfirmDialog";
 import {
   StakeError,
   submitStakeTransaction,
-  useAvinocBalance,
+  useNrtBalance,
 } from "@/web3/web3-minting";
 import { RewardPredictionBox } from "@/app/minting/ui/RewardPredictionBox";
 import { StatusBox } from "@/app/minting/ui/MintingComponents";
@@ -15,8 +14,7 @@ import { StakeButton } from "@/app/minting/ui/MintingComponents";
 import { SwitchToRewardPageButton } from "@/app/minting/ui/MintingComponents";
 import { MintingTitleBar } from "@/app/minting/ui/MintingComponents";
 import { TokenAmountInput } from "@/app/minting/ui/MintingComponents";
-import { SelectYears } from "@/app/minting/ui/MintingComponents";
-import { formatNRTAmount, useAvinocPrice } from "@/util/use-avinoc-price";
+import { formatNRTAmount, useNrtPrice } from "@/util/use-avinoc-price";
 import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
@@ -35,14 +33,13 @@ function isPendingState(pageState: PageState) {
 const MintingPage: React.FC = () => {
   useNomoTheme();
 
-  const { avinocPrice } = useAvinocPrice();
+  const { avinocPrice } = useNrtPrice();
   const { evmAddress: ethAddress } = useEvmAddress();
-  const { avinocBalance: tokenBalance, fetchError: balanceFetchError } =
-    useAvinocBalance({
+  const { nrtBalance: tokenBalance, fetchError: balanceFetchError } =
+    useNrtBalance({
       ethAddress,
     });
   const [tokenAmount, setAvinocAmount] = React.useState<bigint>(-1n);
-  const [years, setYears] = React.useState<bigint>(10n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
   const [txError, setTxError] = React.useState<Error | null>(null);
   const networkBonus = true;
@@ -60,12 +57,6 @@ const MintingPage: React.FC = () => {
       setAvinocAmount(roundedAvinocBalance);
     }
   }, [tokenBalance]);
-
-  const handleYearChange = (event: SelectChangeEvent) => {
-    const yearString: string = event.target.value as string;
-    const yearNumber: bigint = BigInt(parseInt(yearString));
-    setYears(yearNumber);
-  };
 
   const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false);
   const [successDialogOpen, setSuccessDialogOpen] = React.useState(false);
@@ -127,11 +118,9 @@ const MintingPage: React.FC = () => {
         <div style={{ color: "white", fontFamily: "Helvetica", paddingBottom: "15px" }}>
           {"Linking period: 720 Days"}
         </div>
-        {/* <SelectYears years={years} onChange={handleYearChange} /> */}
       </div>
       <div className="minting-reward-prediction-box">
         <RewardPredictionBox
-          years={years}
           avinocAmount={tokenAmount}
           avinocPrice={avinocPrice}
           networkBonus={networkBonus}
@@ -157,7 +146,7 @@ const MintingPage: React.FC = () => {
 
       <ConfirmDialogSlide
         isOpen={confirmDialogOpen}
-        years={years}
+        years={10n}
         selectedAmount={tokenAmount}
         networkBonus={networkBonus}
         handleClose={() => setConfirmDialogOpen(false)}

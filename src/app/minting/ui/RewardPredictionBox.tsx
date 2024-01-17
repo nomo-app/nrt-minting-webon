@@ -7,27 +7,19 @@ import { MintingRewardLabel } from "./MintingComponents";
 import { MintingYearsLabel } from "./MintingComponents";
 
 export const RewardPredictionBox: React.FC<{
-  years: bigint;
   avinocAmount: bigint;
   avinocPrice: number | null;
   networkBonus: boolean;
 }> = (props) => {
   const { t } = useTranslation();
 
-  function getApy(years: bigint): number {
+  function getApy(): number {
     return 2.6;
   }
 
   const apyLabel = props.networkBonus
-    ? "+" + 100 * getApy(props.years) + "%"
+    ? "+" + 100 * getApy() + "%"
     : t("reward.disabled");
-
-  function getYearsName(years: bigint): string {
-    return "720 Days";
-  }
-
-  const maxYears = 10n;
-  const isMaxYears: boolean = props.years === maxYears;
 
   return (
     <Card

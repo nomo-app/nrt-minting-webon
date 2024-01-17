@@ -1,6 +1,6 @@
 import { fetchWithRetryEtherScan } from "@/util/util";
 import { getNomoEvmNetwork } from "./navigation";
-import { getMintingContract, getMintingContractAddress } from "./web3-minting";
+import { getMintingContract, mintingContractAddress } from "./web3-minting";
 import { NomoEvmNetwork, nomo, isFallbackModeActive } from "nomo-webon-kit";
 
 export async function fetchMintingTokenIDs(args: {
@@ -13,7 +13,7 @@ export async function fetchMintingTokenIDs(args: {
   const network: NomoEvmNetwork = getNomoEvmNetwork();
   const { nfts: allNFTs } = await nomo.getNFTs({ network });
   console.log("allNFTs", allNFTs);
-  const contractAddress = getMintingContractAddress();
+  const contractAddress = mintingContractAddress;
   const stakingNFTs = allNFTs.filter(
     (nft: any) =>
       nft.contractAddress.toLowerCase() === contractAddress.toLowerCase()
@@ -58,7 +58,7 @@ async function fetchTokenIDCandidatesFromEtherscan(args: {
   if (network !== "ethereum") {
     throw Error("etherscan does not work on ZENIQ Smartchain!");
   }
-  const contractAddress = getMintingContractAddress();
+  const contractAddress = mintingContractAddress;
   // https://docs.etherscan.io/getting-started/endpoint-urls
   const etherScanNFTEndpoint =
     "https://api.etherscan.io/api?module=account&action=tokennfttx&contractaddress=" +

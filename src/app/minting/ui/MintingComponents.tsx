@@ -225,7 +225,7 @@ export const TokenAmountInput: React.FC<{
 
   const isError = props.value <= INPUT_ERROR_TRHESHOLD;
 
-  const userVisibleProp = 1000; //props.value >= 0 ? Number(props.value) / 1e18 : "";
+  const userVisibleProp = props.value >= 0 ? Number(props.value) / 1e18 : "";
 
   return (
     <TextField

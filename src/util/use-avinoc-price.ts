@@ -1,32 +1,35 @@
 import React from "react";
 import { nomo } from "nomo-webon-kit";
-import { getNomoEvmNetwork, getTokenStandard } from "@/web3/navigation";
-import { mintingContractAddress } from "@/web3/web3-minting";
+import { getTokenStandard } from "@/web3/navigation";
+import { nrtTokenContractAddress } from "@/web3/web3-minting";
 
-export function useAvinocPrice() {
+export function useNrtPrice() {
   const [avinocPrice, setAvinocPrice] = React.useState<number | null>(null);
   React.useEffect(() => {
-    fetchAvinocPrice();
+    fetchNrtPrice();
   }, []);
 
-  async function fetchAvinocPrice() {
+  async function fetchNrtPrice() {
     try {
-      const network = getNomoEvmNetwork();
       const priceState = await nomo.getAssetPrice({
         symbol: "NRT",
-        contractAddress: mintingContractAddress,
-        network,
+        contractAddress: nrtTokenContractAddress,
+        network: "zeniq-smart-chain",
       });
       setAvinocPrice(priceState.price);
     } catch (e) {
-      console.error(e);
+      console.log("failed to fetch NRT price. set to default price.");
+      setAvinocPrice(0.15);
     }
   }
 
   return { avinocPrice };
 }
 
-export function formatNRTAmount(args: { tokenAmount: bigint, ultraPrecision?: boolean }): string {
+export function formatNRTAmount(args: {
+  tokenAmount: bigint;
+  ultraPrecision?: boolean;
+}): string {
   const inpreciseTokenAmount = Number(args.tokenAmount) / 1e18;
   const tokenStandard = getTokenStandard();
 
