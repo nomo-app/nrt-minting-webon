@@ -19,7 +19,7 @@ import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
 import "./MintingPage.scss";
-import { useMintingNFTs } from "@/web3/nft-fetching";
+import { getMaxLinkableAmount, useMintingNFTs } from "@/web3/nft-fetching";
 
 export type PageState =
   | "IDLE"
@@ -45,6 +45,7 @@ const MintingPage: React.FC = () => {
   const networkBonus = true;
 
   const { mintingNFTs } = useMintingNFTs();
+  const maxLinkableAmount = getMaxLinkableAmount({ mintingNFTs });
 
   useEffect(() => {
     if (balanceFetchError) {
@@ -115,7 +116,9 @@ const MintingPage: React.FC = () => {
           <div className="information-entry">
             <p>Max. linkable amount:</p>
             <p style={{ fontWeight: "bold" }}>
-              {formatNRTAmount({ tokenAmount: 1000n * 10n ** 8n })}
+              {maxLinkableAmount != null
+                ? formatNRTAmount({ tokenAmount: maxLinkableAmount })
+                : "Loading..."}
             </p>
           </div>
           <div className="information-entry">

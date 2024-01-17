@@ -1,12 +1,27 @@
 import { useEffect } from "react";
-import { MintingNft, fetchNftDetails, getMintingContract } from "./web3-minting";
+import {
+  MintingNft,
+  fetchNftDetails,
+  getMintingContract,
+} from "./web3-minting";
 import { useEvmAddress } from "./web3-common";
 import React from "react";
+
+const amountCapPowerNode: bigint = 1500n * 10n ** 8n; // this depends on the price of NRTPowerNodes!
+
+export function getMaxLinkableAmount(args: {
+  mintingNFTs: Record<string, MintingNft>;
+}): bigint | null {
+  const numNFTs = Object.keys(args.mintingNFTs).length;
+  return BigInt(numNFTs) * amountCapPowerNode;
+}
 
 export function useMintingNFTs() {
   const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
   const { evmAddress } = useEvmAddress();
-    const [mintingNFTs, setMintingNFTs] = React.useState<Record<string, MintingNft>>({});
+  const [mintingNFTs, setMintingNFTs] = React.useState<
+    Record<string, MintingNft>
+  >({});
 
   useEffect(() => {
     if (evmAddress) {
@@ -21,22 +36,22 @@ export function useMintingNFTs() {
     }
   }, [evmAddress]);
 
-    useEffect(() => {
-      tokenIDs.forEach((tokenId) => {
-        fetchNftDetails({ tokenId })
-          .then((stakingNft: any) => {
-            setMintingNFTs((prevMintingNFTs) => {
-              return {
-                ...prevMintingNFTs,
-                ["" + tokenId]: stakingNft,
-              };
-            });
-          })
-          .catch((e: any) => {
-            console.error(e);
+  useEffect(() => {
+    tokenIDs.forEach((tokenId) => {
+      fetchNftDetails({ tokenId })
+        .then((stakingNft: any) => {
+          setMintingNFTs((prevMintingNFTs) => {
+            return {
+              ...prevMintingNFTs,
+              ["" + tokenId]: stakingNft,
+            };
           });
-      });
-    }, [tokenIDs]);
+        })
+        .catch((e: any) => {
+          console.error(e);
+        });
+    });
+  }, [tokenIDs]);
   return { mintingNFTs };
 }
 
