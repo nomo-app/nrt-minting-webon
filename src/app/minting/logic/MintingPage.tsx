@@ -27,10 +27,6 @@ export type PageState =
   | "ERROR_FETCH_FAILED"
   | StakeError;
 
-function isPendingState(pageState: PageState) {
-  return pageState.startsWith("PENDING");
-}
-
 const MintingPage: React.FC = () => {
   useNomoTheme();
 
@@ -46,6 +42,10 @@ const MintingPage: React.FC = () => {
 
   const { mintingNFTs } = useMintingNFTs();
   const maxLinkableAmount = getMaxLinkableAmount({ mintingNFTs });
+
+  function isPendingState(pageState: PageState) {
+    return pageState.startsWith("PENDING") || maxLinkableAmount === null;
+  }
 
   useEffect(() => {
     if (balanceFetchError) {

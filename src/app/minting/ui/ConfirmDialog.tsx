@@ -52,6 +52,7 @@ export const ConfirmDialogSlide: React.FC<{
           background: "url(assets/registrationbackground.svg)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "100%",
+          fontFamily: "Helvetica",
         }}
       >
         <DialogTitle>
@@ -84,7 +85,7 @@ export const ConfirmDialogSlide: React.FC<{
             <img
               src={nrtIcon}
               className={"avi-logo"}
-              style={{ height: "12px" }}
+              style={{ height: "12px", paddingLeft: "5px" }}
             />
           </div>
 
@@ -96,7 +97,7 @@ export const ConfirmDialogSlide: React.FC<{
               marginBottom: "14px",
             }}
           >
-            {t("reward.stakingPeriod")}{" "}
+            {t("reward.stakingPeriod")}{" 720 Days"}
           </div>
 
           <div
@@ -150,7 +151,7 @@ export const ConfirmDialogSlide: React.FC<{
             }}
             onClick={props.handleConfirm}
           >
-            {"Stake"}
+            {"Link and Mint!"}
           </Button>
         </DialogActions>
       </div>
