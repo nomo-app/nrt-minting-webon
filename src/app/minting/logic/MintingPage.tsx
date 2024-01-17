@@ -128,7 +128,7 @@ const MintingPage: React.FC = () => {
         <div className="minting-card-information">
           <div className="information-entry">
             <p>Max. linkable amount:</p>
-            <p style={{fontWeight: "bold"}}>{formatNRTAmount({tokenAmount: 1000n * 10n ** 18n})}</p>
+            <p style={{fontWeight: "bold"}}>{formatNRTAmount({tokenAmount: 1000n * 10n ** 8n})}</p>
           </div>
           <div className="information-entry">
             <p>Linking period:</p>
