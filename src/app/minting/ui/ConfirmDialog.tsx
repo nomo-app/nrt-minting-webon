@@ -9,12 +9,11 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { useTranslation } from "react-i18next";
 import CheckIcon from "@mui/icons-material/Check";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import { nrtIcon } from "@/asset-paths";
 import { formatNRTAmount } from "@/util/use-nrt-price";
+import { MintingPlan } from "@/web3/minting-plan";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -27,15 +26,14 @@ const Transition = React.forwardRef(function Transition(
 
 export const ConfirmDialogSlide: React.FC<{
   isOpen: boolean;
-  selectedAmount: bigint;
-  networkBonus: boolean;
+  mintingPlan: MintingPlan;
   handleClose: () => void;
   handleConfirm: () => void;
 }> = (props) => {
   const { t } = useTranslation();
 
   const visibleSelectedAmount = formatNRTAmount({
-    tokenAmount: props.selectedAmount,
+    tokenAmount: props.mintingPlan.totalAmountToLink,
   });
 
   return (
@@ -97,7 +95,8 @@ export const ConfirmDialogSlide: React.FC<{
               marginBottom: "14px",
             }}
           >
-            {t("reward.stakingPeriod")}{" 720 Days"}
+            {t("reward.stakingPeriod")}
+            {" 720 Days"}
           </div>
 
           <div
@@ -107,30 +106,29 @@ export const ConfirmDialogSlide: React.FC<{
             }}
             id="alert-dialog-slide-description"
           >
-            <CheckBoxNetwork networkBonus={!props.networkBonus} />
-            <div style={{ flexGrow: 1, textAlign: "left", marginRight: "2px" }}>
-              {t("staking.apyWithoutBonus")}:{" "}
-            </div>
-            <div>APY</div>
+            {"Minting plan details:"}
           </div>
-
-          <div
-            style={{
-              fontSize: "small",
-              marginBottom: "5px",
-              display: "flex",
-            }}
-            id="alert-dialog-slide-description"
-          >
-            <CheckBoxNetwork networkBonus={props.networkBonus} />
-            <div style={{ flexGrow: 1, textAlign: "left", marginRight: "2px" }}>
-              {t("staking.apyWithBonus")}:{" "}
+          {props.mintingPlan.mintingOps.map((mintingOp, _) => (
+            <div
+              style={{
+                fontSize: "small",
+                marginBottom: "2px",
+                display: "flex",
+                textAlign: "left",
+              }}
+              id="alert-dialog-slide-description"
+              key={mintingOp.nft.tokenId.toString()}
+            >
+              {formatNRTAmount({ tokenAmount: mintingOp.amountToLink }) +
+                " on NRT Power Node #" +
+                mintingOp.nft.tokenId.toString() +
+                " with minting power " +
+                mintingOp.nft.mintingPower.toString()}
             </div>
-            <div>{"APY"}</div>
-          </div>
+          ))}
         </DialogContent>
         <div>
-          <AlertDialog networkBonus={props.networkBonus} />
+          <AlertDialog networkBonus={true} />
         </div>
 
         <DialogActions>
@@ -197,16 +195,6 @@ const AlertDialog: React.FC<{ networkBonus: boolean }> = (props) => {
       >
         {t("staking.networkBonusWarning")}
       </div>
-    );
-  }
-};
-
-const CheckBoxNetwork: React.FC<{ networkBonus: boolean }> = (props) => {
-  if (props.networkBonus) {
-    return <CheckBoxIcon style={{ height: "15px" }} />;
-  } else {
-    return (
-      <CheckBoxOutlineBlankIcon sx={{ height: "15px", colorScheme: "black" }} />
     );
   }
 };

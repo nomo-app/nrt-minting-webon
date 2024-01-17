@@ -19,7 +19,12 @@ import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
 import "./MintingPage.scss";
-import { getMaxLinkableAmount, useMintingNFTs } from "@/web3/nft-fetching";
+import { useMintingNFTs } from "@/web3/nft-fetching";
+import {
+  MintingPlan,
+  getMaxLinkableAmount,
+  getMintingPlan,
+} from "@/web3/minting-plan";
 
 export type PageState =
   | "IDLE"
@@ -38,10 +43,13 @@ const MintingPage: React.FC = () => {
   const [nrtAmount, setNrtAmount] = React.useState<bigint>(-1n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
   const [txError, setTxError] = React.useState<Error | null>(null);
-  const networkBonus = true;
 
   const { mintingNFTs } = useMintingNFTs();
   const maxLinkableAmount = getMaxLinkableAmount({ mintingNFTs });
+  const mintingPlan: MintingPlan = getMintingPlan({
+    mintingNFTs: mintingNFTs ?? {},
+    nrtAmount,
+  });
 
   function isPendingState(pageState: PageState) {
     return pageState.startsWith("PENDING") || maxLinkableAmount === null;
@@ -139,7 +147,7 @@ const MintingPage: React.FC = () => {
         <RewardPredictionBox
           avinocAmount={nrtAmount}
           avinocPrice={nrtPrice}
-          networkBonus={networkBonus}
+          networkBonus={true}
         />
       </div>
 
@@ -161,9 +169,8 @@ const MintingPage: React.FC = () => {
       )}
 
       <ConfirmDialogSlide
+        mintingPlan={mintingPlan}
         isOpen={confirmDialogOpen}
-        selectedAmount={nrtAmount}
-        networkBonus={networkBonus}
         handleClose={() => setConfirmDialogOpen(false)}
         handleConfirm={() => submitMinting()}
       />
