@@ -82,7 +82,7 @@ const ClaimRewardsPage: React.FC = () => {
   }
 
   const nftID = getNFTID();
-  const selectedNFT = nftID ? stakingNFTs[Number(nftID)] : undefined;
+  const selectedNFT = nftID && !!stakingNFTs ? stakingNFTs[Number(nftID)] : undefined;
   console.log("selectedNFT", selectedNFT);
 
   return (
@@ -101,7 +101,7 @@ const ClaimRewardsPage: React.FC = () => {
         />
       ) : (
         <div className={"scroll-container"}>
-          {Object.values(stakingNFTs).map((stakingNft) => {
+          {!!stakingNFTs && Object.values(stakingNFTs).map((stakingNft) => {
             return (
               <MintingNftBox
                 key={stakingNft.tokenId}
@@ -129,7 +129,7 @@ const ClaimRewardsPage: React.FC = () => {
       </Card> */}
 
       {pageState === "IDLE" ? (
-        <ClaimedRewards stakingNFTs={stakingNFTs} />
+        <ClaimedRewards stakingNFTs={stakingNFTs ?? {}} />
       ) : (
         <StatusBox pageState={pageState} />
       )}
