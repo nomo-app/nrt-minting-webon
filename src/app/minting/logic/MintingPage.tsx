@@ -114,6 +114,14 @@ const MintingPage: React.FC = () => {
         />
         <div className="minting-card-information">
           <div className="information-entry">
+            <p>Number of NRT Power Nodes:</p>
+            <p style={{ fontWeight: "bold" }}>
+              {mintingNFTs != null
+                ? Object.keys(mintingNFTs).length.toString()
+                : "Loading..."}
+            </p>
+          </div>
+          <div className="information-entry">
             <p>Max. linkable amount:</p>
             <p style={{ fontWeight: "bold" }}>
               {maxLinkableAmount != null
