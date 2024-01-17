@@ -19,6 +19,7 @@ import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
 import "./MintingPage.scss";
+import { fetchMintingTokenIDs } from "@/web3/nft-fetching";
 
 export type PageState =
   | "IDLE"
@@ -35,14 +36,29 @@ const MintingPage: React.FC = () => {
 
   const { nrtPrice } = useNrtPrice();
   const { evmAddress: ethAddress } = useEvmAddress();
-  const { nrtBalance, fetchError: balanceFetchError } =
-    useNrtBalance({
-      ethAddress,
-    });
+  const { nrtBalance, fetchError: balanceFetchError } = useNrtBalance({
+    ethAddress,
+  });
+  const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
+  const { evmAddress } = useEvmAddress();
   const [nrtAmount, setNrtAmount] = React.useState<bigint>(-1n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
   const [txError, setTxError] = React.useState<Error | null>(null);
   const networkBonus = true;
+
+  useEffect(() => {
+    if (evmAddress) {
+      fetchMintingTokenIDs({ ethAddress: evmAddress })
+        .then((tokenIDs: any) => {
+          console.log("fetched tokenIDs: ", tokenIDs);
+          setTokenIDs(tokenIDs);
+        })
+        .catch((e: any) => {
+          console.error(e);
+          setPageState("ERROR_FETCH_FAILED");
+        });
+    }
+  }, [evmAddress]);
 
   useEffect(() => {
     if (balanceFetchError) {
@@ -115,7 +131,13 @@ const MintingPage: React.FC = () => {
               tokenAmount: nrtBalance ?? 0n,
             })}
         </div>
-        <div style={{ color: "white", fontFamily: "Helvetica", paddingBottom: "15px" }}>
+        <div
+          style={{
+            color: "white",
+            fontFamily: "Helvetica",
+            paddingBottom: "15px",
+          }}
+        >
           {"Linking period: 720 Days"}
         </div>
       </div>
