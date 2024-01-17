@@ -15,7 +15,7 @@ import { UnreachableCaseError } from "@/util/typesafe";
 
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import { nrtIcon, stakingIcon } from "@/asset-paths";
+import { nrtIcon, nrtMigrationIcon } from "@/asset-paths";
 import { PageState } from "../logic/MintingPage";
 import BackButton from "@/common/BackButton";
 import { getTokenStandard, navigateToClaimingPage } from "@/web3/navigation";
@@ -104,6 +104,7 @@ export const StakeButton: React.FC<{
           flexDirection: "row",
           justifyContent: "center",
           fontSize: "large",
+          fontWeight: "bold",
         }}
       >
         {/* <img src={stakingIcon} alt={""} height={"14px"} /> */}
@@ -125,14 +126,11 @@ export const SwitchToRewardPageButton: React.FC<{
 
   return (
     <button
-      className="minting-page-button"
+      className="reward-page-button"
       disabled={props.disabled}
       onClick={() => props.disabled || onClick()}
       style={{
         color: props.disabled ? "grey" : undefined,
-        backgroundColor: props.disabled
-          ? "grey"
-          : "var(--color-primary-button-background)",
       }}
     >
       <div
@@ -141,6 +139,7 @@ export const SwitchToRewardPageButton: React.FC<{
           flexDirection: "row",
           justifyContent: "center",
           fontSize: "large",
+          fontWeight: "bold",
         }}
       >
         {t("staking.claimRewards")}
@@ -162,24 +161,27 @@ export const SwitchToRewardPageButton: React.FC<{
 };
 export const MintingTitleBar: React.FC = () => {
   const tokenStandard = getTokenStandard();
+  const titleText = "NEO Credit DeFi";
 
   return (
     <div
       style={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "center"
       }}
     >
+      <img src={nrtMigrationIcon} alt="logo" style={{ width: 75, height: 75 }} />
       <div
         style={{
           fontWeight: "bold",
-          fontSize: "large",
+          fontSize: "x-large",
           fontFamily: "Helvetica",
         }}
       >
-        {"NRT " + tokenStandard + " Minting"}
+        {/* {"NRT " + tokenStandard + " Minting"} */}
+        {titleText}
       </div>
     </div>
   );
@@ -241,7 +243,7 @@ export const TokenAmountInput: React.FC<{
       }}
       sx={{
         input: { color: "white" },
-        label: { color: "white" },
+        label: { color: "#23c1c4" },
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
             borderColor: "white",
@@ -256,8 +258,9 @@ export const TokenAmountInput: React.FC<{
         "& .MuiFormHelperText-root": {
           color: "white",
           fontSize: "medium",
+          fontWeight: "bold",
           textAlign: "center",
-          marginTop: "2rem",
+          marginTop: "1.5rem",
         },
         "& .MuiInput-underline:before": {
           // underline color when textfield is not focused
@@ -276,23 +279,15 @@ export const TokenAmountInput: React.FC<{
       }}
       InputProps={{
         endAdornment: (
-          <InputAdornment
-            onClick={() => !props.maxValue || props.onChange(props.maxValue)}
-            position="end"
-          >
-            <div id={"max_button"} className={"MaxButton"}>
+          <InputAdornment onClick={() => !props.maxValue || props.onChange(props.maxValue)} position="end">
+            <div id={"max_button"} className={"MaxButton"} style={{ color: "#23c1c4" }}>
               MAX
             </div>
           </InputAdornment>
         ),
         startAdornment: (
           <InputAdornment position="start">
-            <img
-              src={nrtIcon}
-              className="Zeniq-Logo"
-              alt="logo"
-              style={{ width: 25, height: 25 }}
-            />
+            <img src={nrtIcon} className="Zeniq-Logo" alt="logo" style={{ width: 25, height: 25 }} />
           </InputAdornment>
         ),
       }}
@@ -306,11 +301,7 @@ export const SelectYears: React.FC<{
   const { t } = useTranslation();
 
   return (
-    <FormControl
-      variant={"outlined"}
-      sx={{ m: 1 }}
-      style={{ width: "90%", marginTop: "2rem", marginBottom: "2rem" }}
-    >
+    <FormControl variant={"outlined"} sx={{ m: 1 }} style={{ width: "90%", marginTop: "2rem", marginBottom: "2rem" }}>
       <InputLabel
         id="stakingTimeTitle"
         sx={{
@@ -352,11 +343,9 @@ export const SelectYears: React.FC<{
 export const MintingYearsLabel: React.FC<{ label: string }> = (props) => {
   return (
     <div
-      className={"Col"}
       style={{
-        fontWeight: "bold",
-        fontSize: "medium",
-        fontFamily: "Helvetica",
+        flex: 2,
+        color: "white",
       }}
     >
       {props.label}
@@ -366,17 +355,11 @@ export const MintingYearsLabel: React.FC<{ label: string }> = (props) => {
 export const MintingRewardLabel: React.FC<{ label: string }> = (props) => {
   return (
     <div
-      className={"Reward"}
-      id={"reward_15"}
       style={{
-        fontWeight: "light",
-        fontSize: "medium",
-        color: "white",
         display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: "Helvetica",
+        justifyContent: "end",
+        flex: 2,
+        color: "white",
       }}
     >
       {props.label}
@@ -389,10 +372,10 @@ export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
   return (
     <div
       style={{
-        fontWeight: "light",
-        fontSize: "medium",
+        display: "flex",
+        justifyContent: "end",
+        flex: 1,
         color: "white",
-        fontFamily: "Helvetica",
       }}
     >
       {props.label}
@@ -400,10 +383,7 @@ export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
   );
 };
 
-export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (
-  props
-) => {
-
+export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (props) => {
   return (
     <div
       className="bonus-box"
@@ -415,7 +395,7 @@ export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (
         fontWeight: "bold",
         color: "white",
         fontSize: "medium",
-        background: "linear-gradient(45deg, blue, lightblue)",
+        background: "linear-gradient(45deg, #1f2124, #494c56)",
         borderRadius: ".5rem",
         padding: ".5rem",
         fontFamily: "Helvetica",

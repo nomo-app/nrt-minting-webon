@@ -12,12 +12,26 @@
   .minting-card {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     border: .1rem solid #3d3c3e;
     border-radius: 1rem;
     background-color: #13111a;
     margin: 1rem;
+
+    .minting-card-information {
+      display: flex;
+      flex-direction: column;
+      margin: 1rem;
+      padding: 1rem;
+      gap: .25rem;
+      border: .1rem solid #3d3c3e;
+      border-radius: 1rem;
+
+      .information-entry {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
   }
 
   .minting-reward-prediction-box {

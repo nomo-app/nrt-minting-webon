@@ -125,20 +125,15 @@ const MintingPage: React.FC = () => {
           maxValue={nrtBalance}
           onChange={(value) => setNrtAmount(value)}
         />
-        <div style={{ color: "white", fontFamily: "Helvetica" }}>
-          {"Maximum linkable amount: " +
-            formatNRTAmount({
-              tokenAmount: nrtBalance ?? 0n,
-            })}
-        </div>
-        <div
-          style={{
-            color: "white",
-            fontFamily: "Helvetica",
-            paddingBottom: "15px",
-          }}
-        >
-          {"Linking period: 720 Days"}
+        <div className="minting-card-information">
+          <div className="information-entry">
+            <p>Max. linkable amount:</p>
+            <p style={{fontWeight: "bold"}}>{formatNRTAmount({tokenAmount: 1000n * 10n ** 8n})}</p>
+          </div>
+          <div className="information-entry">
+            <p>Linking period:</p>
+            <p style={{fontWeight: "bold"}}>720 Days</p>
+          </div>
         </div>
       </div>
       <div className="minting-reward-prediction-box">
