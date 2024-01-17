@@ -12,8 +12,10 @@ import { Contract } from "ethers";
 import { isFallbackModeActive } from "nomo-webon-kit";
 import { mintingAbi } from "@/contracts/minting-abi";
 
-export const mintingContractAddress = "0xB5680e3E462F14F77b665D820097C5ec1445431A";
-export const nrtTokenContractAddress = "0xEdF221F8C1957b6aC950430836e7aa0d7Db5b4dA";
+export const mintingContractAddress =
+  "0xB5680e3E462F14F77b665D820097C5ec1445431A";
+export const nrtTokenContractAddress =
+  "0xEdF221F8C1957b6aC950430836e7aa0d7Db5b4dA";
 
 export function getMintingContract(): Contract {
   const signer = getEthersSigner();
@@ -45,17 +47,16 @@ const gasLimits = {
 
 export interface MintingNft {
   tokenId: bigint;
-  amount: bigint;
-  payoutFactor: bigint;
+  mintingPower: bigint;
+  stakedTokens: bigint;
+  totalRewards: bigint;
   claimedRewards: bigint;
-  apy: number;
-  start: Date;
-  end: Date;
-  lastClaim: Date;
+  lastClaimedTimestamp: Date;
+  endTime: Date;
 }
 
 async function checkNrtReserves(args: {
-  avinocAmount: bigint;
+  nrtAmount: bigint;
 }): Promise<StakeError | null> {
   const stakingContract = getMintingContract();
   const tokenContract = getNrtTokenContract();
@@ -65,7 +66,7 @@ async function checkNrtReserves(args: {
     tokenContract.balanceOf(mintingContractAddress),
   ]);
   const remainingReserves = aviBalance - remainingPayout - remainingBurn;
-  if (remainingReserves < (args.avinocAmount * 11n) / 10n) {
+  if (remainingReserves < (args.nrtAmount * 11n) / 10n) {
     return "ERROR_INSUFFICIENT_RESERVES";
   } else {
     return null;
@@ -73,16 +74,16 @@ async function checkNrtReserves(args: {
 }
 
 async function approveIfNecessary(args: {
-  avinocAmount: bigint;
+  nrtAmount: bigint;
   ethAddress: string;
 }) {
   const tokenContract = getNrtTokenContract();
   const allowance: bigint = await tokenContract.allowance(
     args.ethAddress,
-    mintingContractAddress,
+    mintingContractAddress
   );
   console.log("allowance", allowance);
-  if (args.avinocAmount > allowance) {
+  if (args.nrtAmount > allowance) {
     const txApprove = await tokenContract.approve(
       mintingContractAddress,
       ethers.MaxUint256,
@@ -104,7 +105,7 @@ export type StakeError =
 
 export async function submitStakeTransaction(args: {
   years: bigint;
-  avinocAmount: bigint;
+  nrtAmount: bigint;
   safirSig: string | null;
   ethAddress: string;
 }): Promise<StakeError | null> {
@@ -113,7 +114,7 @@ export async function submitStakeTransaction(args: {
   }
 
   const reserveError = await checkNrtReserves({
-    avinocAmount: args.avinocAmount,
+    nrtAmount: args.nrtAmount,
   });
   if (reserveError) {
     return reserveError;
@@ -128,18 +129,15 @@ export async function submitStakeTransaction(args: {
   }
 
   await approveIfNecessary({
-    avinocAmount: args.avinocAmount,
+    nrtAmount: args.nrtAmount,
     ethAddress: args.ethAddress,
   });
 
-  // const safir_avinoc_address = "0x176c066F77BE7C320f8378C4E24fFee3a8c8172a";
-  // const bonusSigExampleDevWallet =
-  //   "0x2db5eaa08e1b09c50ce6625ed3c2d259fefeb40d51c7c8a9dffae3986a11c528524da168622c776bf179fc81a20f2742a8552ed0b8bea9df4c017f25809424251b";
   const bonusSigs = args.safirSig ? [args.safirSig] : [];
   const stakingContract = getMintingContract();
   const txStake = await stakingContract.stake(
     args.years,
-    args.avinocAmount,
+    args.nrtAmount,
     bonusSigs,
     {
       gasLimit: gasLimits.toStake, // for the case that a gasLimit cannot be automatically estimated
@@ -170,55 +168,29 @@ export async function submitClaimTransaction(args: {
   return null;
 }
 
-export async function fetchMintingNft(args: {
+export async function fetchNftDetails(args: {
   tokenId: bigint;
 }): Promise<MintingNft> {
-  const stakingContract = getMintingContract();
-  const rawMintingNft = await stakingContract.stakingNFTs(args.tokenId);
-  const amount: bigint = rawMintingNft["amount"];
-  const payoutFactor: bigint = rawMintingNft["payoutFactor"];
-  const start = new Date(Number(rawMintingNft["start"]) * 1000);
-  const end = new Date(Number(rawMintingNft["end"]) * 1000);
-  const lastClaim = new Date(Number(rawMintingNft["lastClaim"]) * 1000);
-  const years: bigint = BigInt(end.getFullYear() - start.getFullYear());
-  const inprecisePayoutFactor = Number(payoutFactor) / 1e18;
-  const apy = parseFloat(
-    ((100 * (inprecisePayoutFactor - 1.0)) / Number(years)).toFixed(3)
-  );
+  const mintingContract = getMintingContract();
+  const rawMintingNft = await mintingContract.stakingNFTs(args.tokenId);
 
-  const claimedRewards =
-    (amount * payoutFactor * BigInt(lastClaim!.getTime() - start.getTime())) /
-    (BigInt(end.getTime() - start.getTime()) * 10n ** 18n);
-
-  const stakingNft: MintingNft = {
+  const mintingNFT: MintingNft = {
     tokenId: args.tokenId,
-    amount,
-    payoutFactor,
-    claimedRewards,
-    apy,
-    start,
-    end,
-    lastClaim,
+    mintingPower: rawMintingNft["mintingPower"],
+    stakedTokens: rawMintingNft["stakedTokens"],
+    totalRewards: rawMintingNft["totalRewards"],
+    claimedRewards: rawMintingNft["claimedRewards"],
+    lastClaimedTimestamp: new Date(
+      Number(rawMintingNft["lastClaimedTimestamp"]) * 1000
+    ),
+    endTime: new Date(Number(rawMintingNft["endTime"]) * 1000),
   };
-  // console.log("rawMintingNft", rawMintingNft);
-  // console.log("stakingNft", stakingNft);
-  return stakingNft;
+  console.log("mintingNFT", mintingNFT);
+  return mintingNFT;
 }
 
-function getClaimFraction(stakingNft: MintingNft): bigint {
-  return (
-    (10n ** 18n * BigInt(Date.now() - stakingNft.lastClaim.getTime())) /
-    BigInt(stakingNft.end.getTime() - stakingNft.start.getTime())
-  );
-}
-
-export function computeUnclaimedRewards(stakingNft: MintingNft): bigint {
-  return (
-    (stakingNft.amount *
-      stakingNft.payoutFactor *
-      getClaimFraction(stakingNft)) /
-    (10n ** 18n * 10n ** 18n)
-  );
+export function computeUnclaimedRewards(mintingNft: MintingNft): bigint {
+  return mintingNft.stakedTokens - mintingNft.claimedRewards;
 }
 
 export function useNrtBalance(args: { ethAddress: string | null }): {

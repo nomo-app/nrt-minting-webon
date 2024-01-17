@@ -1,6 +1,46 @@
-import { getMintingContract } from "./web3-minting";
+import { useEffect } from "react";
+import { MintingNft, fetchNftDetails, getMintingContract } from "./web3-minting";
+import { useEvmAddress } from "./web3-common";
+import React from "react";
 
-export async function fetchMintingTokenIDs(args: {
+export function useMintingNFTs() {
+  const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
+  const { evmAddress } = useEvmAddress();
+    const [mintingNFTs, setMintingNFTs] = React.useState<Record<string, MintingNft>>({});
+
+  useEffect(() => {
+    if (evmAddress) {
+      fetchMintingTokenIDs({ ethAddress: evmAddress })
+        .then((tokenIDs: any) => {
+          console.log("fetched tokenIDs: ", tokenIDs);
+          setTokenIDs(tokenIDs);
+        })
+        .catch((e: any) => {
+          console.error(e);
+        });
+    }
+  }, [evmAddress]);
+
+    useEffect(() => {
+      tokenIDs.forEach((tokenId) => {
+        fetchNftDetails({ tokenId })
+          .then((stakingNft: any) => {
+            setMintingNFTs((prevMintingNFTs) => {
+              return {
+                ...prevMintingNFTs,
+                ["" + tokenId]: stakingNft,
+              };
+            });
+          })
+          .catch((e: any) => {
+            console.error(e);
+          });
+      });
+    }, [tokenIDs]);
+  return { mintingNFTs };
+}
+
+async function fetchMintingTokenIDs(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
   return await enumerateOwnedTokenIDs(args);

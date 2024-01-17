@@ -25,6 +25,8 @@
       gap: .25rem;
       border: .1rem solid #3d3c3e;
       border-radius: 1rem;
+      color: white;
+      font-family: 'Helvetica';
 
       .information-entry {
         display: flex;
@@ -42,6 +44,7 @@
     border-radius: 1rem;
     background-color: #13111a;
     margin: 1rem;
+    font-family: 'Helvetica';
   }
 
   .minting-footer {

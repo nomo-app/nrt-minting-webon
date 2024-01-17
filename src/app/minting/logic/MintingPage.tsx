@@ -19,7 +19,7 @@ import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
 import "./MintingPage.scss";
-import { fetchMintingTokenIDs } from "@/web3/nft-fetching";
+import { useMintingNFTs } from "@/web3/nft-fetching";
 
 export type PageState =
   | "IDLE"
@@ -39,26 +39,12 @@ const MintingPage: React.FC = () => {
   const { nrtBalance, fetchError: balanceFetchError } = useNrtBalance({
     ethAddress,
   });
-  const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
-  const { evmAddress } = useEvmAddress();
   const [nrtAmount, setNrtAmount] = React.useState<bigint>(-1n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
   const [txError, setTxError] = React.useState<Error | null>(null);
   const networkBonus = true;
 
-  useEffect(() => {
-    if (evmAddress) {
-      fetchMintingTokenIDs({ ethAddress: evmAddress })
-        .then((tokenIDs: any) => {
-          console.log("fetched tokenIDs: ", tokenIDs);
-          setTokenIDs(tokenIDs);
-        })
-        .catch((e: any) => {
-          console.error(e);
-          setPageState("ERROR_FETCH_FAILED");
-        });
-    }
-  }, [evmAddress]);
+  const { mintingNFTs } = useMintingNFTs();
 
   useEffect(() => {
     if (balanceFetchError) {
@@ -94,7 +80,7 @@ const MintingPage: React.FC = () => {
 
     setPageState("PENDING_SUBMIT_TX");
     submitStakeTransaction({
-      avinocAmount: nrtAmount,
+      nrtAmount: nrtAmount,
       years: 1n,
       safirSig: null,
       ethAddress,
@@ -128,11 +114,13 @@ const MintingPage: React.FC = () => {
         <div className="minting-card-information">
           <div className="information-entry">
             <p>Max. linkable amount:</p>
-            <p style={{fontWeight: "bold"}}>{formatNRTAmount({tokenAmount: 1000n * 10n ** 8n})}</p>
+            <p style={{ fontWeight: "bold" }}>
+              {formatNRTAmount({ tokenAmount: 1000n * 10n ** 8n })}
+            </p>
           </div>
           <div className="information-entry">
             <p>Linking period:</p>
-            <p style={{fontWeight: "bold"}}>720 Days</p>
+            <p style={{ fontWeight: "bold" }}>720 Days</p>
           </div>
         </div>
       </div>
@@ -174,45 +162,6 @@ const MintingPage: React.FC = () => {
         translationKey={"staking.DialogSuccess"}
       />
     </div>
-    // <div style={mintingMainFlexBox}>
-    //   <div style={{ flexGrow: 10 }} />
-    //   <MintingTitleBar />
-    //   <StatusBox pageState={pageState} />
-    //   {!!txError && <ErrorDetails error={txError} />}
-    //   <Card variant={"elevation"} elevation={3} className={"input-card"}>
-    //     <AvinocAmountInput
-    //       value={avinocAmount}
-    //       maxValue={avinocBalance}
-    //       onChange={(value) => setAvinocAmount(value)}
-    //     />
-    //     <SelectYears years={years} onChange={handleYearChange} />
-    //   </Card>
-    //   <RewardPredictionBox
-    //     years={years}
-    //     avinocAmount={avinocAmount}
-    //     avinocPrice={avinocPrice}
-    //     networkBonus={networkBonus}
-    //   />
-    //   <StakeButton
-    //     disabled={isPendingState(pageState)}
-    //     onClick={onClickStakeButton}
-    //   />
-    //   <ConfirmDialogSlide
-    //     isOpen={confirmDialogOpen}
-    //     years={years}
-    //     selectedAmount={avinocAmount}
-    //     networkBonus={networkBonus}
-    //     handleClose={() => setConfirmDialogOpen(false)}
-    //     handleConfirm={() => submitMinting()}
-    //   />
-    //   <CongratDialogSlide
-    //     isOpen={successDialogOpen}
-    //     handleClose={() => setSuccessDialogOpen(false)}
-    //     translationKey={"staking.DialogSuccess"}
-    //   />
-    //   <SwitchToRewardPageButton disabled={isPendingState(pageState)} />
-    //   <div style={{ flexGrow: 50 }} />
-    // </div>
   );
 };
 

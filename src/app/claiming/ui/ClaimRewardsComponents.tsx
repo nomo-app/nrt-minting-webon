@@ -1,9 +1,6 @@
 import React from "react";
 import "@/common/colors.css";
-import {
-  formatNRTAmount,
-  formatTokenDollarPrice,
-} from "@/util/use-nrt-price";
+import { formatNRTAmount, formatTokenDollarPrice } from "@/util/use-nrt-price";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -140,7 +137,7 @@ export const ClaimAllButton: React.FC<{
 
 export const MintingNftBox: React.FC<{
   avinocPrice: number | null;
-  stakingNft: MintingNft;
+  mintingNft: MintingNft;
   pageState: PageState;
   onClickClaim: (stakingNft: MintingNft) => void;
 }> = (props) => {
@@ -148,27 +145,24 @@ export const MintingNftBox: React.FC<{
   usePeriodReRender(1000); // frequent re-rendering to show "live updates" of rewards
 
   const totalRewards: bigint =
-    (props.stakingNft.amount * props.stakingNft.payoutFactor) / 10n ** 18n;
-  const unclaimedRewards: bigint = computeUnclaimedRewards(props.stakingNft);
+    props.mintingNft.stakedTokens * props.mintingNft.mintingPower;
+  const unclaimedRewards: bigint = computeUnclaimedRewards(props.mintingNft);
   const unclaimedRewardsFormatted = formatNRTAmount({
     tokenAmount: unclaimedRewards,
     ultraPrecision: true, // ultraPrecision to see every second that the rewards are increasing
   });
 
-  const progress: number = Number(
-    (100n * (props.stakingNft.claimedRewards + unclaimedRewards)) / totalRewards
-  );
-  const stakingPeriod: string = `${props.stakingNft.start.toLocaleDateString()} - ${props.stakingNft.end.toLocaleDateString()}`;
-  const years: bigint = BigInt(
-    props.stakingNft.end.getFullYear() - props.stakingNft.start.getFullYear()
-  );
-  const avinocPerDay: bigint = totalRewards / (years * 365n);
-  const avinocPerDayFormatted = formatNRTAmount({
-    tokenAmount: avinocPerDay,
+  const progress: number = totalRewards > 0n ? Number(
+    (100n * (props.mintingNft.claimedRewards + unclaimedRewards)) / totalRewards
+  ) : 0;
+  const linkingPeriod: string = `${props.mintingNft.endTime.toLocaleDateString()} - ${props.mintingNft.endTime.toLocaleDateString()}`;
+  const nrtPerDay: bigint = totalRewards / 720n;
+  const nrtPerDayFormatted = formatNRTAmount({
+    tokenAmount: nrtPerDay,
   });
 
   function onClickClaimClosure() {
-    props.onClickClaim(props.stakingNft);
+    props.onClickClaim(props.mintingNft);
   }
   return (
     <Card
@@ -203,7 +197,7 @@ export const MintingNftBox: React.FC<{
               fontWeight: "bolder",
             }}
           >
-            {"NFT-ID: #" + props.stakingNft.tokenId}
+            {"NFT-ID: #" + props.mintingNft.tokenId}
           </div>
           <div
             style={{
@@ -213,7 +207,7 @@ export const MintingNftBox: React.FC<{
             }}
           >
             {"Staked: " +
-              formatNRTAmount({ tokenAmount: props.stakingNft.amount })}
+              formatNRTAmount({ tokenAmount: props.mintingNft.stakedTokens })}
           </div>
           <div
             style={{
@@ -233,10 +227,10 @@ export const MintingNftBox: React.FC<{
               fontSize: "14px",
             }}
           >
-            {avinocPerDayFormatted + " / " + t("generic.day")}
+            {nrtPerDayFormatted + " / " + t("generic.day")}
           </div>
           <div style={{ fontWeight: "lighter", fontSize: "14px" }}>
-            {"APY: " + props.stakingNft.apy + "%"}
+            {"APY: " + props.mintingNft.mintingPower + "%"}
           </div>
           <div
             style={{
@@ -245,7 +239,7 @@ export const MintingNftBox: React.FC<{
               textAlign: "start",
             }}
           >
-            {t("reward.stakingPeriod")}: {stakingPeriod}{" "}
+            {t("reward.stakingPeriod")}: {linkingPeriod}{" "}
           </div>
         </div>
         <img

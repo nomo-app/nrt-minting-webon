@@ -5,11 +5,7 @@ import { useNrtPrice } from "../../../util/use-nrt-price";
 import { useTranslation } from "react-i18next";
 import { Alert, CircularProgress } from "@mui/material";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
-import {
-  fetchMintingNft,
-  MintingNft,
-  submitClaimTransaction,
-} from "@/web3/web3-minting";
+import { MintingNft, submitClaimTransaction } from "@/web3/web3-minting";
 import { UnreachableCaseError } from "../../../util/typesafe";
 import { useEvmAddress } from "@/web3/web3-common";
 import {
@@ -19,7 +15,7 @@ import {
   TitleBox,
 } from "../ui/ClaimRewardsComponents";
 import { claimRewardsMainFlexBox } from "../ui/claim-style";
-import { fetchMintingTokenIDs } from "@/web3/nft-fetching";
+import { useMintingNFTs } from "@/web3/nft-fetching";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
 import { getNFTID } from "@/web3/navigation";
@@ -51,50 +47,9 @@ const ClaimRewardsPage: React.FC = () => {
     "PENDING_TOKENID_FETCH"
   );
   const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
-  const [fetchError, setFetchError] = React.useState<Error | null>(null);
-  const [stakingNFTs, setMintingNFTs] = React.useState<
-    Record<string, MintingNft>
-  >({});
+  const [fetchError] = React.useState<Error | null>(null);
+  const { mintingNFTs: stakingNFTs } = useMintingNFTs();
   const [congratDialogOpen, setCongratDialogOpen] = React.useState(false);
-
-  useEffect(() => {
-    if (evmAddress) {
-      fetchMintingTokenIDs({ ethAddress: evmAddress })
-        .then((tokenIDs: any) => {
-          if (tokenIDs.length) {
-            setPageState("PENDING_DETAILS_FETCH");
-          } else {
-            setPageState("ERROR_NO_NFTS_CLAIM");
-          }
-          tokenIDs.sort((a: bigint, b: bigint) => Number(a - b));
-          setTokenIDs(tokenIDs);
-        })
-        .catch((e) => {
-          console.error(e);
-          setFetchError(e);
-          setPageState("ERROR_FETCH_FAILED");
-        });
-    }
-  }, [evmAddress]);
-
-  useEffect(() => {
-    tokenIDs.forEach((tokenId) => {
-      fetchMintingNft({ tokenId })
-        .then((stakingNft: any) => {
-          setMintingNFTs((prevMintingNFTs) => {
-            return {
-              ...prevMintingNFTs,
-              ["" + tokenId]: stakingNft,
-            };
-          });
-          setPageState("IDLE");
-        })
-        .catch((e: any) => {
-          setPageState("ERROR_FETCH_FAILED");
-          console.error(e);
-        });
-    });
-  }, [tokenIDs]);
 
   function refreshOnChainData() {
     console.log("Refreshing on-chain data...");
@@ -140,7 +95,7 @@ const ClaimRewardsPage: React.FC = () => {
         <MintingNftBox
           key={selectedNFT.tokenId}
           avinocPrice={nrtPrice}
-          stakingNft={selectedNFT}
+          mintingNft={selectedNFT}
           pageState={pageState as any}
           onClickClaim={onClickClaim}
         />
@@ -151,7 +106,7 @@ const ClaimRewardsPage: React.FC = () => {
               <MintingNftBox
                 key={stakingNft.tokenId}
                 avinocPrice={nrtPrice}
-                stakingNft={stakingNft}
+                mintingNft={stakingNft}
                 pageState={pageState as any}
                 onClickClaim={onClickClaim}
               />
