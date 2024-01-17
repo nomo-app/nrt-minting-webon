@@ -4,7 +4,7 @@ import { getTokenStandard } from "@/web3/navigation";
 import { nrtTokenContractAddress } from "@/web3/web3-minting";
 
 export function useNrtPrice() {
-  const [avinocPrice, setAvinocPrice] = React.useState<number | null>(null);
+  const [nrtPrice, setNrtPrice] = React.useState<number | null>(null);
   React.useEffect(() => {
     fetchNrtPrice();
   }, []);
@@ -16,21 +16,21 @@ export function useNrtPrice() {
         contractAddress: nrtTokenContractAddress,
         network: "zeniq-smart-chain",
       });
-      setAvinocPrice(priceState.price);
+      setNrtPrice(priceState.price);
     } catch (e) {
       console.log("failed to fetch NRT price. set to default price.");
-      setAvinocPrice(0.15);
+      setNrtPrice(0.15);
     }
   }
 
-  return { avinocPrice };
+  return { nrtPrice };
 }
 
 export function formatNRTAmount(args: {
   tokenAmount: bigint;
   ultraPrecision?: boolean;
 }): string {
-  const inpreciseTokenAmount = Number(args.tokenAmount) / 1e18;
+  const inpreciseTokenAmount = Number(args.tokenAmount) / 1e8;
   const tokenStandard = getTokenStandard();
 
   if (args.ultraPrecision && inpreciseTokenAmount > 0) {

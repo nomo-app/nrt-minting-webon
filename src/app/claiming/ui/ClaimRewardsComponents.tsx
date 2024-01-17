@@ -3,7 +3,7 @@ import "@/common/colors.css";
 import {
   formatNRTAmount,
   formatTokenDollarPrice,
-} from "@/util/use-avinoc-price";
+} from "@/util/use-nrt-price";
 import { useTranslation } from "react-i18next";
 import {
   Box,

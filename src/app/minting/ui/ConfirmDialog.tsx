@@ -14,7 +14,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import { nrtIcon } from "@/asset-paths";
-import { formatNRTAmount } from "@/util/use-avinoc-price";
+import { formatNRTAmount } from "@/util/use-nrt-price";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {

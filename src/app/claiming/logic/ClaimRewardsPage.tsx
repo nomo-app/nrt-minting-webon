@@ -1,7 +1,7 @@
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
 import "@/common/colors.css";
-import { useNrtPrice } from "../../../util/use-avinoc-price";
+import { useNrtPrice } from "../../../util/use-nrt-price";
 import { useTranslation } from "react-i18next";
 import { Alert, CircularProgress } from "@mui/material";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
@@ -46,7 +46,7 @@ const ClaimRewardsPage: React.FC = () => {
   useNomoTheme();
 
   const { evmAddress } = useEvmAddress();
-  const { avinocPrice } = useNrtPrice();
+  const { nrtPrice } = useNrtPrice();
   const [pageState, setPageState] = React.useState<PageState>(
     "PENDING_TOKENID_FETCH"
   );
@@ -139,7 +139,7 @@ const ClaimRewardsPage: React.FC = () => {
       {selectedNFT ? (
         <MintingNftBox
           key={selectedNFT.tokenId}
-          avinocPrice={avinocPrice}
+          avinocPrice={nrtPrice}
           stakingNft={selectedNFT}
           pageState={pageState as any}
           onClickClaim={onClickClaim}
@@ -150,7 +150,7 @@ const ClaimRewardsPage: React.FC = () => {
             return (
               <MintingNftBox
                 key={stakingNft.tokenId}
-                avinocPrice={avinocPrice}
+                avinocPrice={nrtPrice}
                 stakingNft={stakingNft}
                 pageState={pageState as any}
                 onClickClaim={onClickClaim}

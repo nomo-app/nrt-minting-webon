@@ -19,7 +19,7 @@ import { nrtIcon, stakingIcon } from "@/asset-paths";
 import { PageState } from "../logic/MintingPage";
 import BackButton from "@/common/BackButton";
 import { getTokenStandard, navigateToClaimingPage } from "@/web3/navigation";
-import { formatNRTAmount } from "@/util/use-avinoc-price";
+import { formatNRTAmount } from "@/util/use-nrt-price";
 import { useNavigate } from "react-router-dom";
 import "./MintingComponents.scss";
 
@@ -172,7 +172,6 @@ export const MintingTitleBar: React.FC = () => {
         justifyContent: "space-between",
       }}
     >
-      <BackButton />
       <div
         style={{
           fontWeight: "bold",
@@ -219,7 +218,7 @@ export const TokenAmountInput: React.FC<{
   const availableText =
     props.maxValue !== null && props.maxValue !== undefined
       ? `Available in wallet: ${formatNRTAmount({
-          tokenAmount: 1500n * (10n ** 18n),
+          tokenAmount: props.maxValue,
         })}`
       : t("staking.loadBalance");
 

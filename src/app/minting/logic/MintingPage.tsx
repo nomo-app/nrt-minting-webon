@@ -14,7 +14,7 @@ import { StakeButton } from "@/app/minting/ui/MintingComponents";
 import { SwitchToRewardPageButton } from "@/app/minting/ui/MintingComponents";
 import { MintingTitleBar } from "@/app/minting/ui/MintingComponents";
 import { TokenAmountInput } from "@/app/minting/ui/MintingComponents";
-import { formatNRTAmount, useNrtPrice } from "@/util/use-avinoc-price";
+import { formatNRTAmount, useNrtPrice } from "@/util/use-nrt-price";
 import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
@@ -33,13 +33,13 @@ function isPendingState(pageState: PageState) {
 const MintingPage: React.FC = () => {
   useNomoTheme();
 
-  const { avinocPrice } = useNrtPrice();
+  const { nrtPrice } = useNrtPrice();
   const { evmAddress: ethAddress } = useEvmAddress();
-  const { nrtBalance: tokenBalance, fetchError: balanceFetchError } =
+  const { nrtBalance, fetchError: balanceFetchError } =
     useNrtBalance({
       ethAddress,
     });
-  const [tokenAmount, setAvinocAmount] = React.useState<bigint>(-1n);
+  const [nrtAmount, setNrtAmount] = React.useState<bigint>(-1n);
   const [pageState, setPageState] = React.useState<PageState>("IDLE");
   const [txError, setTxError] = React.useState<Error | null>(null);
   const networkBonus = true;
@@ -52,17 +52,17 @@ const MintingPage: React.FC = () => {
   }, [balanceFetchError]);
 
   useEffect(() => {
-    if (tokenBalance) {
-      const roundedAvinocBalance = tokenBalance - (tokenBalance % 10n ** 18n);
-      setAvinocAmount(roundedAvinocBalance);
+    if (nrtBalance) {
+      const roundedBalance = nrtBalance - (nrtBalance % 10n ** 18n);
+      setNrtAmount(roundedBalance);
     }
-  }, [tokenBalance]);
+  }, [nrtBalance]);
 
   const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false);
   const [successDialogOpen, setSuccessDialogOpen] = React.useState(false);
 
   function onClickStakeButton() {
-    if (tokenAmount <= 0n) {
+    if (nrtAmount <= 0n) {
       setPageState("ERROR_INSUFFICIENT_NRT");
       return;
     }
@@ -78,7 +78,7 @@ const MintingPage: React.FC = () => {
 
     setPageState("PENDING_SUBMIT_TX");
     submitStakeTransaction({
-      avinocAmount: tokenAmount,
+      avinocAmount: nrtAmount,
       years: 1n,
       safirSig: null,
       ethAddress,
@@ -105,14 +105,14 @@ const MintingPage: React.FC = () => {
       </div>
       <div className="minting-card">
         <TokenAmountInput
-          value={tokenAmount}
-          maxValue={tokenBalance}
-          onChange={(value) => setAvinocAmount(value)}
+          value={nrtAmount}
+          maxValue={nrtBalance}
+          onChange={(value) => setNrtAmount(value)}
         />
         <div style={{ color: "white", fontFamily: "Helvetica" }}>
           {"Maximum linkable amount: " +
             formatNRTAmount({
-              tokenAmount: 1000n * 10n ** 18n,
+              tokenAmount: nrtBalance ?? 0n,
             })}
         </div>
         <div style={{ color: "white", fontFamily: "Helvetica", paddingBottom: "15px" }}>
@@ -121,8 +121,8 @@ const MintingPage: React.FC = () => {
       </div>
       <div className="minting-reward-prediction-box">
         <RewardPredictionBox
-          avinocAmount={tokenAmount}
-          avinocPrice={avinocPrice}
+          avinocAmount={nrtAmount}
+          avinocPrice={nrtPrice}
           networkBonus={networkBonus}
         />
       </div>
@@ -146,7 +146,7 @@ const MintingPage: React.FC = () => {
 
       <ConfirmDialogSlide
         isOpen={confirmDialogOpen}
-        selectedAmount={tokenAmount}
+        selectedAmount={nrtAmount}
         networkBonus={networkBonus}
         handleClose={() => setConfirmDialogOpen(false)}
         handleConfirm={() => submitMinting()}
