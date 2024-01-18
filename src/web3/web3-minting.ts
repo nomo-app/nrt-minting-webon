@@ -14,7 +14,7 @@ import { mintingAbi } from "@/contracts/minting-abi";
 import { MintingOperation, MintingPlan } from "./minting-plan";
 
 export const mintingContractAddress =
-  "0xB5680e3E462F14F77b665D820097C5ec1445431A";
+  "0x8ddc5631AbfCa16dA6a666bdc9413b93E0B4B4F8";
 export const nrtTokenContractAddress =
   "0xEdF221F8C1957b6aC950430836e7aa0d7Db5b4dA";
 

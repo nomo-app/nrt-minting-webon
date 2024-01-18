@@ -121,7 +121,7 @@ export const ConfirmDialogSlide: React.FC<{
                 " on NRT Power Node #" +
                 mintingOp.nft.tokenId.toString() +
                 " with minting power " +
-                mintingOp.nft.mintingPower.toString()}
+                (Number(mintingOp.nft.mintingPower) / 100).toString()}
             </div>
           ))}
         </DialogContent>
