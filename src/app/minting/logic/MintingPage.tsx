@@ -46,10 +46,11 @@ const MintingPage: React.FC = () => {
   const [txError, setTxError] = React.useState<Error | null>(null);
 
   const { mintingNFTs } = useMintingNFTs();
-  const maxLinkableAmount = getMaxLinkableAmount({ mintingNFTs });
+  const maxLinkableAmount = getMaxLinkableAmount({ mintingNFTs, nrtPrice: nrtPrice });
   const mintingPlan: MintingPlan = getMintingPlan({
     mintingNFTs: mintingNFTs ?? {},
     nrtAmount,
+    nrtPrice: nrtPrice,
   });
 
   function isPendingState(pageState: PageState) {
