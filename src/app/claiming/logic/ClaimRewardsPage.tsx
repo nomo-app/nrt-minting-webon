@@ -45,6 +45,10 @@ const ClaimRewardsPage: React.FC = () => {
   const { mintingNFTs } = useMintingNFTs();
   const [congratDialogOpen, setCongratDialogOpen] = React.useState(false);
 
+  useEffect(() => {
+    if (mintingNFTs !== null) { setPageState("IDLE"); }
+  }, [mintingNFTs]);
+
   function refreshOnChainData() {
     console.log("Refreshing on-chain data...");
     setTokenIDs([...tokenIDs]);
