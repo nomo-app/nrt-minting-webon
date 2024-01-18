@@ -10,6 +10,7 @@ import { isPendingState } from "@/app/claiming/logic/ClaimRewardsPage";
 import { nrtIcon, boxLogo, doubleBoxLogo, rocketIcon, nrtStakingIcon } from "@/asset-paths";
 import BackButton from "@/common/BackButton";
 import "./ClaimRewardsComponents.scss";
+import { getLifeCycleDays } from "@/web3/web3-minting";
 
 export const TitleBox: React.FC<{ showBackButton: boolean }> = (props) => {
   const { t } = useTranslation();
@@ -126,7 +127,7 @@ export const MintingNftBox: React.FC<{
   const progress: number =
     totalRewards > 0n ? Number((100n * (props.mintingNft.claimedRewards + unclaimedRewards)) / totalRewards) : 0;
   const linkingPeriod: string = `${props.mintingNft.endTime.toLocaleDateString()} - ${props.mintingNft.endTime.toLocaleDateString()}`;
-  const nrtPerDay: bigint = totalRewards / 720n;
+  const nrtPerDay: bigint = totalRewards / getLifeCycleDays(props.mintingNft);
   const nrtPerDayFormatted = formatNRTAmount({
     tokenAmount: nrtPerDay,
   });
@@ -149,7 +150,7 @@ export const MintingNftBox: React.FC<{
         <p>{"1" + " / " + t("generic.day")}</p>
         <p>{"Minting Power: " + props.mintingNft.mintingPower + "%"}</p>
         <p>
-          {t("reward.stakingPeriod")}: {720}{" "}
+          {t("reward.stakingPeriod")}: {getLifeCycleDays(props.mintingNft).toString()}{" "}
         </p>
       </div>
 

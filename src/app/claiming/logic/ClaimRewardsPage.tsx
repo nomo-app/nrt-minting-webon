@@ -54,13 +54,13 @@ const ClaimRewardsPage: React.FC = () => {
     setTokenIDs([...tokenIDs]);
   }
 
-  function doClaim(args: { tokenIDs: Array<bigint> }) {
+  function doClaim(args: { tokenID: bigint }) {
     if (!evmAddress) {
       setPageState("ERROR_INSUFFICIENT_ETH");
       return;
     }
     setPageState("PENDING_SUBMIT_TX");
-    submitClaimTransaction({ tokenIDs: args.tokenIDs, ethAddress: evmAddress })
+    submitClaimTransaction({ tokenID: args.tokenID, ethAddress: evmAddress })
       .then((error: any) => {
         if (error) {
           setPageState(error);
@@ -76,7 +76,7 @@ const ClaimRewardsPage: React.FC = () => {
   }
 
   function onClickClaim(stakingNft: MintingNft) {
-    doClaim({ tokenIDs: [stakingNft.tokenId] });
+    doClaim({ tokenID: stakingNft.tokenId });
   }
 
   const nftID = getNFTID();

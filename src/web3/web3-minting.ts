@@ -41,8 +41,8 @@ function getNrtTokenContract(): Contract {
 const gasLimits = {
   toApprove: 60000n,
   toStake: 280000n,
-  toClaim: (numberOfNFTs: bigint) => {
-    return 150000n + (numberOfNFTs - 1n) * 25000n;
+  toClaim: () => {
+    return 150000n;
   },
 };
 
@@ -53,6 +53,7 @@ export interface MintingNft {
   totalRewards: bigint;
   claimedRewards: bigint;
   lastClaimedTimestamp: Date;
+  lifeCycleDuration: Date;
   endTime: Date;
 }
 
@@ -115,6 +116,8 @@ export async function submitMintingTx(args: {
     await submitMintintOp({ mintingOp, nonce });
     nonce++;
   }
+
+  return null;
 }
 
 async function submitMintintOp(args: {
@@ -135,10 +138,10 @@ async function submitMintintOp(args: {
 }
 
 export async function submitClaimTransaction(args: {
-  tokenIDs: Array<bigint>;
+  tokenID: bigint;
   ethAddress: string;
 }): Promise<"ERROR_INSUFFICIENT_ETH" | null> {
-  const gasLimit = gasLimits.toClaim(BigInt(args.tokenIDs.length));
+  const gasLimit = gasLimits.toClaim();
   const gasError = await checkIfGasCanBePaid({
     ethAddress: args.ethAddress,
     gasLimit,
@@ -148,9 +151,7 @@ export async function submitClaimTransaction(args: {
   }
 
   const stakingContract = getMintingContract();
-  const txResponse = await stakingContract.claim(args.tokenIDs, {
-    gasLimit, // in some cases the automatic gasLimit-estimation seems to fail
-  });
+  const txResponse = await stakingContract.claimRewards(args.tokenID);
   await waitForConfirmationOrThrow(txResponse);
   return null;
 }
@@ -167,6 +168,9 @@ export async function fetchNftDetails(args: {
     stakedTokens: rawMintingNft["stakedTokens"],
     totalRewards: rawMintingNft["totalRewards"],
     claimedRewards: rawMintingNft["claimedRewards"],
+    lifeCycleDuration: new Date(
+      Number(rawMintingNft["lifeCycleDuration"]) * 1000
+    ),
     lastClaimedTimestamp: new Date(
       Number(rawMintingNft["lastClaimedTimestamp"]) * 1000
     ),
@@ -174,6 +178,16 @@ export async function fetchNftDetails(args: {
   };
   console.log("mintingNFT", mintingNFT);
   return mintingNFT;
+}
+
+export function getLifeCycleDays(mintingNft: MintingNft): bigint {
+  const lifeCycleDuration = mintingNft.lifeCycleDuration;
+  if (Number.isNaN(lifeCycleDuration.getTime())) {
+    return 720n;
+  }
+
+  const lifeCycleDays = BigInt(lifeCycleDuration.getTime()) / (1000n * 60n * 60n * 24n);
+  return lifeCycleDays;
 }
 
 export function computeUnclaimedRewards(mintingNft: MintingNft): bigint {
