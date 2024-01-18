@@ -14,7 +14,7 @@
     "ERROR_NO_NFTS": "Não há NFTs disponíveis",
     "ERROR_NO_NFTS_CLAIM": "Não há recompensas disponíveis. Por favor, volte para escolher uma quantidade de NRT.",
     "ERROR_TX_FAILED": "Erro - Falha na transação",
-    "ERROR_INSUFFICIENT_ETH": "Erro - Não é possível pagar as taxas de transação. Por favor, financie sua carteira com Ethereum suficiente.",
+    "ERROR_INSUFFICIENT_ETH": "Erro - Não é possível pagar as taxas de transação. Por favor, financie sua carteira com ZENIQ suficiente.",
     "ERROR_LIMIT_EXCEEDED": "O staking de NRT está limitado a um máximo de 250.000 NRT (apenas por 15 anos).",
     "ERROR_INSUFFICIENT_NRT": "Quantidade NRT insuficiente"
   },

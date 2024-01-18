@@ -14,7 +14,7 @@
     "ERROR_NO_NFTS": "Ingen tilgængelige NFT'er",
     "ERROR_NO_NFTS_CLAIM": "Ingen tilgængelige belønninger. Gå tilbage for at vælge en mængde NRT.",
     "ERROR_TX_FAILED": "Fejl - Transaktion mislykkedes",
-    "ERROR_INSUFFICIENT_ETH": "Fejl - Kan ikke betale transaktionsgebyrer. Venligst finansier din tegnebog med tilstrækkelig Ethereum.",
+    "ERROR_INSUFFICIENT_ETH": "Fejl - Kan ikke betale transaktionsgebyrer. Venligst finansier din tegnebog med tilstrækkelig ZENIQ.",
     "ERROR_LIMIT_EXCEEDED": "NRT-indsats er begrænset til maksimalt 250000 NRT (kun i 15 år).",
     "ERROR_INSUFFICIENT_NRT": "Utilstrækkelig NRT-mængde"
   },

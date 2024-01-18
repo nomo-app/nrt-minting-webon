@@ -14,7 +14,7 @@
     "ERROR_NO_NFTS": "Aucun NFT disponible",
     "ERROR_NO_NFTS_CLAIM": "Aucune récompense disponible. Veuillez revenir en arrière pour choisir une quantité d'NRT.",
     "ERROR_TX_FAILED": "Erreur - Échec de la transaction",
-    "ERROR_INSUFFICIENT_ETH": "Erreur - Impossible de payer les frais de transaction. Veuillez approvisionner votre portefeuille avec suffisamment d'Ethereum.",
+    "ERROR_INSUFFICIENT_ETH": "Erreur - Impossible de payer les frais de transaction. Veuillez approvisionner votre portefeuille avec suffisamment d'ZENIQ.",
     "ERROR_LIMIT_EXCEEDED": "Le jalonnement NRT est limité à un maximum de 250000 NRT (seulement pendant 15 ans).",
     "ERROR_INSUFFICIENT_NRT": "Quantité d'NRT insuffisante"
   },

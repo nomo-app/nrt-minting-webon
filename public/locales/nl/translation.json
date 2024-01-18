@@ -14,7 +14,7 @@
     "ERROR_NO_NFTS": "Geen NFT's beschikbaar",
     "ERROR_NO_NFTS_CLAIM": "Geen beloningen beschikbaar. Ga terug om een hoeveelheid NRT te kiezen.",
     "ERROR_TX_FAILED": "Fout - Transactie mislukt",
-    "ERROR_INSUFFICIENT_ETH": "Fout - Kan transactiekosten niet betalen. Gelieve uw portemonnee te financieren met voldoende Ethereum.",
+    "ERROR_INSUFFICIENT_ETH": "Fout - Kan transactiekosten niet betalen. Gelieve uw portemonnee te financieren met voldoende ZENIQ.",
     "ERROR_LIMIT_EXCEEDED": "NRT staking is beperkt tot een maximum van 250000 NRT (alleen voor 15 jaar).",
     "ERROR_INSUFFICIENT_NRT": "Onvoldoende hoeveelheid NRT"
   },

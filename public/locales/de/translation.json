@@ -14,7 +14,7 @@
     "ERROR_NO_NFTS": "Keine NFTs verfügbar",
     "ERROR_NO_NFTS_CLAIM": "Keine Belohnungen verfügbar. Bitte gehen Sie zurück, um eine NRT-Menge auszuwählen.",
     "ERROR_TX_FAILED": "Fehler - Transaktion fehlgeschlagen",
-    "ERROR_INSUFFICIENT_ETH": "Fehler - Transaktionsgebühren können nicht bezahlt werden. Bitte füllen Sie Ihr Wallet mit ausreichend Ethereum auf.",
+    "ERROR_INSUFFICIENT_ETH": "Fehler - Transaktionsgebühren können nicht bezahlt werden. Bitte füllen Sie Ihr Wallet mit ausreichend ZENIQ auf.",
     "ERROR_LIMIT_EXCEEDED": "NRT Minting ist auf maximal 250000 NRT begrenzt (nur für 15 Jahre).",
     "ERROR_INSUFFICIENT_NRT": "Unzureichende NRT-Menge"
   },

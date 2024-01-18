@@ -14,7 +14,7 @@
     "ERROR_NO_NFTS": "Inga NFT:er tillgängliga",
     "ERROR_NO_NFTS_CLAIM": "Inga belöningar tillgängliga. Gå tillbaka för att välja en mängd NRT.",
     "ERROR_TX_FAILED": "Fel - Transaktionen misslyckades",
-    "ERROR_INSUFFICIENT_ETH": "Fel - Kan inte betala transaktionsavgifter. Vänligen finansiera din plånbok med tillräckligt med Ethereum.",
+    "ERROR_INSUFFICIENT_ETH": "Fel - Kan inte betala transaktionsavgifter. Vänligen finansiera din plånbok med tillräckligt med ZENIQ.",
     "ERROR_LIMIT_EXCEEDED": "NRT-insatsen är begränsad till maximalt 250 000 NRT (endast i 15 år).",
     "ERROR_INSUFFICIENT_NRT": "Otillräcklig mängd NRT"
   },

@@ -14,7 +14,7 @@
     "ERROR_NO_NFTS": "No hay NFT disponibles",
     "ERROR_NO_NFTS_CLAIM": "No hay recompensas disponibles. Vuelva a elegir una cantidad de NRT.",
     "ERROR_TX_FAILED": "Error: transacción fallida",
-    "ERROR_INSUFFICIENT_ETH": "Error: no se pueden pagar las tarifas de transacción. Financie su billetera con suficiente Ethereum.",
+    "ERROR_INSUFFICIENT_ETH": "Error: no se pueden pagar las tarifas de transacción. Financie su billetera con suficiente ZENIQ.",
     "ERROR_LIMIT_EXCEEDED": "La participación de NRT está limitada a un máximo de 250000 NRT (solo durante 15 años).",
     "ERROR_INSUFFICIENT_NRT": "Cantidad insuficiente de NRT"
   },
