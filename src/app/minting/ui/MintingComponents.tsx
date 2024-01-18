@@ -45,6 +45,8 @@ export const StatusBox: React.FC<{ pageState: PageState }> = (props) => {
       case "ERROR_LIMIT_EXCEEDED":
       case "PENDING_SUBMIT_TX":
         return t("status." + props.pageState);
+      case "ERROR_NO_POWER_NRT_POWER_NODES":
+        return "No NRT Power Nodes were found in this wallet.";
       case "IDLE":
         return ""; // should never happen
       default:

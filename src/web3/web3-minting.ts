@@ -89,23 +89,32 @@ export type StakeError =
   | Web3Error
   | "ERROR_INSUFFICIENT_RESERVES"
   | "ERROR_LIMIT_EXCEEDED"
+  | "ERROR_NO_POWER_NRT_POWER_NODES"
   | "ERROR_INSUFFICIENT_NRT";
 
 export async function submitMintingTx(args: {
   mintingPlan: MintingPlan;
   ethAddress: string;
+  nrtBalance: bigint;
 }): Promise<StakeError | null> {
   if (!isFallbackModeActive() && !(await isWalletBackupAvailable())) {
     return "ERROR_MISSING_WALLET_BACKUP";
   }
 
+  if (!args.mintingPlan.totalAmountToLink) {
+    return "ERROR_NO_POWER_NRT_POWER_NODES";
+  }
+  if (args.mintingPlan.totalAmountToLink > args.nrtBalance) {
+    return "ERROR_INSUFFICIENT_NRT";
+  }
+
   const totalGasLimit = gasLimits.toApprove + gasLimits.toStake;
   const gasError = await checkIfGasCanBePaid({
-    ethAddress: args.ethAddress,
-    gasLimit: totalGasLimit,
+  ethAddress: args.ethAddress,
+  gasLimit: totalGasLimit,
   });
   if (gasError) {
-    return gasError;
+  return gasError;
   }
 
   let { nonce } = await approveIfNecessary({
