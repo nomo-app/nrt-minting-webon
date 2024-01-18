@@ -5,13 +5,12 @@ import { useNrtPrice } from "../../../util/use-nrt-price";
 import { useTranslation } from "react-i18next";
 import { Alert, CircularProgress } from "@mui/material";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
-import { fetchMintingNft, MintingNft, submitClaimTransaction } from "@/web3/web3-minting";
+import { MintingNft, submitClaimTransaction } from "@/web3/web3-minting";
 import { UnreachableCaseError } from "../../../util/typesafe";
 import { useEvmAddress } from "@/web3/web3-common";
 import { ClaimedRewards, MintingNftBox, TitleBox } from "../ui/ClaimRewardsComponents";
-import { fetchMintingTokenIDs } from "@/web3/nft-fetching";
+import {  } from "@/web3/nft-fetching";
 import { useMintingNFTs } from "@/web3/nft-fetching";
-import { claimRewardsMainFlexBox } from "../ui/claim-style";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
 import { getNFTID } from "@/web3/navigation";
@@ -43,7 +42,7 @@ const ClaimRewardsPage: React.FC = () => {
   const [pageState, setPageState] = React.useState<PageState>("PENDING_TOKENID_FETCH");
   const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
   const [fetchError] = React.useState<Error | null>(null);
-  const { mintingNFTs: stakingNFTs } = useMintingNFTs();
+  const { mintingNFTs } = useMintingNFTs();
   const [congratDialogOpen, setCongratDialogOpen] = React.useState(false);
 
   function refreshOnChainData() {
@@ -77,43 +76,32 @@ const ClaimRewardsPage: React.FC = () => {
   }
 
   const nftID = getNFTID();
-  const selectedNFT = nftID && !!stakingNFTs ? stakingNFTs[Number(nftID)] : undefined;
+  const selectedNFT = nftID && !!mintingNFTs ? mintingNFTs[Number(nftID)] : undefined;
   console.log("selectedNFT", selectedNFT);
 
   return (
     <div className="claim-rewards-page-container">
       <div>
         <TitleBox showBackButton={!selectedNFT} />
-        {pageState === "IDLE" ? <ClaimedRewards stakingNFTs={stakingNFTs} /> : <StatusBox pageState={pageState} />}
+        {pageState === "IDLE" ? <ClaimedRewards mintingNFTs={mintingNFTs ?? {}} /> : <StatusBox pageState={pageState} />}
       </div>
       <div>
         {selectedNFT ? (
           <MintingNftBox
             key={selectedNFT.tokenId}
             avinocPrice={nrtPrice}
-            stakingNft={selectedNFT}
+            mintingNft={selectedNFT}
             pageState={pageState as any}
             onClickClaim={onClickClaim}
           />
         ) : (
           <div>
-            {Object.values(stakingNFTs).map((stakingNft) => {
+            {Object.values(mintingNFTs ?? {}).map((mintingNft) => {
               return (
                 <MintingNftBox
-                  key={stakingNft.tokenId}
+                  key={mintingNft.tokenId}
                   avinocPrice={nrtPrice}
-                  stakingNft={stakingNft}
-                  pageState={pageState as any}
-                  onClickClaim={onClickClaim}
-                />
-              );
-            })}
-            {Object.values(stakingNFTs).map((stakingNft) => {
-              return (
-                <MintingNftBox
-                  key={stakingNft.tokenId}
-                  avinocPrice={nrtPrice}
-                  stakingNft={stakingNft}
+                  mintingNft={mintingNft}
                   pageState={pageState as any}
                   onClickClaim={onClickClaim}
                 />
@@ -122,49 +110,6 @@ const ClaimRewardsPage: React.FC = () => {
           </div>
         )}
       </div>
-
-      {selectedNFT ? (
-        <MintingNftBox
-          key={selectedNFT.tokenId}
-          avinocPrice={nrtPrice}
-          stakingNft={selectedNFT}
-          pageState={pageState as any}
-          onClickClaim={onClickClaim}
-        />
-      ) : (
-        <div className={"scroll-container"}>
-          {Object.values(stakingNFTs).map((stakingNft) => {
-            return (
-              <MintingNftBox
-                key={stakingNft.tokenId}
-                avinocPrice={nrtPrice}
-                stakingNft={stakingNft}
-                pageState={pageState as any}
-                onClickClaim={onClickClaim}
-              />
-            );
-          })}
-        </div>
-      )}
-
-      {/* <Card
-        style={{
-          display: Object.values(stakingNFTs).length >= 2 ? undefined : "none",
-          width: "90%",
-          height: "fit-content",
-        }}
-      >
-        <ClaimAllButton
-          disabled={isPendingState(pageState)}
-          onClick={onClickClaimAll}
-        />
-      </Card> */}
-
-      {pageState === "IDLE" ? (
-        <ClaimedRewards stakingNFTs={stakingNFTs} />
-      ) : (
-        <StatusBox pageState={pageState} />
-      )}
 
       <CongratDialogSlide
         isOpen={congratDialogOpen}

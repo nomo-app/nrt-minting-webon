@@ -140,18 +140,18 @@ export const MintingNftBox: React.FC<{
     <div className="nft-card-container">
       <div className="nft-card-header">
         <div className="header-info">
-          <div>{"NFT-ID: #" + props.stakingNft.tokenId}</div>
-          <div>{"Staked: " + formatNRTAmount({ tokenAmount: props.stakingNft.amount })}</div>
+          <div>{"NFT-ID: #" + props.mintingNft.tokenId}</div>
+          <div>{"Staked: " + formatNRTAmount({ tokenAmount: props.mintingNft.stakedTokens })}</div>
         </div>
         <img src={nrtStakingIcon} style={{ width: "50px" }} />
       </div>
 
       <div className="nft-card-body">
         <p>{t("reward.totalPayout") + ": " + formatNRTAmount({ tokenAmount: totalRewards })}</p>
-        <p>{avinocPerDayFormatted + " / " + t("generic.day")}</p>
-        <p>{"APY: " + props.stakingNft.apy + "%"}</p>
+        <p>{"1" + " / " + t("generic.day")}</p>
+        <p>{"Minting Power: " + props.mintingNft.mintingPower + "%"}</p>
         <p>
-          {t("reward.stakingPeriod")}: {stakingPeriod}{" "}
+          {t("reward.stakingPeriod")}: {720}{" "}
         </p>
       </div>
 
