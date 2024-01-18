@@ -1,24 +1,21 @@
 import "@/util/i18n"; // needed to initialize i18next
 import React, { useEffect } from "react";
-import "@/common/colors.css";
+// import "@/common/colors.css";
 import { useNrtPrice } from "../../../util/use-nrt-price";
 import { useTranslation } from "react-i18next";
 import { Alert, CircularProgress } from "@mui/material";
 import { CongratDialogSlide } from "@/app/minting/ui/CongratDialog";
-import { MintingNft, submitClaimTransaction } from "@/web3/web3-minting";
+import { fetchMintingNft, MintingNft, submitClaimTransaction } from "@/web3/web3-minting";
 import { UnreachableCaseError } from "../../../util/typesafe";
 import { useEvmAddress } from "@/web3/web3-common";
-import {
-  //ClaimAllButton,
-  ClaimedRewards,
-  MintingNftBox,
-  TitleBox,
-} from "../ui/ClaimRewardsComponents";
-import { claimRewardsMainFlexBox } from "../ui/claim-style";
+import { ClaimedRewards, MintingNftBox, TitleBox } from "../ui/ClaimRewardsComponents";
+import { fetchMintingTokenIDs } from "@/web3/nft-fetching";
 import { useMintingNFTs } from "@/web3/nft-fetching";
+import { claimRewardsMainFlexBox } from "../ui/claim-style";
 import ErrorDetails from "@/common/ErrorDetails";
 import { useNomoTheme } from "@/util/util";
 import { getNFTID } from "@/web3/navigation";
+import "./ClaimRewardsPage.scss";
 
 export type PageState =
   | "PENDING_TOKENID_FETCH"
@@ -43,9 +40,7 @@ const ClaimRewardsPage: React.FC = () => {
 
   const { evmAddress } = useEvmAddress();
   const { nrtPrice } = useNrtPrice();
-  const [pageState, setPageState] = React.useState<PageState>(
-    "PENDING_TOKENID_FETCH"
-  );
+  const [pageState, setPageState] = React.useState<PageState>("PENDING_TOKENID_FETCH");
   const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
   const [fetchError] = React.useState<Error | null>(null);
   const { mintingNFTs: stakingNFTs } = useMintingNFTs();
@@ -86,27 +81,64 @@ const ClaimRewardsPage: React.FC = () => {
   console.log("selectedNFT", selectedNFT);
 
   return (
-    <div style={claimRewardsMainFlexBox}>
-      <div style={{ flexGrow: "10" }} />
-      <TitleBox showBackButton={!selectedNFT} />
-      {!!fetchError && <ErrorDetails error={fetchError} />}
+    <div className="claim-rewards-page-container">
+      <div>
+        <TitleBox showBackButton={!selectedNFT} />
+        {pageState === "IDLE" ? <ClaimedRewards stakingNFTs={stakingNFTs} /> : <StatusBox pageState={pageState} />}
+      </div>
+      <div>
+        {selectedNFT ? (
+          <MintingNftBox
+            key={selectedNFT.tokenId}
+            avinocPrice={nrtPrice}
+            stakingNft={selectedNFT}
+            pageState={pageState as any}
+            onClickClaim={onClickClaim}
+          />
+        ) : (
+          <div>
+            {Object.values(stakingNFTs).map((stakingNft) => {
+              return (
+                <MintingNftBox
+                  key={stakingNft.tokenId}
+                  avinocPrice={nrtPrice}
+                  stakingNft={stakingNft}
+                  pageState={pageState as any}
+                  onClickClaim={onClickClaim}
+                />
+              );
+            })}
+            {Object.values(stakingNFTs).map((stakingNft) => {
+              return (
+                <MintingNftBox
+                  key={stakingNft.tokenId}
+                  avinocPrice={nrtPrice}
+                  stakingNft={stakingNft}
+                  pageState={pageState as any}
+                  onClickClaim={onClickClaim}
+                />
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {selectedNFT ? (
         <MintingNftBox
           key={selectedNFT.tokenId}
           avinocPrice={nrtPrice}
-          mintingNft={selectedNFT}
+          stakingNft={selectedNFT}
           pageState={pageState as any}
           onClickClaim={onClickClaim}
         />
       ) : (
         <div className={"scroll-container"}>
-          {!!stakingNFTs && Object.values(stakingNFTs).map((stakingNft) => {
+          {Object.values(stakingNFTs).map((stakingNft) => {
             return (
               <MintingNftBox
                 key={stakingNft.tokenId}
                 avinocPrice={nrtPrice}
-                mintingNft={stakingNft}
+                stakingNft={stakingNft}
                 pageState={pageState as any}
                 onClickClaim={onClickClaim}
               />
@@ -129,7 +161,7 @@ const ClaimRewardsPage: React.FC = () => {
       </Card> */}
 
       {pageState === "IDLE" ? (
-        <ClaimedRewards stakingNFTs={stakingNFTs ?? {}} />
+        <ClaimedRewards stakingNFTs={stakingNFTs} />
       ) : (
         <StatusBox pageState={pageState} />
       )}
@@ -142,7 +174,8 @@ const ClaimRewardsPage: React.FC = () => {
         }}
         translationKey={"reward.DialogSuccess"}
       />
-      <div style={{ flexGrow: "50" }} />
+
+      {!!fetchError && <ErrorDetails error={fetchError} />}
     </div>
   );
 };

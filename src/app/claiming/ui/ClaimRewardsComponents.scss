@@ -1,0 +1,53 @@
+.title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: .5rem;
+
+  p {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.nft-card-container {
+  display: flex;
+  flex-direction: column;
+  border: .1rem solid #3d3c3e;
+  border-radius: 1rem;
+  background-color: #13111a;
+  margin: .5rem;
+
+  .nft-card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: .5rem;
+
+    .header-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+
+  .nft-card-body {
+    display: flex;
+    flex-direction: column;
+    margin: .5rem;
+  }
+
+  .nft-card-footer {
+    display: flex;
+    flex-direction: column;
+    margin: .5rem;
+
+    .unclaimed-rewards {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+}

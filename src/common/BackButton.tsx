@@ -7,12 +7,11 @@ const BackButton: React.FC = () => {
   return (
     <Button
       sx={{
-        backgroundColor: '#2c04fe',
         '&:hover': {
           backgroundColor: '#5432fd', // Slightly darker for the hover state
         },
       }}
-      startIcon={<ArrowBackIcon style={{fill: 'white'}} />}
+      startIcon={<ArrowBackIcon style={{fill: 'white', width: '2rem', height: '2rem'}} />}
       onClick={handleGoBack}
     />
   );
