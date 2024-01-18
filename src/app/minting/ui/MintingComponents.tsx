@@ -363,12 +363,11 @@ export const MintingRewardLabel: React.FC<{ label: string }> = (props) => {
       }}
     >
       {props.label}
-      {/* <img src={avinocIcon} className={"avi-logo"}  /> */}
     </div>
   );
 };
 
-export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
+export const NRTDollarRewardLabel: React.FC<{ label: string }> = (props) => {
   return (
     <div
       style={{

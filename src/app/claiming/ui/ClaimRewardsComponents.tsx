@@ -107,7 +107,7 @@ export const ClaimAllButton: React.FC<{
 };
 
 export const MintingNftBox: React.FC<{
-  avinocPrice: number | null;
+  nrtPrice: number | null;
   mintingNft: MintingNft;
   pageState: PageState;
   onClickClaim: (stakingNft: MintingNft) => void;
@@ -174,7 +174,7 @@ export const MintingNftBox: React.FC<{
             </p>
             <p>
               {formatTokenDollarPrice({
-                tokenPrice: props.avinocPrice,
+                tokenPrice: props.nrtPrice,
                 tokenAmount: unclaimedRewards,
               })}
             </p>

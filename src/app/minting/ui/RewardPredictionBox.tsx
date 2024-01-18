@@ -2,7 +2,7 @@ import { Card } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { BonusBox } from "./MintingComponents";
-import { AvinocDollarRewardLabel } from "./MintingComponents";
+import { NRTDollarRewardLabel } from "./MintingComponents";
 import { MintingRewardLabel } from "./MintingComponents";
 import { MintingYearsLabel } from "./MintingComponents";
 import "./RewardPredicionBox.scss";
@@ -39,12 +39,12 @@ export const RewardPredictionBox: React.FC<{
         <div className="reward-information">
           <MintingYearsLabel label={"Daily"} />
           <MintingRewardLabel label={`+ ${formatNRTAmount({tokenAmount: dailyRewards}).replace(' ZEN20', '')}`} />
-          <AvinocDollarRewardLabel label={formatTokenDollarPrice({ tokenPrice: props.nrtPrice, tokenAmount: dailyRewards })} />
+          <NRTDollarRewardLabel label={formatTokenDollarPrice({ tokenPrice: props.nrtPrice, tokenAmount: dailyRewards })} />
         </div>
         <div className="reward-information">
           <MintingYearsLabel label={"After 720 days"} />       
           <MintingRewardLabel label={`+ ${formatNRTAmount({tokenAmount: totalRewards}).replace(' ZEN20', '')}`} />
-          <AvinocDollarRewardLabel label={formatTokenDollarPrice({ tokenPrice: props.nrtPrice, tokenAmount: totalRewards })} />
+          <NRTDollarRewardLabel label={formatTokenDollarPrice({ tokenPrice: props.nrtPrice, tokenAmount: totalRewards })} />
         </div>
       </div>
     </Card>

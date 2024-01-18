@@ -94,7 +94,7 @@ const ClaimRewardsPage: React.FC = () => {
         {selectedNFT ? (
           <MintingNftBox
             key={selectedNFT.tokenId}
-            avinocPrice={nrtPrice}
+            nrtPrice={nrtPrice}
             mintingNft={selectedNFT}
             pageState={pageState as any}
             onClickClaim={onClickClaim}
@@ -105,7 +105,7 @@ const ClaimRewardsPage: React.FC = () => {
               return (
                 <MintingNftBox
                   key={mintingNft.tokenId}
-                  avinocPrice={nrtPrice}
+                  nrtPrice={nrtPrice}
                   mintingNft={mintingNft}
                   pageState={pageState as any}
                   onClickClaim={onClickClaim}
