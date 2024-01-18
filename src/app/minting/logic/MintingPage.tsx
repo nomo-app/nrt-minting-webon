@@ -112,6 +112,16 @@ const MintingPage: React.FC = () => {
       <div className="staking-title-bar">
         <MintingTitleBar />
       </div>
+
+      <div className="minting-status-box">
+        <StatusBox pageState={pageState} />
+      </div>
+      {!!txError && (
+        <div className="minting-error-details">
+          <ErrorDetails error={txError} />
+        </div>
+      )}
+
       <div className="minting-card">
         <TokenAmountInput
           value={nrtAmount}
@@ -156,15 +166,6 @@ const MintingPage: React.FC = () => {
         />
         <SwitchToRewardPageButton disabled={isPendingState(pageState)} />
       </div>
-
-      <div className="minting-status-box">
-        <StatusBox pageState={pageState} />
-      </div>
-      {!!txError && (
-        <div className="minting-error-details">
-          <ErrorDetails error={txError} />
-        </div>
-      )}
 
       <ConfirmDialogSlide
         mintingPlan={mintingPlan}
