@@ -90,6 +90,7 @@ const ClaimRewardsPage: React.FC = () => {
         {pageState === "IDLE" ? <ClaimedRewards mintingNFTs={mintingNFTs ?? {}} /> : <StatusBox pageState={pageState} />}
       </div>
       <div>
+        {pageState === 'IDLE' && Object.values(mintingNFTs ?? {}).length === 0 && <div className="empty-ntfs">No NRT Power Nodes found</div>}
         {selectedNFT ? (
           <MintingNftBox
             key={selectedNFT.tokenId}

@@ -4,34 +4,17 @@ import { nomo } from "nomo-webon-kit";
 import { useEffect, useState } from "react";
 import { getNomoEvmNetwork } from "./navigation";
 
-export const ethProviderInstance = ethers.getDefaultProvider("mainnet");
-
 export function getEthersProvider(): AbstractProvider {
-  const network = getNomoEvmNetwork();
-  if (network === "ethereum") {
-    return ethProviderInstance;
-  } else if (network === "zeniq-smart-chain") {
-    return zscProvider;
-  } else {
-    throw Error("unsupported network " + network);
-  }
+  return zscProvider;
 }
 
 export function getEthersSigner(): Signer {
-  const network = getNomoEvmNetwork();
   const publicTestMnemonicHello =
     "hello upon mirror situate cradle execute cute negative sudden city mean square";
 
   const fallbackMnemonic =
     import.meta.env.VITE_FALLBACK_MNEMONIC ?? publicTestMnemonicHello;
-  if (network === "ethereum") {
-    const provider = getEthersProvider();
-    return new EthersjsNomoSigner(provider, fallbackMnemonic);
-  } else if (network === "zeniq-smart-chain") {
     return new EthersjsNomoSigner(zscProvider, fallbackMnemonic);
-  } else {
-    throw Error("unsupported network " + network);
-  }
 }
 
 export type Web3Error =
@@ -77,7 +60,7 @@ export async function fetchEthGasPriceWithTip(
   return gasPrice;
 }
 
-export async function fetchEthereumBalance(args: { ethAddress: string }) {
+export async function fetchEVMBalance(args: { ethAddress: string }) {
   const provider = getEthersProvider();
   const ethBalance = await provider.getBalance(args.ethAddress);
   return ethBalance;
@@ -89,7 +72,7 @@ export async function checkIfGasCanBePaid(args: {
 }): Promise<"ERROR_INSUFFICIENT_ETH" | null> {
   const provider = getEthersProvider();
   const [ethBalance, gasPrice] = await Promise.all([
-    fetchEthereumBalance({
+    fetchEVMBalance({
       ethAddress: args.ethAddress,
     }),
     fetchEthGasPriceWithTip(provider),
@@ -103,7 +86,7 @@ export async function checkIfGasCanBePaid(args: {
   }
 }
 
-export function isValidEthereumAddress(str: string): boolean {
+export function isValidEVMAddress(str: string): boolean {
   try {
     ethers.getAddress(str);
     return true;
