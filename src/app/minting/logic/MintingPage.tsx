@@ -93,6 +93,7 @@ const MintingPage: React.FC = () => {
     submitMintingTx({
       mintingPlan,
       ethAddress,
+      nrtBalance: nrtBalance ?? 0n,
     })
       .then((stakeError) => {
         if (stakeError) {
