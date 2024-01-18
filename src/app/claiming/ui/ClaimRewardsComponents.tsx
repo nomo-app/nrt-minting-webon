@@ -22,10 +22,10 @@ export const TitleBox: React.FC<{ showBackButton: boolean }> = (props) => {
 };
 
 export const ClaimedRewards: React.FC<{
-  stakingNFTs: Record<number, MintingNft>;
+  mintingNFTs: Record<number, MintingNft>;
 }> = (props) => {
   const { t } = useTranslation();
-  const nftArray: Array<MintingNft> = Object.values(props.stakingNFTs);
+  const nftArray: Array<MintingNft> = Object.values(props.mintingNFTs);
   const sumRewards = nftArray.reduce((prev, nft) => prev + nft.claimedRewards, 0n);
   const sumRewardsFormatted = formatNRTAmount({ tokenAmount: sumRewards });
   return (
