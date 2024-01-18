@@ -11,7 +11,7 @@ import {
 import { Contract } from "ethers";
 import { isFallbackModeActive } from "nomo-webon-kit";
 import { mintingAbi } from "@/contracts/minting-abi";
-import { MintingPlan } from "./minting-plan";
+import { MintingOperation, MintingPlan } from "./minting-plan";
 
 export const mintingContractAddress =
   "0xB5680e3E462F14F77b665D820097C5ec1445431A";
@@ -107,23 +107,31 @@ export async function submitMintingTx(args: {
     return gasError;
   }
 
-  const { nonce } = await approveIfNecessary({
+  let { nonce } = await approveIfNecessary({
     nrtAmount: args.mintingPlan.totalAmountToLink,
     ethAddress: args.ethAddress,
   });
+  for (const mintingOp of args.mintingPlan.mintingOps) {
+    await submitMintintOp({ mintingOp, nonce });
+    nonce++;
+  }
+}
 
+async function submitMintintOp(args: {
+  mintingOp: MintingOperation;
+  nonce: number;
+}): Promise<void> {
+  const mintingOp = args.mintingOp;
   const mintingContract = getMintingContract();
-  const mintingOp = args.mintingPlan.mintingOps[0];
   const txMint = await mintingContract.stake(
     mintingOp.amountToLink,
     mintingOp.nft.tokenId,
     {
       gasLimit: gasLimits.toStake, // for the case that a gasLimit cannot be automatically estimated
-      nonce,
+      nonce: args.nonce,
     }
   );
   await waitForConfirmationOrThrow(txMint);
-  return null;
 }
 
 export async function submitClaimTransaction(args: {
