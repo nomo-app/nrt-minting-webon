@@ -177,7 +177,7 @@ export async function fetchNftDetails(args: {
 }
 
 export function computeUnclaimedRewards(mintingNft: MintingNft): bigint {
-  return mintingNft.stakedTokens - mintingNft.claimedRewards;
+  return (mintingNft.totalRewards * 60n / 100n) - mintingNft.claimedRewards;
 }
 
 export function useNrtBalance(args: { ethAddress: string | null }): {

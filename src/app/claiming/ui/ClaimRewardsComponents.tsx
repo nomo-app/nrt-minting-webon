@@ -35,7 +35,7 @@ export const ClaimedRewards: React.FC<{
         flexDirection: "row",
         justifyContent: "space-between",
         alignContent: "center",
-        margin: ".5rem"
+        margin: ".5rem",
       }}
     >
       <img src={rocketIcon} style={{ padding: "8px", height: "14px", alignSelf: "center" }} />
@@ -116,17 +116,15 @@ export const MintingNftBox: React.FC<{
   const { t } = useTranslation();
   usePeriodReRender(1000); // frequent re-rendering to show "live updates" of rewards
 
-  const totalRewards: bigint =
-    props.mintingNft.stakedTokens * props.mintingNft.mintingPower;
+  const totalRewards: bigint = props.mintingNft.stakedTokens * props.mintingNft.mintingPower;
   const unclaimedRewards: bigint = computeUnclaimedRewards(props.mintingNft);
   const unclaimedRewardsFormatted = formatNRTAmount({
     tokenAmount: unclaimedRewards,
     ultraPrecision: true, // ultraPrecision to see every second that the rewards are increasing
   });
 
-  const progress: number = totalRewards > 0n ? Number(
-    (100n * (props.mintingNft.claimedRewards + unclaimedRewards)) / totalRewards
-  ) : 0;
+  const progress: number =
+    totalRewards > 0n ? Number((100n * (props.mintingNft.claimedRewards + unclaimedRewards)) / totalRewards) : 0;
   const linkingPeriod: string = `${props.mintingNft.endTime.toLocaleDateString()} - ${props.mintingNft.endTime.toLocaleDateString()}`;
   const nrtPerDay: bigint = totalRewards / 720n;
   const nrtPerDayFormatted = formatNRTAmount({
@@ -169,15 +167,23 @@ export const MintingNftBox: React.FC<{
 
       <div className="nft-card-footer">
         <div className="unclaimed-rewards">
-          <p>{t("reward.unclaimedRewards")}</p>
-          <p>
-            {formatTokenDollarPrice({
-              tokenPrice: props.avinocPrice,
-              tokenAmount: unclaimedRewards,
-            })}
-          </p>
+          <div>
+            <p>{t("reward.unclaimedRewards")}</p>
+          </div>
+          <div>
+            <p>
+              {formatNRTAmount({
+                tokenAmount: unclaimedRewards,
+              })}
+            </p>
+            <p>
+              {formatTokenDollarPrice({
+                tokenPrice: props.avinocPrice,
+                tokenAmount: unclaimedRewards,
+              })}
+            </p>
+          </div>
         </div>
-        {/* {unclaimedRewardsFormatted} */}
       </div>
 
       <ClaimButton disabled={isPendingState(props.pageState as any)} onClick={onClickClaimClosure} />
@@ -194,7 +200,7 @@ export const ClaimButton: React.FC<{
     <Button
       disabled={props.disabled}
       onClick={() => props.disabled || props.onClick()}
-      style={{margin: ".5rem", border: "1px solid #23c1c4", color: "white", fontWeight: "bold"}}
+      style={{ margin: ".5rem", border: "1px solid #23c1c4", color: "white", fontWeight: "bold" }}
     >
       {t("reward.claim")}
     </Button>
@@ -221,7 +227,9 @@ const LinearProgressWithLabel: React.FC<LinearProgressProps & { value: number }>
         />
       </Box>
       <Box sx={{ minWidth: 35, display: "flex", justifyContent: "center" }}>
-        <Typography variant="body2" color="white">{"1/"+`${props.value.toPrecision(3)} Days`}</Typography>
+        <Typography variant="body2" color="white">
+          {"1/" + `${props.value.toPrecision(3)} Days`}
+        </Typography>
       </Box>
     </Box>
   );
