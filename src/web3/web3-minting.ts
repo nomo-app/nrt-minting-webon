@@ -180,6 +180,12 @@ export async function fetchNftDetails(args: {
   return mintingNFT;
 }
 
+export function getCurrentDay(mintingNft: MintingNft): number {
+  const startTime = mintingNft.endTime.getTime() - mintingNft.lifeCycleDuration.getTime();
+  const currentTime = new Date().getTime();
+  return (currentTime - startTime) / (1000 * 60 * 60 * 24);
+}
+
 export function getLifeCycleDays(mintingNft: MintingNft): bigint {
   const lifeCycleDuration = mintingNft.lifeCycleDuration;
   if (Number.isNaN(lifeCycleDuration.getTime())) {

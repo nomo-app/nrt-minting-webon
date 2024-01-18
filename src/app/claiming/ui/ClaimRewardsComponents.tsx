@@ -3,7 +3,7 @@ import React from "react";
 import { formatNRTAmount, formatTokenDollarPrice } from "@/util/use-nrt-price";
 import { useTranslation } from "react-i18next";
 import { Box, Button, Card, LinearProgress, LinearProgressProps, Typography } from "@mui/material";
-import { computeUnclaimedRewards, MintingNft } from "@/web3/web3-minting";
+import { computeUnclaimedRewards, getCurrentDay, MintingNft } from "@/web3/web3-minting";
 import { usePeriodReRender } from "../../../util/util";
 import { PageState } from "@/app/minting/logic/MintingPage";
 import { isPendingState } from "@/app/claiming/logic/ClaimRewardsPage";
@@ -39,15 +39,13 @@ export const ClaimedRewards: React.FC<{
         margin: ".5rem",
       }}
     >
-      <img src={rocketIcon} style={{ padding: "8px", height: "14px", alignSelf: "center" }} />
       <div
         style={{
-          marginTop: "5px",
-          marginBottom: "5px",
           fontWeight: "Bold",
           fontSize: "14px",
           textAlign: "left",
-          flex: "2",
+          flex: "1",
+          margin: ".5rem"
         }}
       >
         <p>{t("reward.claimedRewards")}</p>
@@ -57,7 +55,7 @@ export const ClaimedRewards: React.FC<{
           alignSelf: "center",
           fontSize: "14px",
           textAlign: "right",
-          flex: "1",
+          flex: "2",
         }}
       >
         <p>{sumRewardsFormatted}</p>
@@ -124,8 +122,12 @@ export const MintingNftBox: React.FC<{
     ultraPrecision: true, // ultraPrecision to see every second that the rewards are increasing
   });
 
-  const progress: number =
-    totalRewards > 0n ? Number((100n * (props.mintingNft.claimedRewards + unclaimedRewards)) / totalRewards) : 0;
+  // const progress: number =
+  //   totalRewards > 0n ? Number((100n * (props.mintingNft.claimedRewards + unclaimedRewards)) / totalRewards) : 0;
+
+  const currentDay = Math.floor(getCurrentDay(props.mintingNft));
+  const progress = Number(currentDay) / Number(getLifeCycleDays(props.mintingNft)) * 100;
+
   const linkingPeriod: string = `${props.mintingNft.endTime.toLocaleDateString()} - ${props.mintingNft.endTime.toLocaleDateString()}`;
   const nrtPerDay: bigint = totalRewards / getLifeCycleDays(props.mintingNft);
   const nrtPerDayFormatted = formatNRTAmount({
@@ -157,12 +159,8 @@ export const MintingNftBox: React.FC<{
       <div className="nft-card-loading-bar">
         <LinearProgressWithLabel
           value={progress}
-          sx={{
-            backgroundColor: "var(--color-primary-light)",
-            "& .MuiLinearProgress-bar": {
-              backgroundColor: "var(--color-primary-button-background)",
-            },
-          }}
+          currentDay={currentDay}
+          lifeCycle={Number(getLifeCycleDays(props.mintingNft))}
         />
       </div>
 
@@ -175,6 +173,7 @@ export const MintingNftBox: React.FC<{
             <p>
               {formatNRTAmount({
                 tokenAmount: unclaimedRewards,
+                ultraPrecision: true,
               })}
             </p>
             <p>
@@ -208,7 +207,7 @@ export const ClaimButton: React.FC<{
   );
 };
 
-const LinearProgressWithLabel: React.FC<LinearProgressProps & { value: number }> = (props) => {
+const LinearProgressWithLabel: React.FC<{ value: number, currentDay: number, lifeCycle: number }> = (props) => {
   return (
     <Box
       sx={{
@@ -224,12 +223,18 @@ const LinearProgressWithLabel: React.FC<LinearProgressProps & { value: number }>
             borderRadius: "6px",
           }}
           variant="determinate"
-          {...props}
+          value={props.value}
+          sx={{
+            backgroundColor: "var(--color-primary-light)",
+            "& .MuiLinearProgress-bar": {
+              backgroundColor: "var(--color-primary-button-background)",
+            },
+          }}
         />
       </Box>
       <Box sx={{ minWidth: 35, display: "flex", justifyContent: "center" }}>
         <Typography variant="body2" color="white">
-          {"1/" + `${props.value.toPrecision(3)} Days`}
+          {`${props.currentDay}/` + `${props.lifeCycle} Days`}
         </Typography>
       </Box>
     </Box>
