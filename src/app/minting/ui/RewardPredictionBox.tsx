@@ -6,21 +6,16 @@ import { AvinocDollarRewardLabel } from "./MintingComponents";
 import { MintingRewardLabel } from "./MintingComponents";
 import { MintingYearsLabel } from "./MintingComponents";
 import "./RewardPredicionBox.scss";
+import { formatNRTAmount, formatTokenDollarPrice } from "@/util/use-nrt-price";
 
 export const RewardPredictionBox: React.FC<{
-  avinocAmount: bigint;
-  avinocPrice: number | null;
-  networkBonus: boolean;
+  nrtAmount: bigint;
+  nrtPrice: number | null;
+  nrtMintingPower: bigint
 }> = (props) => {
   const { t } = useTranslation();
-
-  function getApy(): number {
-    return 2.6;
-  }
-
-  const apyLabel = props.networkBonus
-    ? "+" + 100 * getApy() + "%"
-    : t("reward.disabled");
+  const totalRewards = props.nrtAmount * props.nrtMintingPower / 100n;
+  const dailyRewards = totalRewards / 720n;
 
   return (
     <Card
@@ -37,19 +32,19 @@ export const RewardPredictionBox: React.FC<{
       }}
     >
       {/*row 1 network bonus*/}
-      <BonusBox apyLabel={apyLabel} networkBonus={props.networkBonus} />
+      <BonusBox />
 
       {/*ro2 your rewards */}
       <div className="reward-information-container">
         <div className="reward-information">
           <MintingYearsLabel label={"Daily"} />
-          <MintingRewardLabel label={"+ 3.33 NRT"} />
-          <AvinocDollarRewardLabel label={"$0.49"} />
+          <MintingRewardLabel label={`+ ${formatNRTAmount({tokenAmount: dailyRewards}).replace(' ZEN20', '')}`} />
+          <AvinocDollarRewardLabel label={formatTokenDollarPrice({ tokenPrice: props.nrtPrice, tokenAmount: dailyRewards })} />
         </div>
         <div className="reward-information">
           <MintingYearsLabel label={"After 720 days"} />       
-          <MintingRewardLabel label={"+ " + 1000 * 2.4 + " NRT"} />
-          <AvinocDollarRewardLabel label={"$360.0"} />
+          <MintingRewardLabel label={`+ ${formatNRTAmount({tokenAmount: totalRewards}).replace(' ZEN20', '')}`} />
+          <AvinocDollarRewardLabel label={formatTokenDollarPrice({ tokenPrice: props.nrtPrice, tokenAmount: totalRewards })} />
         </div>
       </div>
     </Card>

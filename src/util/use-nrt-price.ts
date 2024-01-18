@@ -50,9 +50,9 @@ export function formatTokenDollarPrice(args: {
   if (!args.tokenPrice) {
     return "-";
   }
-  const inpreciseTokenAmount = Number(args.tokenAmount) / 1e18;
+  const inpreciseTokenAmount = Number(args.tokenAmount) / 1e8;
   const fixedPrice =
-    args.tokenAmount >= 10000
+    inpreciseTokenAmount >= 500
       ? (args.tokenPrice * inpreciseTokenAmount).toFixed(0)
       : (args.tokenPrice * inpreciseTokenAmount).toFixed(2);
   return "$" + fixedPrice;

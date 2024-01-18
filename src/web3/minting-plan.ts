@@ -2,19 +2,14 @@ import { MintingNft } from "./web3-minting";
 
 const amountCapPowerNode: bigint = 1500n * 10n ** 8n; // this depends on the price of NRTPowerNodes!
 
-export function getMaxLinkableAmount(args: {
-  mintingNFTs: Record<string, MintingNft> | null;
-}): bigint | null {
+export function getMaxLinkableAmount(args: { mintingNFTs: Record<string, MintingNft> | null }): bigint | null {
   if (!args.mintingNFTs) {
     return null;
   }
   let maxLinkableAmount = 0n;
   for (const nftId in Object.keys(args.mintingNFTs)) {
     const nft: MintingNft = args.mintingNFTs[nftId];
-    const linkableAmount =
-      amountCapPowerNode >= nft.stakedTokens
-        ? amountCapPowerNode - nft.stakedTokens
-        : 0n;
+    const linkableAmount = amountCapPowerNode >= nft.stakedTokens ? amountCapPowerNode - nft.stakedTokens : 0n;
     maxLinkableAmount += linkableAmount;
   }
   return maxLinkableAmount;
@@ -33,10 +28,7 @@ export interface MintingPlan {
 /**
  * Try to maximize gains by preferring NFTs with a high minting power.
  */
-export function getMintingPlan(args: {
-  mintingNFTs: Record<string, MintingNft>;
-  nrtAmount: bigint;
-}): MintingPlan {
+export function getMintingPlan(args: { mintingNFTs: Record<string, MintingNft>; nrtAmount: bigint }): MintingPlan {
   const allNFTs: MintingNft[] = Object.values(args.mintingNFTs);
   const sortedNFTs = allNFTs.sort((a, b) => {
     return Number(b.mintingPower) - Number(a.mintingPower);
@@ -49,8 +41,7 @@ export function getMintingPlan(args: {
   let remainingAmount = args.nrtAmount;
   for (const nft of filteredNFTs) {
     const linkableAmount = amountCapPowerNode - nft.stakedTokens;
-    const amountToLink =
-      remainingAmount < linkableAmount ? remainingAmount : linkableAmount;
+    const amountToLink = remainingAmount < linkableAmount ? remainingAmount : linkableAmount;
 
     mintingOps.push({
       nft,
@@ -63,4 +54,19 @@ export function getMintingPlan(args: {
   }
   const totalAmountToLink = args.nrtAmount - remainingAmount;
   return { mintingOps, totalAmountToLink };
+}
+
+export function getNRTMintingPower(mintingPlan: MintingPlan): bigint {
+  let totalMintingPower = 0n;
+  for (const operation of mintingPlan.mintingOps) {
+    const nft = operation.nft;
+    const mintingPower = nft.mintingPower;
+    totalMintingPower += mintingPower;
+  }
+
+  if (mintingPlan.mintingOps.length == 0) { return 240n }
+  
+  totalMintingPower = totalMintingPower / BigInt(mintingPlan.mintingOps.length);
+
+  return totalMintingPower;
 }

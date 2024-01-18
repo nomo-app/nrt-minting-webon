@@ -383,7 +383,7 @@ export const AvinocDollarRewardLabel: React.FC<{ label: string }> = (props) => {
   );
 };
 
-export const BonusBox: React.FC<{ apyLabel: string; networkBonus: boolean }> = (props) => {
+export const BonusBox: React.FC = () => {
   return (
     <div
       className="bonus-box"

@@ -24,6 +24,7 @@ import {
   MintingPlan,
   getMaxLinkableAmount,
   getMintingPlan,
+  getNRTMintingPower
 } from "@/web3/minting-plan";
 
 export type PageState =
@@ -153,9 +154,9 @@ const MintingPage: React.FC = () => {
       </div>
       <div className="minting-reward-prediction-box">
         <RewardPredictionBox
-          avinocAmount={nrtAmount}
-          avinocPrice={nrtPrice}
-          networkBonus={true}
+          nrtAmount={nrtAmount}
+          nrtPrice={nrtPrice}
+          nrtMintingPower={getNRTMintingPower(mintingPlan)}
         />
       </div>
 
