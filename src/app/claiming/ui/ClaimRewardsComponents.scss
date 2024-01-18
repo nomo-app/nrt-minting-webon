@@ -51,3 +51,14 @@
   }
 
 }
+
+.nft-not-linked {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: .5rem;
+  border: 1px solid #23c1c4;
+  font-weight: bold;
+  padding: .25rem;
+  border-radius: .25rem;
+}

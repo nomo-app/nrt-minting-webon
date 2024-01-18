@@ -187,7 +187,7 @@ export const MintingNftBox: React.FC<{
         </div>
       </div>
 
-      <ClaimButton disabled={isPendingState(props.pageState as any)} onClick={onClickClaimClosure} />
+      {props.mintingNft.stakedTokens === 0n ? <div className="nft-not-linked">No tokens linked</div> : <ClaimButton disabled={isPendingState(props.pageState as any)} onClick={onClickClaimClosure} />}
     </div>
   );
 };
