@@ -1,13 +1,13 @@
 import { MintingNft } from "./web3-minting";
 
-const amountCapPowerNode: bigint = 1500n * 10n ** 8n; // this depends on the price of NRTPowerNodes!
+const amountCapPowerNode: bigint = 10000n * 10n ** 8n; // this depends on the price of NRTPowerNodes!
 
 export function getMaxLinkableAmount(args: { mintingNFTs: Record<string, MintingNft> | null }): bigint | null {
   if (!args.mintingNFTs) {
     return null;
   }
   let maxLinkableAmount = 0n;
-  for (const nftId in Object.keys(args.mintingNFTs)) {
+  for (const nftId of Object.keys(args.mintingNFTs)) {
     const nft: MintingNft = args.mintingNFTs[nftId];
     const linkableAmount = amountCapPowerNode >= nft.stakedTokens ? amountCapPowerNode - nft.stakedTokens : 0n;
     maxLinkableAmount += linkableAmount;
@@ -65,7 +65,7 @@ export function getNRTMintingPower(mintingPlan: MintingPlan): bigint {
   }
 
   if (mintingPlan.mintingOps.length == 0) { return 240n }
-  
+
   totalMintingPower = totalMintingPower / BigInt(mintingPlan.mintingOps.length);
 
   return totalMintingPower;

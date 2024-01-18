@@ -142,7 +142,7 @@ const MintingPage: React.FC = () => {
             <p>Max. linkable amount:</p>
             <p style={{ fontWeight: "bold" }}>
               {maxLinkableAmount != null
-                ? formatNRTAmount({ tokenAmount: maxLinkableAmount })
+                ? formatNRTAmount({ tokenAmount: maxLinkableAmount }).replace(' ZEN20', '')
                 : "Loading..."}
             </p>
           </div>
