@@ -1,6 +1,5 @@
 import { Card } from "@mui/material";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { BonusBox } from "./MintingComponents";
 import { NRTDollarRewardLabel } from "./MintingComponents";
 import { MintingRewardLabel } from "./MintingComponents";
@@ -13,7 +12,6 @@ export const RewardPredictionBox: React.FC<{
   nrtPrice: number | null;
   nrtMintingPower: bigint
 }> = (props) => {
-  const { t } = useTranslation();
   const totalRewards = props.nrtAmount * props.nrtMintingPower / 100n;
   const dailyRewards = totalRewards / 720n;
 
@@ -23,7 +21,7 @@ export const RewardPredictionBox: React.FC<{
       elevation={0}
       style={{
         width: "100%",
-        margin: "1rem",
+        margin: "0.5rem",
         display: "flex",
         flexDirection: "column",
       }}

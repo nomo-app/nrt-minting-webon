@@ -241,7 +241,7 @@ export const TokenAmountInput: React.FC<{
         width: "90%",
         marginLeft: "1rem",
         marginRight: "1rem",
-        marginTop: "2rem",
+        marginTop: "1rem",
       }}
       sx={{
         input: { color: "white" },
@@ -259,10 +259,10 @@ export const TokenAmountInput: React.FC<{
         },
         "& .MuiFormHelperText-root": {
           color: "white",
-          fontSize: "medium",
+          fontSize: "small",
           fontWeight: "bold",
           textAlign: "center",
-          marginTop: "1.5rem",
+          marginTop: "0.5rem",
         },
         "& .MuiInput-underline:before": {
           // underline color when textfield is not focused
@@ -395,7 +395,7 @@ export const BonusBox: React.FC = () => {
         minHeight: "1rem",
         fontWeight: "bold",
         color: "white",
-        fontSize: "medium",
+        fontSize: "small",
         background: "linear-gradient(45deg, #1f2124, #494c56)",
         borderRadius: ".5rem",
         padding: ".5rem",

@@ -1,12 +1,12 @@
 .minting-page-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: start;
   width: 100%;
   height: 100vh;
 
   .staking-title-bar {
-    margin: 1rem;
+    margin: 0.5rem;
   }
 
   .minting-card {
@@ -15,13 +15,14 @@
     border: .1rem solid #3d3c3e;
     border-radius: 1rem;
     background-color: #13111a;
-    margin: 1rem;
+    margin: 0.5rem;
+    margin-top: 0;
 
     .minting-card-information {
       display: flex;
       flex-direction: column;
-      margin: 1rem;
-      padding: 1rem;
+      margin: 0.5rem;
+      padding: 0.5rem;
       gap: .25rem;
       border: .1rem solid #3d3c3e;
       border-radius: 1rem;
@@ -32,6 +33,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        font-size: small;
       }
     }
   }
@@ -43,15 +45,17 @@
     border: .1rem solid #3d3c3e;
     border-radius: 1rem;
     background-color: #13111a;
-    margin: 1rem;
+    margin: 0.5rem;
     font-family: 'Helvetica';
+    font-size: small;
   }
 
   .minting-footer {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 1rem;
+    margin: 0.5rem;
+    margin-top: 0;
   }
 
   .minting-status-box {
