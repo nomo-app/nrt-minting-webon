@@ -18,12 +18,16 @@
   border-radius: 1rem;
   background-color: #13111a;
   margin: .5rem;
+  color: white;
+  font-family: 'helvetica';
+  font-size: small;
 
   .nft-card-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin: .5rem;
+    margin-bottom: 0;
 
     .header-info {
       display: flex;
@@ -36,6 +40,7 @@
     display: flex;
     flex-direction: column;
     margin: .5rem;
+    margin-bottom: 0;
   }
 
   .nft-card-footer {

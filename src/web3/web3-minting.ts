@@ -110,11 +110,11 @@ export async function submitMintingTx(args: {
 
   const totalGasLimit = gasLimits.toApprove + gasLimits.toStake;
   const gasError = await checkIfGasCanBePaid({
-  ethAddress: args.ethAddress,
-  gasLimit: totalGasLimit,
+    ethAddress: args.ethAddress,
+    gasLimit: totalGasLimit,
   });
   if (gasError) {
-  return gasError;
+    return gasError;
   }
 
   let { nonce } = await approveIfNecessary({
@@ -190,7 +190,8 @@ export async function fetchNftDetails(args: {
 }
 
 export function getCurrentDay(mintingNft: MintingNft): number {
-  const startTime = mintingNft.endTime.getTime() - mintingNft.lifeCycleDuration.getTime();
+  const startTime =
+    mintingNft.endTime.getTime() - mintingNft.lifeCycleDuration.getTime();
   const currentTime = new Date().getTime();
   return (currentTime - startTime) / (1000 * 60 * 60 * 24);
 }
@@ -201,12 +202,21 @@ export function getLifeCycleDays(mintingNft: MintingNft): bigint {
     return 720n;
   }
 
-  const lifeCycleDays = BigInt(lifeCycleDuration.getTime()) / (1000n * 60n * 60n * 24n);
+  const lifeCycleDays =
+    BigInt(lifeCycleDuration.getTime()) / (1000n * 60n * 60n * 24n);
   return lifeCycleDays;
 }
 
 export function computeUnclaimedRewards(mintingNft: MintingNft): bigint {
-  return (mintingNft.totalRewards * 60n / 100n) - mintingNft.claimedRewards;
+  const endTime = BigInt(mintingNft.endTime.getTime());
+  const startTime = endTime - BigInt(mintingNft.lifeCycleDuration.getTime());
+  const currentTime = BigInt(new Date().getTime());
+
+  const totalRewards: bigint =
+    (mintingNft.stakedTokens * mintingNft.mintingPower) / 100n;
+  const claimableRewards =
+    ((currentTime - startTime) * totalRewards) / (endTime - startTime);
+  return claimableRewards - mintingNft.claimedRewards;
 }
 
 export function useNrtBalance(args: { ethAddress: string | null }): {

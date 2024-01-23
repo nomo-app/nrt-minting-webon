@@ -122,17 +122,10 @@ export const MintingNftBox: React.FC<{
     ultraPrecision: true, // ultraPrecision to see every second that the rewards are increasing
   });
 
-  // const progress: number =
-  //   totalRewards > 0n ? Number((100n * (props.mintingNft.claimedRewards + unclaimedRewards)) / totalRewards) : 0;
-
   const currentDay = Math.floor(getCurrentDay(props.mintingNft));
   const progress = Number(currentDay) / Number(getLifeCycleDays(props.mintingNft)) * 100;
 
-  const linkingPeriod: string = `${props.mintingNft.endTime.toLocaleDateString()} - ${props.mintingNft.endTime.toLocaleDateString()}`;
-  const nrtPerDay: bigint = totalRewards / getLifeCycleDays(props.mintingNft);
-  const nrtPerDayFormatted = formatNRTAmount({
-    tokenAmount: nrtPerDay,
-  });
+  const lifeCycle = Number(getLifeCycleDays(props.mintingNft));
 
   function onClickClaimClosure() {
     props.onClickClaim(props.mintingNft);
@@ -156,7 +149,7 @@ export const MintingNftBox: React.FC<{
         <LinearProgressWithLabel
           value={progress}
           currentDay={currentDay}
-          lifeCycle={Number(getLifeCycleDays(props.mintingNft))}
+          lifeCycle={lifeCycle}
         />
       </div>
 
@@ -167,10 +160,7 @@ export const MintingNftBox: React.FC<{
           </div>
           <div>
             <p>
-              {formatNRTAmount({
-                tokenAmount: unclaimedRewards,
-                ultraPrecision: true,
-              })}
+              {unclaimedRewardsFormatted}
             </p>
             <p>
               {formatTokenDollarPrice({
