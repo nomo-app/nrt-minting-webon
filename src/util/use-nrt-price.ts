@@ -30,11 +30,23 @@ export function formatNRTAmount(args: { tokenAmount: bigint; ultraPrecision?: bo
   const tokenStandard = getTokenStandard();
 
   if (args.ultraPrecision && inpreciseTokenAmount > 0) {
-    let precision = 2;
-    if (inpreciseTokenAmount < 0.0001) {
-      precision = 8;
+    let precision: number;
+    if (inpreciseTokenAmount < 0.1) {
+      precision = 9;
     } else if (inpreciseTokenAmount < 1) {
+      precision = 8;
+    } else if (inpreciseTokenAmount < 10) {
+      precision = 7;
+    } else if (inpreciseTokenAmount < 100) {
+      precision = 6;
+    } else if (inpreciseTokenAmount < 1000) {
+      precision = 5;
+    } else if (inpreciseTokenAmount < 10000) {
       precision = 4;
+    } else if (inpreciseTokenAmount < 100000) {
+      precision = 3;
+    } else {
+      precision = 2;
     }
     return inpreciseTokenAmount.toFixed(precision) + " NRT " + tokenStandard;
   }
