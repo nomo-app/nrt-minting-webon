@@ -14,7 +14,7 @@ import { mintingAbi } from "@/contracts/minting-abi";
 import { MintingOperation, MintingPlan } from "./minting-plan";
 
 export const mintingContractAddress =
-  "0x451816785Ee766C1D7899a298f11168FD759f64e";
+  "0x3920563775Dd9D1302BD5951Bdc68e2df5783A48";
 export const nrtTokenContractAddress =
   "0xEdF221F8C1957b6aC950430836e7aa0d7Db5b4dA";
 
@@ -57,6 +57,7 @@ export interface MintingNft {
   endTime: Date;
   quantity: bigint;
   nrtPowerNodePrice: bigint;
+  nrtPowerNodePurchaseCurrency: string;
 }
 
 async function approveIfNecessary(args: {
@@ -188,6 +189,7 @@ export async function fetchNftDetails(args: {
     endTime: new Date(Number(rawMintingNft["endTime"]) * 1000),
     quantity: rawMintingNft["quantity"],
     nrtPowerNodePrice: rawMintingNft["nrtPowerNodePrice"],
+    nrtPowerNodePurchaseCurrency: rawMintingNft["nrtPowerNodePurchaseCurrency"],
   };
   console.log("mintingNFT", mintingNFT);
   return mintingNFT;
@@ -217,7 +219,7 @@ export function computeUnclaimedRewards(mintingNft: MintingNft): bigint {
   const currentTime = BigInt(new Date().getTime());
 
   const totalRewards: bigint =
-    (mintingNft.stakedTokens * mintingNft.mintingPower) / 100n;
+    (mintingNft.stakedTokens * mintingNft.mintingPower) / (10n ** 18n);
   const claimableRewards =
     ((currentTime - startTime) * totalRewards) / (endTime - startTime);
   return claimableRewards - mintingNft.claimedRewards;

@@ -1,18 +1,20 @@
 import { MintingNft } from "./web3-minting";
 
-const nrtPowerNodePrice: number = 1820; // this is approx. the current backoffice price of NRTPowerNodes
-
-export function getMaxLinkableAmount(args: { mintingNFTs: Record<string, MintingNft> | null, nrtPrice: number }): bigint | null {
-  
-  const amountCapPowerNode = getAmountCapPowerNode(args.nrtPrice);
-
+export function getMaxLinkableAmount(args: {
+  mintingNFTs: Record<string, MintingNft> | null;
+  nrtPrice: number;
+}): bigint | null {
   if (!args.mintingNFTs) {
     return null;
   }
   let maxLinkableAmount = 0n;
   for (const nftId of Object.keys(args.mintingNFTs)) {
     const nft: MintingNft = args.mintingNFTs[nftId];
-    const linkableAmount = amountCapPowerNode >= nft.stakedTokens ? amountCapPowerNode - nft.stakedTokens : 0n;
+    const amountCapPowerNode = getAmountCapPowerNode(args.nrtPrice, nft);
+    const linkableAmount =
+      amountCapPowerNode >= nft.stakedTokens
+        ? amountCapPowerNode - nft.stakedTokens
+        : 0n;
     maxLinkableAmount += linkableAmount;
   }
   return maxLinkableAmount;
@@ -31,23 +33,28 @@ export interface MintingPlan {
 /**
  * Try to maximize gains by preferring NFTs with a high minting power.
  */
-export function getMintingPlan(args: { mintingNFTs: Record<string, MintingNft>; nrtAmount: bigint; nrtPrice: number }): MintingPlan {
+export function getMintingPlan(args: {
+  mintingNFTs: Record<string, MintingNft>;
+  nrtAmount: bigint;
+  nrtPrice: number;
+}): MintingPlan {
   const allNFTs: MintingNft[] = Object.values(args.mintingNFTs);
   const sortedNFTs = allNFTs.sort((a, b) => {
     return Number(b.mintingPower) - Number(a.mintingPower);
   });
 
-  const amountCapPowerNode = getAmountCapPowerNode(args.nrtPrice);
-
   const filteredNFTs = sortedNFTs.filter((nft) => {
+    const amountCapPowerNode = getAmountCapPowerNode(args.nrtPrice, nft);
     return nft.stakedTokens < amountCapPowerNode;
   });
 
   const mintingOps: MintingOperation[] = [];
   let remainingAmount = args.nrtAmount;
   for (const nft of filteredNFTs) {
+    const amountCapPowerNode = getAmountCapPowerNode(args.nrtPrice, nft);
     const linkableAmount = amountCapPowerNode - nft.stakedTokens;
-    const amountToLink = remainingAmount < linkableAmount ? remainingAmount : linkableAmount;
+    const amountToLink =
+      remainingAmount < linkableAmount ? remainingAmount : linkableAmount;
 
     mintingOps.push({
       nft,
@@ -70,15 +77,19 @@ export function getNRTMintingPower(mintingPlan: MintingPlan): bigint {
     totalMintingPower += mintingPower;
   }
 
-  if (mintingPlan.mintingOps.length == 0) { return 240n }
+  if (mintingPlan.mintingOps.length == 0) {
+    return 240n;
+  }
 
   totalMintingPower = totalMintingPower / BigInt(mintingPlan.mintingOps.length);
 
   return totalMintingPower;
 }
 
-function getAmountCapPowerNode(nrtPrice: number): bigint {
-  const nrtPowerNodePriceInNrt = nrtPowerNodePrice / nrtPrice;
-  const amountCapPowerNode: bigint = BigInt(Math.floor(nrtPowerNodePriceInNrt)) * 10n ** 8n;
+function getAmountCapPowerNode(nrtPrice: number, nft: MintingNft): bigint {
+  // divide by 10**10 because the end-result should have 8 digits
+  const nrtPowerNodePriceInNrt = Number(nft.nrtPowerNodePrice / (10n ** 10n)) / nrtPrice;
+  const amountCapPowerNode: bigint =
+    BigInt(Math.floor(nrtPowerNodePriceInNrt));
   return amountCapPowerNode;
 }

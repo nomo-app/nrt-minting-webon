@@ -115,7 +115,7 @@ export const MintingNftBox: React.FC<{
   const { t } = useTranslation();
   usePeriodReRender(1000); // frequent re-rendering to show "live updates" of rewards
 
-  const totalRewards: bigint = props.mintingNft.stakedTokens * props.mintingNft.mintingPower / 100n;
+  const totalRewards: bigint = props.mintingNft.stakedTokens * props.mintingNft.mintingPower / (10n ** 18n);
   const unclaimedRewards: bigint = computeUnclaimedRewards(props.mintingNft);
   const unclaimedRewardsFormatted = formatNRTAmount({
     tokenAmount: unclaimedRewards,
@@ -142,7 +142,7 @@ export const MintingNftBox: React.FC<{
 
       <div className="nft-card-body">
         <p>{t("reward.totalPayout") + ": " + formatNRTAmount({ tokenAmount: totalRewards })}</p>
-        <p>{"Minting Power: " + Number(props.mintingNft.mintingPower) / 100}</p>
+        <p>{"Minting Power: " + Number(props.mintingNft.mintingPower) / 1e18}</p>
         <p>{"Quantity: " + (Number(props.mintingNft.quantity) / 1e18)}</p>
       </div>
 

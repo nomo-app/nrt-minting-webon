@@ -12,7 +12,7 @@ export const RewardPredictionBox: React.FC<{
   nrtPrice: number | null;
   nrtMintingPower: bigint
 }> = (props) => {
-  const totalRewards = props.nrtAmount * props.nrtMintingPower / 100n;
+  const totalRewards = props.nrtAmount * props.nrtMintingPower / (10n ** 18n);
   const dailyRewards = totalRewards / 720n;
 
   return (
