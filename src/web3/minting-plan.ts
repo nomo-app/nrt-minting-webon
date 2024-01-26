@@ -78,7 +78,7 @@ export function getNRTMintingPower(mintingPlan: MintingPlan): bigint {
   }
 
   if (mintingPlan.mintingOps.length == 0) {
-    return 240n;
+    return BigInt(2.4 * 1e18);
   }
 
   totalMintingPower = totalMintingPower / BigInt(mintingPlan.mintingOps.length);
