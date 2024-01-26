@@ -110,7 +110,8 @@ export const StakeButton: React.FC<{
         }}
       >
         {/* <img src={stakingIcon} alt={""} height={"14px"} /> */}
-        {"Link " + getTokenStandard()}
+        {/* {"Link " + getTokenStandard()} */}
+        {"Link NRT"}
       </div>
     </button>
   );
@@ -233,7 +234,7 @@ export const TokenAmountInput: React.FC<{
   return (
     <TextField
       id="textfield_outline"
-      helperText={availableText}
+      helperText={availableText.replace('ZEN20', '')}
       label={t("staking.amountMinting")}
       variant="outlined"
       type={"number"}
