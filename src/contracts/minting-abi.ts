@@ -96,6 +96,11 @@ export const mintingAbi = [
         type: "uint256[]",
         internalType: "uint256[]",
       },
+      {
+        name: "_nrtPowerNodePurchaseCurrency",
+        type: "string[]",
+        internalType: "string[]",
+      },
       { name: "_quantity", type: "uint256[]", internalType: "uint256[]" },
     ],
     outputs: [],
@@ -227,6 +232,11 @@ export const mintingAbi = [
       { name: "lifeCycleDuration", type: "uint256", internalType: "uint256" },
       { name: "endTime", type: "uint256", internalType: "uint256" },
       { name: "nrtPowerNodePrice", type: "uint256", internalType: "uint256" },
+      {
+        name: "nrtPowerNodePurchaseCurrency",
+        type: "string",
+        internalType: "string",
+      },
       { name: "quantity", type: "uint256", internalType: "uint256" },
     ],
     stateMutability: "view",
