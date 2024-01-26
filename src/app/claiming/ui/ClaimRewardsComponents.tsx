@@ -143,7 +143,7 @@ export const MintingNftBox: React.FC<{
       <div className="nft-card-body">
         <p>{t("reward.totalPayout") + ": " + formatNRTAmount({ tokenAmount: totalRewards })}</p>
         <p>{"Minting Power: " + Number(props.mintingNft.mintingPower) / 100}</p>
-        <p>{"Quantity: " + Number(props.mintingNft.quantity) / 100}</p>
+        <p>{"Quantity: " + (Number(props.mintingNft.quantity) / 1e18)}</p>
       </div>
 
       <div className="nft-card-loading-bar">
