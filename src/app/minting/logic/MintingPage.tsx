@@ -53,6 +53,8 @@ const MintingPage: React.FC = () => {
     nrtPrice: nrtPrice,
   });
 
+  const [nrtMintingPower, setNrtMintingPower] = React.useState<bigint>(0n);
+
   function isPendingState(pageState: PageState) {
     return pageState.startsWith("PENDING") || maxLinkableAmount === null;
   }
@@ -110,6 +112,19 @@ const MintingPage: React.FC = () => {
       });
   }
 
+  function nftQuantitiyCalculation() {
+    let quantitiy: bigint = 0n;
+    if (mintingNFTs != null) {
+      for (var nft of Object.values(mintingNFTs)) {
+        quantitiy += nft.quantity
+      }
+      quantitiy = quantitiy / 10n ** 18n;
+      const formattedQuantitiy = Number(quantitiy.toString()).toFixed(2);
+      return formattedQuantitiy;
+    }
+  }
+
+
   return (
     <div className="minting-page-content">
       <div className="staking-title-bar">
@@ -136,7 +151,8 @@ const MintingPage: React.FC = () => {
             <p>Number of NRT Power Nodes:</p>
             <p style={{ fontWeight: "bold" }}>
               {mintingNFTs != null
-                ? Object.keys(mintingNFTs).length.toString()
+                // ? Object.keys(mintingNFTs).length.toString()
+                ? nftQuantitiyCalculation()
                 : "Loading..."}
             </p>
           </div>
