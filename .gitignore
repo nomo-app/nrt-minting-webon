@@ -7,3 +7,4 @@ gcloud_service_account.json
 .env.development
 nomo.tar.gz
 .env
+clear_cloudflare_cache.sh
