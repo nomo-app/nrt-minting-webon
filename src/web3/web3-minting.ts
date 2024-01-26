@@ -56,6 +56,7 @@ export interface MintingNft {
   lifeCycleDuration: Date;
   endTime: Date;
   quantity: bigint;
+  nrtPowerNodePrice: bigint;
 }
 
 async function approveIfNecessary(args: {
@@ -186,6 +187,7 @@ export async function fetchNftDetails(args: {
     ),
     endTime: new Date(Number(rawMintingNft["endTime"]) * 1000),
     quantity: rawMintingNft["quantity"],
+    nrtPowerNodePrice: rawMintingNft["nrtPowerNodePrice"],
   };
   console.log("mintingNFT", mintingNFT);
   return mintingNFT;
