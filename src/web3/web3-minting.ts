@@ -14,7 +14,7 @@ import { mintingAbi } from "@/contracts/minting-abi";
 import { MintingOperation, MintingPlan } from "./minting-plan";
 
 export const mintingContractAddress =
-  "0x8ddc5631AbfCa16dA6a666bdc9413b93E0B4B4F8";
+  "0x1bCF9e51e77aA11cE363BA2a836F045E2B8e4066";
 export const nrtTokenContractAddress =
   "0xEdF221F8C1957b6aC950430836e7aa0d7Db5b4dA";
 
@@ -55,6 +55,7 @@ export interface MintingNft {
   lastClaimedTimestamp: Date;
   lifeCycleDuration: Date;
   endTime: Date;
+  quantity: bigint;
 }
 
 async function approveIfNecessary(args: {
@@ -184,6 +185,7 @@ export async function fetchNftDetails(args: {
       Number(rawMintingNft["lastClaimedTimestamp"]) * 1000
     ),
     endTime: new Date(Number(rawMintingNft["endTime"]) * 1000),
+    quantity: rawMintingNft["quantity"],
   };
   console.log("mintingNFT", mintingNFT);
   return mintingNFT;
