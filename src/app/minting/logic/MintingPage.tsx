@@ -112,16 +112,17 @@ const MintingPage: React.FC = () => {
       });
   }
 
-  function nftQuantitiyCalculation() {
+  function nftQuantitiyCalculation(): number {
     let quantitiy: bigint = 0n;
     if (mintingNFTs != null) {
       for (var nft of Object.values(mintingNFTs)) {
         quantitiy += nft.quantity
       }
-      quantitiy = quantitiy / 10n ** 18n;
-      const formattedQuantitiy = Number(quantitiy.toString()).toFixed(2);
-      return formattedQuantitiy;
+      // do the division in two steps to avoid floating point errors
+      const quantityNumber = Number(quantitiy / (10n ** 9n)) / 1e9;
+      return quantityNumber;
     }
+    return 0;
   }
 
 
