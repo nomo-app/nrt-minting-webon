@@ -24,7 +24,7 @@ import {
   MintingPlan,
   getMaxLinkableAmount,
   getMintingPlan,
-  getNRTMintingPower
+  getNRTMintingPower,
 } from "@/web3/minting-plan";
 
 export type PageState =
@@ -46,14 +46,15 @@ const MintingPage: React.FC = () => {
   const [txError, setTxError] = React.useState<Error | null>(null);
 
   const { mintingNFTs } = useMintingNFTs();
-  const maxLinkableAmount = getMaxLinkableAmount({ mintingNFTs, nrtPrice: nrtPrice });
+  const maxLinkableAmount = getMaxLinkableAmount({
+    mintingNFTs,
+    nrtPrice: nrtPrice,
+  });
   const mintingPlan: MintingPlan = getMintingPlan({
     mintingNFTs: mintingNFTs ?? {},
     nrtAmount,
     nrtPrice: nrtPrice,
   });
-
-  const [nrtMintingPower, setNrtMintingPower] = React.useState<bigint>(0n);
 
   function isPendingState(pageState: PageState) {
     return pageState.startsWith("PENDING") || maxLinkableAmount === null;
@@ -69,9 +70,9 @@ const MintingPage: React.FC = () => {
   useEffect(() => {
     if (nrtBalance) {
       const roundedBalance = nrtBalance - (nrtBalance % 10n ** 8n);
-      setNrtAmount(roundedBalance);
+      setNrtAmount(maxLinkableAmount ?? roundedBalance);
     }
-  }, [nrtBalance]);
+  }, [nrtBalance, maxLinkableAmount]);
 
   const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false);
   const [successDialogOpen, setSuccessDialogOpen] = React.useState(false);
@@ -79,6 +80,10 @@ const MintingPage: React.FC = () => {
   function onClickStakeButton() {
     if (nrtAmount <= 0n) {
       setPageState("ERROR_INSUFFICIENT_NRT");
+      return;
+    }
+    if (maxLinkableAmount != null && nrtAmount > maxLinkableAmount) {
+      setPageState("ERROR_MAX_LINKABLE_AMOUNT");
       return;
     }
     setConfirmDialogOpen(true);
@@ -116,15 +121,24 @@ const MintingPage: React.FC = () => {
     let quantitiy: bigint = 0n;
     if (mintingNFTs != null) {
       for (var nft of Object.values(mintingNFTs)) {
-        quantitiy += nft.quantity
+        quantitiy += nft.quantity;
       }
       // do the division in two steps to avoid floating point errors
-      const quantityNumber = Number(quantitiy / (10n ** 9n)) / 1e9;
+      const quantityNumber = Number(quantitiy / 10n ** 9n) / 1e9;
       return quantityNumber;
     }
     return 0;
   }
 
+  function getMaxValue(): bigint | null {
+    if (maxLinkableAmount == null) {
+      return nrtBalance;
+    } else if (nrtBalance == null) {
+      return maxLinkableAmount;
+    } else {
+      return maxLinkableAmount < nrtBalance ? maxLinkableAmount : nrtBalance;
+    }
+  }
 
   return (
     <div className="minting-page-content">
@@ -144,7 +158,7 @@ const MintingPage: React.FC = () => {
       <div className="minting-card">
         <TokenAmountInput
           value={nrtAmount}
-          maxValue={nrtBalance}
+          maxValue={getMaxValue()}
           onChange={(value) => setNrtAmount(value)}
         />
         <div className="minting-card-information">
@@ -152,8 +166,8 @@ const MintingPage: React.FC = () => {
             <p>Number of NRT Power Nodes:</p>
             <p style={{ fontWeight: "bold" }}>
               {mintingNFTs != null
-                // ? Object.keys(mintingNFTs).length.toString()
-                ? nftQuantitiyCalculation()
+                ? // ? Object.keys(mintingNFTs).length.toString()
+                  nftQuantitiyCalculation()
                 : "Loading..."}
             </p>
           </div>
@@ -161,7 +175,10 @@ const MintingPage: React.FC = () => {
             <p>Max. linkable amount:</p>
             <p style={{ fontWeight: "bold" }}>
               {maxLinkableAmount != null
-                ? formatNRTAmount({ tokenAmount: maxLinkableAmount }).replace(' ZEN20', '')
+                ? formatNRTAmount({ tokenAmount: maxLinkableAmount }).replace(
+                    " ZEN20",
+                    ""
+                  )
                 : "Loading..."}
             </p>
           </div>

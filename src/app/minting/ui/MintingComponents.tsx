@@ -47,6 +47,8 @@ export const StatusBox: React.FC<{ pageState: PageState }> = (props) => {
         return t("status." + props.pageState);
       case "ERROR_NO_POWER_NRT_POWER_NODES":
         return "No NRT Power Nodes were found in this wallet.";
+      case "ERROR_MAX_LINKABLE_AMOUNT":
+        return "Maximum linkable amount exceeded.";
       case "IDLE":
         return ""; // should never happen
       default:
@@ -172,10 +174,14 @@ export const MintingTitleBar: React.FC = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
       }}
     >
-      <img src={nrtMigrationIcon} alt="logo" style={{ width: 75, height: 75 }} />
+      <img
+        src={nrtMigrationIcon}
+        alt="logo"
+        style={{ width: 75, height: 75 }}
+      />
       <div
         style={{
           fontWeight: "bold",
@@ -234,7 +240,7 @@ export const TokenAmountInput: React.FC<{
   return (
     <TextField
       id="textfield_outline"
-      helperText={availableText.replace('ZEN20', '')}
+      helperText={availableText.replace("ZEN20", "")}
       label={t("staking.amountMinting")}
       variant="outlined"
       type={"number"}
@@ -282,15 +288,27 @@ export const TokenAmountInput: React.FC<{
       }}
       InputProps={{
         endAdornment: (
-          <InputAdornment onClick={() => !props.maxValue || props.onChange(props.maxValue)} position="end">
-            <div id={"max_button"} className={"MaxButton"} style={{ color: "#23c1c4" }}>
+          <InputAdornment
+            onClick={() => !props.maxValue || props.onChange(props.maxValue)}
+            position="end"
+          >
+            <div
+              id={"max_button"}
+              className={"MaxButton"}
+              style={{ color: "#23c1c4" }}
+            >
               MAX
             </div>
           </InputAdornment>
         ),
         startAdornment: (
           <InputAdornment position="start">
-            <img src={nrtIcon} className="Zeniq-Logo" alt="logo" style={{ width: 25, height: 25 }} />
+            <img
+              src={nrtIcon}
+              className="Zeniq-Logo"
+              alt="logo"
+              style={{ width: 25, height: 25 }}
+            />
           </InputAdornment>
         ),
       }}
@@ -304,7 +322,11 @@ export const SelectYears: React.FC<{
   const { t } = useTranslation();
 
   return (
-    <FormControl variant={"outlined"} sx={{ m: 1 }} style={{ width: "90%", marginTop: "2rem", marginBottom: "2rem" }}>
+    <FormControl
+      variant={"outlined"}
+      sx={{ m: 1 }}
+      style={{ width: "90%", marginTop: "2rem", marginBottom: "2rem" }}
+    >
       <InputLabel
         id="stakingTimeTitle"
         sx={{

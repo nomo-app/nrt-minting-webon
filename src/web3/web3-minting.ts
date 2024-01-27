@@ -93,6 +93,7 @@ export type StakeError =
   | "ERROR_INSUFFICIENT_RESERVES"
   | "ERROR_LIMIT_EXCEEDED"
   | "ERROR_NO_POWER_NRT_POWER_NODES"
+  | "ERROR_MAX_LINKABLE_AMOUNT"
   | "ERROR_INSUFFICIENT_NRT";
 
 export async function submitMintingTx(args: {
