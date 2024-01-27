@@ -135,7 +135,7 @@ export const MintingNftBox: React.FC<{
       <div className="nft-card-header">
         <div className="header-info">
           <div>{"NFT-ID: #" + props.mintingNft.tokenId}</div>
-          <div>{"Staked: " + formatNRTAmount({ tokenAmount: props.mintingNft.stakedTokens })}</div>
+          <div>{"Linked: " + formatNRTAmount({ tokenAmount: props.mintingNft.stakedTokens })}</div>
         </div>
         <img src={nrtStakingIcon} style={{ width: "50px" }} />
       </div>
