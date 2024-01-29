@@ -136,6 +136,7 @@ export const SwitchToRewardPageButton: React.FC<{
       onClick={() => props.disabled || onClick()}
       style={{
         color: props.disabled ? "grey" : undefined,
+        backgroundColor: props.disabled ? "grey" : "#2c04fe",
       }}
     >
       <div
@@ -150,18 +151,6 @@ export const SwitchToRewardPageButton: React.FC<{
         {t("staking.claimRewards")}
       </div>
     </button>
-
-    // <a onClick={props.disabled ? undefined : onClick} style={{ width: "100%" }}>
-    //   <button
-    //     style={{
-    //       color: props.disabled ? "white" : undefined,
-    //       backgroundColor: props.disabled ? "gray" : "var(--color-secondary-button-background)",
-    //     }}
-    //     className="secondary-button"
-    //   >
-    //     {t("staking.claimRewards")}
-    //   </button>
-    // </a>
   );
 };
 export const MintingTitleBar: React.FC = () => {

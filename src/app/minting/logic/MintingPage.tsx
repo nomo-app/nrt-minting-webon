@@ -201,7 +201,7 @@ const MintingPage: React.FC = () => {
           disabled={isPendingState(pageState)}
           onClick={onClickStakeButton}
         />
-        <SwitchToRewardPageButton disabled={isPendingState(pageState)} />
+        <SwitchToRewardPageButton disabled={false} />
       </div>
 
       <ConfirmDialogSlide
