@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import {
   MintingNft,
   fetchNftDetails,
-  getMintingContract,
+  mintingContractAddress,
 } from "./web3-minting";
-import { useEvmAddress } from "./web3-common";
+import { getEthersProvider, useEvmAddress } from "./web3-common";
 import React from "react";
+import { Log } from "ethers";
 
 export function useMintingNFTs() {
   const [tokenIDs, setTokenIDs] = React.useState<Array<bigint>>([]);
@@ -53,63 +54,38 @@ export function useMintingNFTs() {
 async function fetchMintingTokenIDs(args: {
   ethAddress: string;
 }): Promise<Array<bigint>> {
-  return await enumerateOwnedTokenIDs(args);
+  return await fetchZEN721TokenIDs({
+    nftContractAddress: mintingContractAddress,
+    address: args.ethAddress,
+  });
 }
 
-function minimumBigInt(a: bigint, b: bigint): bigint {
-  return a < b ? a : b;
-}
+async function fetchZEN721TokenIDs({
+  nftContractAddress,
+  address,
+}: {
+  nftContractAddress: string;
+  address: string;
+}): Promise<bigint[]> {
+  const _block = "0x0";
+  const eventSignature =
+    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+  const topicAddress = address.replace(/^0x/, "0x000000000000000000000000");
 
-function getFirstPossibleTokenID(): bigint {
-  return 0n;
-}
+  const provider = getEthersProvider();
 
-async function enumerateOwnedTokenIDs(args: {
-  ethAddress: string;
-}): Promise<Array<bigint>> {
-  const nftContract = getMintingContract();
-  const lastPossibleNFTId: bigint = await nftContract.nextTokenId();
-  const maxBatchSize: bigint = 10n;
-
-  const tokenIDs: Array<bigint> = [];
-  let idCandidate: bigint = getFirstPossibleTokenID();
-  console.log(
-    args.ethAddress +
-      ": Starting search for owned tokenIDs between the IDs " +
-      idCandidate +
-      " and " +
-      lastPossibleNFTId +
-      "..."
-  );
-  while (idCandidate < lastPossibleNFTId) {
-    const batchSize: bigint = minimumBigInt(
-      lastPossibleNFTId - idCandidate,
-      maxBatchSize
-    );
-    const promiseArray = [];
-    const idCandidateArray: Array<bigint> = [];
-    for (let i = 0; i < batchSize; i++) {
-      const ownerOfPromise = nftContract.ownerOf(BigInt(idCandidate));
-      promiseArray.push(ownerOfPromise);
-      idCandidateArray.push(BigInt(idCandidate));
-      idCandidate++;
-    }
-    const ownerAddressArray: PromiseSettledResult<any>[] =
-      await Promise.allSettled(promiseArray); // can pipe multiple promises over the same HTTP-request
-
-    for (let i = 0; i < batchSize; i++) {
-      const settleResult: PromiseSettledResult<any> = ownerAddressArray[i];
-      if (settleResult.status === "fulfilled") {
-        const ownerAddress: string = settleResult.value;
-        if (
-          ownerAddress.toLowerCase().includes(args.ethAddress.toLowerCase())
-        ) {
-          const foundTokenID = idCandidateArray[i];
-          console.log("found owned tokenID", foundTokenID);
-          tokenIDs.push(foundTokenID);
-        }
-      }
-    }
-  }
+  // a more complex function exists for NFTs that are not soulbound
+  const incomingTransfersFuture: Promise<Log[]> = provider.getLogs({
+    fromBlock: _block,
+    toBlock: "latest",
+    address: nftContractAddress,
+    topics: [eventSignature, null, topicAddress, null],
+  });
+  const results: Log[] = await incomingTransfersFuture;
+  const tokenIDs: bigint[] = results.map(_getTokenID);
   return tokenIDs;
+}
+
+function _getTokenID(transferLog: Log): bigint {
+  return BigInt(transferLog["topics"][3]);
 }

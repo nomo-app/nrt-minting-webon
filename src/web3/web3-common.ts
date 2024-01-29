@@ -2,7 +2,6 @@ import { AbstractProvider, ethers, Signer } from "ethers";
 import { EthersjsNomoSigner, zscProvider } from "ethersjs-nomo-webons";
 import { nomo } from "nomo-webon-kit";
 import { useEffect, useState } from "react";
-import { getNomoEvmNetwork } from "./navigation";
 
 export function getEthersProvider(): AbstractProvider {
   return zscProvider;
@@ -36,6 +35,7 @@ export function useEvmAddress(): { evmAddress: string | null } {
     });
   }, []);
   return { evmAddress };
+  //return { evmAddress: "0xba92Dc4733541FBf1A05680d8DD9F644F410F33c" };
 }
 
 export async function waitForConfirmationOrThrow(txResponse: any) {

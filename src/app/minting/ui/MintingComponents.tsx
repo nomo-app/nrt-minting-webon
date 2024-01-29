@@ -190,6 +190,7 @@ const INPUT_ERROR_TRHESHOLD = -2n;
 export const TokenAmountInput: React.FC<{
   onChange: (value: bigint) => void;
   value: bigint;
+  nrtBalance: bigint | null;
   maxValue: bigint | null;
 }> = (props) => {
   const { t } = useTranslation();
@@ -216,9 +217,9 @@ export const TokenAmountInput: React.FC<{
   };
 
   const availableText =
-    props.maxValue !== null && props.maxValue !== undefined
+    props.nrtBalance !== null && props.nrtBalance !== undefined
       ? `Available in wallet: ${formatNRTAmount({
-          tokenAmount: props.maxValue,
+          tokenAmount: props.nrtBalance,
         })}`
       : t("staking.loadBalance");
 

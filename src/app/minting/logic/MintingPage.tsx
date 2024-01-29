@@ -166,6 +166,7 @@ const MintingPage: React.FC = () => {
         <TokenAmountInput
           value={nrtAmount}
           maxValue={getMaxValue()}
+          nrtBalance={nrtBalance}
           onChange={(value) => setNrtAmount(value)}
         />
         <div className="minting-card-information">
