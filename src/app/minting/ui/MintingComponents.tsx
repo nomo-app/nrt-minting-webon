@@ -13,11 +13,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { UnreachableCaseError } from "@/util/typesafe";
 
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { nrtIcon, nrtMigrationIcon } from "@/asset-paths";
 import { PageState } from "../logic/MintingPage";
-import BackButton from "@/common/BackButton";
 import { getTokenStandard, navigateToClaimingPage } from "@/web3/navigation";
 import { formatNRTAmount } from "@/util/use-nrt-price";
 import { useNavigate } from "react-router-dom";

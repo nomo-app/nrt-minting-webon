@@ -68,9 +68,12 @@ const MintingPage: React.FC = () => {
   }, [balanceFetchError]);
 
   useEffect(() => {
-    if (nrtBalance) {
+    if (maxLinkableAmount) {
+      const roundedAmount = maxLinkableAmount - (maxLinkableAmount % 10n ** 8n);
+      setNrtAmount(roundedAmount);
+    } else if (nrtBalance) {
       const roundedBalance = nrtBalance - (nrtBalance % 10n ** 8n);
-      setNrtAmount(maxLinkableAmount ?? roundedBalance);
+      setNrtAmount(roundedBalance);
     }
   }, [nrtBalance, maxLinkableAmount]);
 
@@ -78,12 +81,16 @@ const MintingPage: React.FC = () => {
   const [successDialogOpen, setSuccessDialogOpen] = React.useState(false);
 
   function onClickStakeButton() {
-    if (nrtAmount <= 0n) {
+    if (maxLinkableAmount != null && nrtAmount > maxLinkableAmount) {
+      setPageState("ERROR_MAX_LINKABLE_AMOUNT");
+      return;
+    }
+    if (nrtBalance != null && mintingPlan.totalAmountToLink > nrtBalance) {
       setPageState("ERROR_INSUFFICIENT_NRT");
       return;
     }
-    if (maxLinkableAmount != null && nrtAmount > maxLinkableAmount) {
-      setPageState("ERROR_MAX_LINKABLE_AMOUNT");
+    if (nrtAmount <= 0n || mintingPlan.totalAmountToLink > nrtAmount) {
+      setPageState("ERROR_INSUFFICIENT_NRT");
       return;
     }
     setConfirmDialogOpen(true);
