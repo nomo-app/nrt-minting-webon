@@ -99,7 +99,7 @@ export const StakeButton: React.FC<{
       onClick={() => props.disabled || props.onClick()}
       style={{
         color: props.disabled ? "white" : undefined,
-        // backgroundColor: props.disabled ? "grey" : "var(--color-primary-button-background)",
+        backgroundColor: props.disabled ? "grey" : "#23c1c4",
       }}
     >
       <div
@@ -111,8 +111,11 @@ export const StakeButton: React.FC<{
           fontWeight: "bold",
         }}
       >
-        {/* <img src={stakingIcon} alt={""} height={"14px"} /> */}
-        {/* {"Link " + getTokenStandard()} */}
+        {props.disabled ? (
+          <CircularProgress style={{ height: "22px", width: "22px" }} />
+        ) : (
+          <div />
+        )}
         {"Link NRT"}
       </div>
     </button>
