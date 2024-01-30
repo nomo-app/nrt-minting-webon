@@ -3,12 +3,6 @@ import {
 } from "nomo-webon-kit";
 import React, { useEffect } from "react";
 
-export function useNomoTheme() {
-  useEffect(() => {
-    injectNomoCSSVariables();
-  }, []);
-}
-
 export function arrayBufferToBase64(buffer: any) {
   let binary = "";
   let bytes = new Uint8Array(buffer);

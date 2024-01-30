@@ -12,7 +12,6 @@ import { ClaimedRewards, MintingNftBox, TitleBox } from "../ui/ClaimRewardsCompo
 import {  } from "@/web3/nft-fetching";
 import { useMintingNFTs } from "@/web3/nft-fetching";
 import ErrorDetails from "@/common/ErrorDetails";
-import { useNomoTheme } from "@/util/util";
 import { getNFTID } from "@/web3/navigation";
 import "./ClaimRewardsPage.scss";
 
@@ -35,7 +34,6 @@ export function isErrorState(pageState: PageState) {
 }
 
 const ClaimRewardsPage: React.FC = () => {
-  useNomoTheme();
 
   const { evmAddress } = useEvmAddress();
   const { nrtPrice } = useNrtPrice();

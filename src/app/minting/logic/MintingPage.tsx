@@ -17,7 +17,6 @@ import { TokenAmountInput } from "@/app/minting/ui/MintingComponents";
 import { formatNRTAmount, useNrtPrice } from "@/util/use-nrt-price";
 import { useEvmAddress } from "@/web3/web3-common";
 import ErrorDetails from "@/common/ErrorDetails";
-import { useNomoTheme } from "@/util/util";
 import "./MintingPage.scss";
 import { useMintingNFTs } from "@/web3/nft-fetching";
 import {
@@ -34,7 +33,6 @@ export type PageState =
   | StakeError;
 
 const MintingPage: React.FC = () => {
-  useNomoTheme();
 
   const { nrtPrice } = useNrtPrice();
   const { evmAddress: ethAddress } = useEvmAddress();
