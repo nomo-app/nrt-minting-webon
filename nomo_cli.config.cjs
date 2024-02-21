@@ -4,7 +4,8 @@ const nomoCliConfig = {
       rawSSH: {
         sshHost: process.env.SSH_TARGET,
         sshBaseDir: "/var/www/production_webons/neocreditdefi/",
-        publicBaseUrl: "https://w.nomo.app/neocreditdefi",
+        publicBaseUrl: "https://nrt.st",
+        hybrid: true,
       },
     },
   },
