@@ -33,7 +33,6 @@ export type PageState =
   | StakeError;
 
 const MintingPage: React.FC = () => {
-
   const { nrtPrice } = useNrtPrice();
   const { evmAddress: ethAddress } = useEvmAddress();
   const { nrtBalance, fetchError: balanceFetchError } = useNrtBalance({
@@ -79,6 +78,10 @@ const MintingPage: React.FC = () => {
   const [successDialogOpen, setSuccessDialogOpen] = React.useState(false);
 
   function onClickStakeButton() {
+    if (mintingNFTs == null || Object.keys(mintingNFTs).length === 0) {
+      setPageState("ERROR_NO_POWER_NRT_POWER_NODES");
+      return;
+    }
     if (maxLinkableAmount != null && nrtAmount > maxLinkableAmount) {
       setPageState("ERROR_MAX_LINKABLE_AMOUNT");
       return;
