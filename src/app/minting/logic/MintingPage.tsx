@@ -162,7 +162,10 @@ const MintingPage: React.FC = () => {
           <ErrorDetails error={txError} />
         </div>
       )}
-
+      {!mintingNFTs || !Object.keys(mintingNFTs).length ?
+      <div className="minting-card no-node">Can currently not be linked. Please be patient this feature will be re-enabled</div>
+          :
+          <>
       <div className="minting-card">
         <TokenAmountInput
           value={nrtAmount}
@@ -224,6 +227,8 @@ const MintingPage: React.FC = () => {
         handleClose={() => setSuccessDialogOpen(false)}
         translationKey={"staking.DialogSuccess"}
       />
+  </>
+}
     </div>
   );
 };
