@@ -86,10 +86,10 @@ export function getNRTMintingPower(mintingPlan: MintingPlan): bigint {
   return totalMintingPower;
 }
 
+// @param {number} nrtPrice - price received from the price oracle
 function getAmountCapPowerNode(nrtPrice: number, nft: MintingNft): bigint {
-  // divide by 10**10 because the end-result should have 8 digits
-  const nrtPowerNodePriceInNrt = Number(nft.nrtPowerNodePrice / (10n ** 10n)) / nrtPrice;
+  const nrtPowerNodePriceInNrt = Number(nft.nrtPowerNodePrice) / nrtPrice;
   const amountCapPowerNode: bigint =
-    BigInt(Math.floor(nrtPowerNodePriceInNrt));
+    BigInt(Math.floor(nrtPowerNodePriceInNrt)) * BigInt(10 ** 8);
   return amountCapPowerNode;
 }
